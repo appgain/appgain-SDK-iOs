@@ -1,12 +1,12 @@
 //
-//  SdkKeys.m
+//  SDKKeys.m
 //  AppGainSDKCreator
 //  Created by appgain.io on 2/13/18.
 //  Copyright © 2018 appgain.io All rights reserved.
 
-#import "SdkKeys.h"
+#import "SDKKeys.h"
 
-@implementation SdkKeys
+@implementation SDKKeys
 
 //appApiKey   <—- that will create from your account in server side .
 //Response AppID

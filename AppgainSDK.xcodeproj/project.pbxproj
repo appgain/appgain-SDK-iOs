@@ -6,6 +6,10 @@
 	objectVersion = 48;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		81B4527C2073B193006CF6B6 /* SDKKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B4523D2073A326006CF6B6 /* SDKKeys.m */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		81B452192073A190006CF6B6 /* AppgainSDK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppgainSDK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81B452332073A325006CF6B6 /* SmartDeepLink.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SmartDeepLink.m; sourceTree = "<group>"; };
@@ -154,6 +158,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81B4527C2073B193006CF6B6 /* SDKKeys.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
