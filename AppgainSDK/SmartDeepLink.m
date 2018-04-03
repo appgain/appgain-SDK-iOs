@@ -43,7 +43,7 @@
 -(NSDictionary *)dictionaryValue{
  
     NSDictionary *details = @{@"name" :_linkName,
-                             // @"slug":_slug,
+                              @"slug":_slug,
                               @"image":_imageUrl,
                               @"description":_linkDescription,
                               @"launch_page":@{@"header":_header},

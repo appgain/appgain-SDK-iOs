@@ -8,9 +8,6 @@
 
 @interface SocialmediaSettings : NSObject
 
-//      "socialmedia_settings": { "title": “[input]", "description":    	"[input]","image": "[input]"
-//                       },
-
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *mediaDescription;
 @property (nonatomic, strong) NSString *image;

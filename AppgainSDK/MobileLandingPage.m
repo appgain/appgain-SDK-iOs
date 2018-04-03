@@ -90,7 +90,7 @@
         NSDictionary *details = @{@"lang" :_lang,
                               @"web_push_subscription":@YES,
                               @"label":_label,
-                              //@"slug"    :_slug,
+                              @"slug"    :_slug,
                               @"image_default":@NO,
             @"components": components,
             @"socialmedia_settings":_socialSetting.dictionaryValue,

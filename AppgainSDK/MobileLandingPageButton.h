@@ -8,17 +8,6 @@
 @interface MobileLandingPageButton : NSObject
 
 
-//      "targets": { "ios": “[input]", "android": “[input]", "web": "[input]"}
-//
-//"type": "basic.btn",
-//
-//"text": "[input text ]”,  //button title
-//"targets": {
-//				"ios": “[url when click from iOS ]",
-//				"android": "[input]",
-//				"web": "[input]"
-//}
-
 
 @property (nonatomic, strong) NSString *title;
 

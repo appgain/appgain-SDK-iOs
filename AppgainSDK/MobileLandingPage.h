@@ -39,35 +39,4 @@
 
 
 
-//{
-//    "lang": "en",
-
-//    "web_push_subscription": true,
-
-
-//    "components": [
-//                   { "type": “basic.h+logo", "logo": { "src": “[Array of
-                       //what]” },"header": 			{ "text": "Product Name “ }
-//                   },
-//                   { "type": "basic.p", "content": "[input] "},
-//                   { "type": "basic.btn","text": "[input]", "alt-text":"[input]",
-//                       "targets": { "ios": “[input]", "android": “[input]", "web": "[input]"}
-//                   },
-//                   {  "type": “basic.slider", "slider": [
-//                       {  "src": “[input]" }, { "src": "[input]"},{"src": "[input]"} ],
-//                           "speed": 3000,
-//                           "direction": "horizontal",
-//                           "autoplay": 4000
-//                       } ],
-//
-//
-//                       "socialmedia_settings": { "title": “[input]", "description":    	"[input]","image": "[input]"
-//                       },
-
-//                       "label": "[input]",
-//                       "image_default":false,
-//                       "slug":"[input]"-->Optional
-//}’
-
-
 @end

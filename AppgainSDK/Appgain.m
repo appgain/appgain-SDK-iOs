@@ -98,7 +98,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         
         SDKKeys * tempkeys = [SDKKeys new];
         configuration.applicationId = [tempkeys getAppSubDomainName];
-        //configuration.clientKey = @"CLIENT-A0D1-BA39C3D5906A";
         configuration.server =[tempkeys getParseServerUrl];
         configuration.localDatastoreEnabled = YES; // If you need to enable local data store
     }]];
