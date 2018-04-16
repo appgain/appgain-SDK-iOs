@@ -156,7 +156,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                     currentInstallation[@"type"] = @"appPush";
                     currentInstallation[@"appPush"] = @"true";
 
-                    currentInstallation[@"userID"] = [[PFUser currentUser] objectId];
+                    currentInstallation[@"userId"] = [[PFUser currentUser] objectId];
                     currentInstallation[@"deviceToken"] = [[SDKKeys new] getDeviceToken];
                     currentInstallation.channels = @[[NSString stringWithFormat:@"user_%@",[PFUser currentUser].objectId]];
                     [currentInstallation saveInBackground];
