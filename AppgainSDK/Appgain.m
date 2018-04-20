@@ -14,31 +14,31 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
 //MARK: init sdk with app_id and api_key
 /*
-
+ 
  #parameter
-     1- appid --> String
-     2- app api key --> string
+ 1- appid --> String
+ 2- app api key --> string
  #response
-     will be response for match link that call back every time app is run.
+ will be response for match link that call back every time app is run.
  # flow of this init method
-     1- save appid and app_api_key for NSUserdefault
-         if user id not found that mean that app first run or not set app data yet so-->
-          1- call api to get app setting
-          2- when sucess get data in NsUserdefault for parser setting
-          3- then call parser server configuration if it is available for this app.
-        else if app data setting before then
-            1-  call matcherLink api for app to sent response feedback to user.
-
+ 1- save appid and app_api_key for NSUserdefault
+ if user id not found that mean that app first run or not set app data yet so-->
+ 1- call api to get app setting
+ 2- when sucess get data in NsUserdefault for parser setting
+ 3- then call parser server configuration if it is available for this app.
+ else if app data setting before then
+ 1-  call matcherLink api for app to sent response feedback to user.
+ 
  */
 
 //get app keys and configure data
 //MARK: init sdk with response for link match of smart link.
 +(void)initializeAppWithID:(NSString *)appID andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete {
     initDone =  onComplete;
-
-   //if no project or parser server is done sent to get parser server data
-    if ([[[SDKKeys new] getParserUserID]  isEqual: @""] ) {
     
+    //if no project or parser server is done sent to get parser server data
+    if ([[[SDKKeys new] getParserUserID]  isEqual: @""] ) {
+        
         SDKKeys* tempSdkKeys = [SDKKeys new];
         [tempSdkKeys setAppApiKey:appApiKey];
         [tempSdkKeys setAppID:appID];
@@ -46,35 +46,39 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             //done
             //  NSLog(@"- init  response ==%@",response);
             // NSLog(@"- init matcher  result ==%@",result);
-        
-        if (result != nil){
-
-            [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
-            [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
-            [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
-            [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
-            //if there is no server parse --> sent match link
-            if ([[tempSdkKeys getParseServerUrl] isEqualToString:@""]){
-                [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
+            
+            if (result != nil){
+                
+                [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
+                [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
+                [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
+                [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
+                //if there is no server parse --> sent match link
+                if ([[tempSdkKeys getParseServerUrl] isEqualToString:@""]){
+                    [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                        initDone(response,result);
+                            initDone(response,result);
                         });
-                }];
+                    }];
+                }
+                //if parser server data available for this app call parser configuration
+                else{//else call parser config
+                    [Appgain configuerServerParser:true];
+                }
             }
-            //if parser server data available for this app call parser configuration
-            else{//else call parser config
-                [Appgain configuerServerParser];
+            else{
+                NSLog(@"AppGain SDK init is fail");
+                //NSLog(@"%@",response);
             }
-        }
-        else{
-             NSLog(@"AppGain SDK init is fail");
-            //NSLog(@"%@",response);
-        }
-        
-    }];
+            
+        }];
     }
     //else get match linker data
     else{
+        // add last
+        // configuer it from offline data.
+        [Appgain configuerServerParser:false];
+        
         [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
             [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -91,8 +95,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 /*
  No parameter that work form data that saved before in NsUserDefault
  */
-+(void)configuerServerParser{
-
++(void)configuerServerParser : (BOOL*)newUser{
+    
     // If you would like all objects to be private by default, remove this line.
     [Parse initializeWithConfiguration:[ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         
@@ -106,30 +110,43 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     PFACL *defaultACL = [PFACL ACL];
     defaultACL.publicReadAccess = YES;
     [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
-
+    
     PFUser *currentUser = [PFUser currentUser];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     });
-   //MARK:create new user for this device
-    //after finish configure parser server then create user id for this app
-    [Appgain createUserID];
-  
+    
+    PFUser * user = [PFUser currentUser];
+    
+    if (newUser){
+        
+        //MARK:create new user for this device
+        //after finish configure parser server then create user id for this app
+        [Appgain createUserID];
+        
+    }
+    else{
+        
+        [user incrementKey:@"usagecounter"];
+        
+    }
+    
+    
 }
 
 
 //then call user id by register new user
 /*flow inside this function
-     1- create unique id for this app
-     2- update parser installtion with this user id
-     3- create user object data for NotificationChannels table.
-     4- finally sent matcher link api
+ 1- create unique id for this app
+ 2- update parser installtion with this user id
+ 3- create user object data for NotificationChannels table.
+ 4- finally sent matcher link api
  
  
  */
 
 + (void)createUserID {
-
+    
     
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
     // NSTimeInterval is defined as double
@@ -139,7 +156,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     user.password = userTimeStamp;
     
     [user incrementKey:@"usagecounter"];
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     });
@@ -153,28 +170,35 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                 if ([PFUser currentUser].objectId)
                 {
                     currentInstallation[@"user"] = [PFUser currentUser];
-                    currentInstallation[@"type"] = @"appPush";
-                    currentInstallation[@"appPush"] = @"true";
-
-                    currentInstallation[@"userID"] = [[PFUser currentUser] objectId];
+                    // currentInstallation[@"type"] = @"appPush";
+                    // currentInstallation[@"appPush"] = @"true";
+                    
+                    currentInstallation[@"userId"] = [[PFUser currentUser] objectId];
                     currentInstallation[@"deviceToken"] = [[SDKKeys new] getDeviceToken];
+                    // NSTimeZone *timeZone=[NSTimeZone localTimeZone];
+                    
                     currentInstallation.channels = @[[NSString stringWithFormat:@"user_%@",[PFUser currentUser].objectId]];
+                    // currentInstallation.channels = timeZone.name;
                     [currentInstallation saveInBackground];
-
-        ///add user object for notification channels
+                    
+                    ///add user object for notification channels
                     PFObject *notificationChannnelsObject = [PFObject objectWithClassName:@"NotificationChannels"];
-                    notificationChannnelsObject[@"userID"] = [PFUser currentUser].objectId;
+                    notificationChannnelsObject[@"userId"] = [PFUser currentUser].objectId;
                     notificationChannnelsObject[@"type"] = @"appPush";
                     notificationChannnelsObject[@"appPush"] = @YES;
+                    
+                    
+                    
+                    
                     [notificationChannnelsObject saveInBackground];
-   
+                    
                 }
-        /// Match link for first run
+                /// Match link for first run
                 [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         initDone(response,result);
                     });
-                    }];
+                }];
             }
         } else {   NSString *errorString = [error userInfo][@"error"];   // Show the
             NSLog(@"AppGain Fail to create your id %@",error);
@@ -201,11 +225,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     [[SDKKeys new] setDeviceToken:token];
     
     //set server installion for this device
-        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-        [currentInstallation setDeviceTokenFromData:deviceToken];
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
     
-        [currentInstallation saveInBackground];
-
+    [currentInstallation saveInBackground];
+    
     [PFPush subscribeToChannelInBackground:@"" block:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             NSLog(@"AppGain StarterProject successfully subscribed to push notifications on the broadcast channel.");
@@ -217,17 +241,17 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
 //MARK:handle recive remote notification to register status track for it
 +(void)handlePush:(NSDictionary *)userInfo forApplication:(UIApplication *)application{
-  //  [PFPush handlePush:userInfo];
+    //  [PFPush handlePush:userInfo];
     
     [Appgain trackNotificationWithAction: [NotificationStatus Opened]   andUserInfo:userInfo  whenFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
-     //   NSLog(@"%@",result);
-
+        //   NSLog(@"%@",result);
+        
     }];
     
     if (application.applicationState == UIApplicationStateInactive) {
         [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
     }
-
+    
 }
 
 
@@ -247,7 +271,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
         });
-   
+        
     }];
     
 }
@@ -258,14 +282,14 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
  input parameter app user id
  */
 +(void)CreateLinkMactcherWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
-
+    
     [[ServiceLayer new] getRequestWithURL:[UrlData getmatcherUrlWithUserID:userID] didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
         });
-
+        
     }];
-
+    
 }
 
 
@@ -274,16 +298,16 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 //MARK : create LandingPage for user
 +(void)createLandingPageWithObject:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
     [[ServiceLayer new] postRequestWithURL:[UrlData getLandingPageUrl] withBodyData: [landingPage dictionaryValue] didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
         });
-
-
-    }];
-
-
         
-
+        
+    }];
+    
+    
+    
+    
 }
 
 
@@ -293,38 +317,54 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 //MARK:create automator
 /*
  input parameter
-     1- trigger point
-     2- userID *optional*
-     3-
+ 1- trigger point
+ 2- userID *optional*
+ 3-
  */
 +(void)CreateAutomatorWithTrigger:(NSString *)trigger andUserId:(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
+    
+    
+    [[ServiceLayer new] getRequestWithURL:[UrlData getAutomatorUrlWithTriggerPoint:trigger] didFinish:^(NSURLResponse *response , NSMutableDictionary * result) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            onComplete(response,result);
+        });
         
         
-        [[ServiceLayer new] getRequestWithURL:[UrlData getAutomatorUrlWithTriggerPoint:trigger] didFinish:^(NSURLResponse *response , NSMutableDictionary * result) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                onComplete(response,result);
-            });
-
-
-            
-        }];
         
-    }
+    }];
+    
+}
 
 //Mark track notification
 /*
  input parameter
-     1- notification user info
-     2- action String (opend, recived, con..)
+ 1- notification user info
+ 2- action String (opend, recived, con..)
  */
 +(void)trackNotificationWithAction :(NSString*)action andUserInfo:(NSDictionary *) userInfo whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
+    
+    NSString * campaign = @"";
+    NSString * campaign_name = @"";
+    
+    if ([userInfo objectForKey:@"campaign_id"]) {
+        
+        
+        campaign = [userInfo objectForKey:@"campaign_id"];
+    }
+    
+    if ([userInfo objectForKey:@"campaign_id"]) {
+        
+        
+        campaign = [userInfo objectForKey:@"campaignName"];
+    }
+    
     NSDictionary *details = @{@"channel" :@"apppush",
                               @"action":
                                   @{@"name":action,@"value":@"NA"} ,//name could be received", --> or conversion or open
                               @"userId":[[SDKKeys new] getParserUserID], //
-                              @"campaign_id": [userInfo objectForKey:@"campaign_id"],
-                              @"campaign_name":[userInfo objectForKey:@"campaignName"]
+                              @"campaign_id": campaign ,
+                              @"campaign_name":campaign_name
                               };
     
     [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result) {
@@ -332,9 +372,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             onComplete(response,result);
         });
     }];
-        
     
-    }
+    
+}
 
 //MARK: get parser user id
 
@@ -343,5 +383,43 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 }
 
 
+
++(void)updateUserId:(NSString *)userId{
+    
+    //update current user id
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    currentInstallation[@"user"] = [PFUser currentUser];
+    
+    currentInstallation[@"userId"] = userId;
+    
+    [currentInstallation saveInBackground];
+    
+    // update user id
+    PFUser * currentUser = [PFUser currentUser];
+    
+    currentUser[@"userId"] = userId;
+    [currentUser saveInBackground];
+    
+    
+    
+    //update user id in notification channel
+    PFQuery *query = [PFQuery queryWithClassName:@"NotificationChannels"];
+    
+    [query whereKey:@"userId" equalTo:currentUser.objectId];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        
+        for (PFObject *user in objects) {
+            
+            user[@"userId"] = userId;
+            [user saveInBackground];
+        }
+        
+        
+    }];
+    
+    
+    
+}
 
 @end

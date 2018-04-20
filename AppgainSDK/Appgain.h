@@ -42,4 +42,9 @@
 
 //MARK: sent notification status for server.
 +(void)trackNotificationWithAction:(NSString*)action andUserInfo:(NSDictionary *) userInfo whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
+
+//MARK: update parser user id with app user id
+
++(void)updateUserId:(NSString*)userId ;
+
 @end
