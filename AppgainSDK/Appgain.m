@@ -102,7 +102,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     [Parse initializeWithConfiguration:[ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         
         SDKKeys * tempkeys = [SDKKeys new];
-        configuration.applicationId = [tempkeys getAppSubDomainName];
+        configuration.applicationId = [tempkeys getParseAppID];
         configuration.server =[tempkeys getParseServerUrl];
         configuration.localDatastoreEnabled = YES; // If you need to enable local data store
     }]];
@@ -116,6 +116,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     });
+    
+   
+    
     
     PFUser * user = [PFUser currentUser];
     
@@ -178,10 +181,15 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                     currentInstallation[@"deviceToken"] = [[SDKKeys new] getDeviceToken];
                     // NSTimeZone *timeZone=[NSTimeZone localTimeZone];
                     
-                    currentInstallation.channels = @[[NSString stringWithFormat:@"user_%@",[PFUser currentUser].objectId]];
+                    currentInstallation.channels = @[[NSString stringWithFormat:@"user_%@",[PFUser currentUser].objectId ]];
                     // currentInstallation.channels = timeZone.name;
-                    [currentInstallation saveInBackground];
+                    //[currentInstallation saveInBackground];
                     
+                    
+                    [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                        
+                        
+                    }];
                     
                     ///add user object for notification channels
                     PFObject *notificationChannnelsObject = [PFObject objectWithClassName:@"NotificationChannels"];
@@ -233,15 +241,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     [currentInstallation saveInBackground];
     
     
-    
-    
-    [PFPush subscribeToChannelInBackground:@"" block:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            NSLog(@"AppGain StarterProject successfully subscribed to push notifications on the broadcast channel.");
-        } else {
-            NSLog(@"AppGain StarterProject failed to subscribe to push notifications on the broadcast channel.");
-        }
-    }];
 }
 
 //MARK:handle recive remote notification to register status track for it
