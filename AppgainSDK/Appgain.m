@@ -47,6 +47,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             //  NSLog(@"- init  response ==%@",response);
             // NSLog(@"- init matcher  result ==%@",result);
             
+            initDone(response,result);
+            
             if (result != nil){
                 
                 [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
@@ -54,17 +56,17 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                 [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
                 [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
                 //if there is no server parse --> sent match link
-                if ([[tempSdkKeys getParseServerUrl] isEqualToString:@""]){
-                    [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            initDone(response,result);
-                        });
-                    }];
-                }
+                //  if ([[tempSdkKeys getParseServerUrl] isEqualToString:@""]){
+                //                    [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
+                //                        dispatch_async(dispatch_get_main_queue(), ^{
+                //                            initDone(response,result);
+                //                        });
+                //                    }];
+                // }
                 //if parser server data available for this app call parser configuration
-                else{//else call parser config
-                    [Appgain configuerServerParser:true];
-                }
+                // else{//else call parser config
+                [Appgain configuerServerParser:true];
+                //  }
             }
             else{
                 NSLog(@"AppGain SDK init is fail");
@@ -80,13 +82,13 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         
         [Appgain configuerServerParser:false];
         
-        [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
-            [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    initDone(response,result);
-                });
-            }];
-        }];
+        //called match inside this
+        //            [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
+        //                dispatch_async(dispatch_get_main_queue(), ^{
+        //                    initDone(response,result);
+        //                });
+        //            }];
+        
     }
 }
 
@@ -117,7 +119,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     });
     
-   
+    
     
     
     PFUser * user = [PFUser currentUser];
@@ -204,11 +206,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                     
                 }
                 /// Match link for first run
-                [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        initDone(response,result);
-                    });
-                }];
+                //                [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
+                //                    dispatch_async(dispatch_get_main_queue(), ^{
+                //                        initDone(response,result);
+                //                    });
+                //                }];
             }
         } else {   NSString *errorString = [error userInfo][@"error"];   // Show the
             NSLog(@"AppGain Fail to create your id %@",error);
