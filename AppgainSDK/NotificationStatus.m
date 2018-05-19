@@ -8,10 +8,7 @@
 
 @implementation NotificationStatus
 
-+(NSString *)Received{
 
-return @"received";
-}
 
 +(NSString *)Opened{
  return @"open";

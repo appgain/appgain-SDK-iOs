@@ -24,7 +24,7 @@
 #define PARSE_SERVER_URL @"parse-server_url"
 #define PARSE_MASTER_KEY @"parse-master_key"
 #define FIRST_RUN_APP @"first_run_app"
-#define USER_PARSER_ID @"user_parser_id"
+#define USER_PARSE_ID @"user_parse_id"
 
 #define PUSH_DEVICE_TOKEN @"push_device_token"
 

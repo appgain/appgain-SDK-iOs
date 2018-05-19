@@ -14,7 +14,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString: url]];
     
-    //To get device agent web
+    //To get device user agent
     UIWebView* webView = [[UIWebView alloc] initWithFrame:CGRectZero];
     NSString* secretAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
     

@@ -164,7 +164,7 @@
 -(NSString *)getParserUserID{
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *theKey = [defaults stringForKey:USER_PARSER_ID];
+    NSString *theKey = [defaults stringForKey:USER_PARSE_ID];
     
     
     if (theKey == NULL ){
@@ -179,7 +179,7 @@
     
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:key forKey:USER_PARSER_ID];
+    [defaults setValue:key forKey:USER_PARSE_ID];
     [defaults synchronize];
 }
 

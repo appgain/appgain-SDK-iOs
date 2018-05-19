@@ -7,7 +7,6 @@
 #import <Foundation/Foundation.h>
 
 @interface NotificationStatus : NSObject
-+(NSString*)Received;
 +(NSString*)Opened;
 +(NSString*)Conversion;
 
