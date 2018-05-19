@@ -4,7 +4,7 @@ Good one for create smart link for your app and keep track for it.
 
 # For more detail and full document and create your app.
 visit provider webside.
-- [Appgain.io](www.appgain.io)
+- [Appgain.io](https://www.appgain.io)
 
 
 # What will be available for sdk.
