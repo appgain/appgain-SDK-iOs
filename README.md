@@ -1,4 +1,4 @@
-# Appgain 
+# Appgain.io
 Smart salutation  for mobile app that help, your business to manage your notification and keep track for it. 
 Good one for create smart link for your app and keep track for it.
 
@@ -24,12 +24,11 @@ visit provider webside.
 
 ##  Installing
 1- redirect to your project from terminal.
-2- add command --> pod init
+2- add command 
 ```
    pod init
    ```
-3- open podfile
-4- Add blow for your pod file 
+3- open podfile and add blow for your pod file 
    ```
    pod 'Appgain'
    ```
@@ -37,8 +36,8 @@ visit provider webside.
 ```
    run pod update
    ```
-##MIT License
-
+## MIT License
+```
 Copyright (c) 2018 Appgain
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -78,3 +77,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
