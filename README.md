@@ -9,10 +9,15 @@ visit provider webside.
 
 # What will be available for sdk.
 1-Push notification integration.
+
 2- track notification status.
+
 3-Deep linking Match.
+
 4- Create automator point for user.
+
 5-Create smartlink for your app.
+
 6-Create landingpage for you app.
 
 # Install
