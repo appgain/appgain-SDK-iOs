@@ -1,3 +1,37 @@
+# Appgain 
+Smart salutation  for mobile app that help, your business to manage your notification and keep track for it. 
+Good one for create smart link for your app and keep track for it.
+
+# For more detail and full document and create your app.
+visit provider webside.
+- [Appgain.io](www.appgain.io)
+
+
+# What will be available for sdk.
+1-Push notification integration.
+2- track notification status.
+3-Deep linking Match.
+4- Create automator point for user.
+5-Create smartlink for your app.
+6-Create landingpage for you app.
+
+# Install
+
+##  Installing
+1- redirect to your project from terminal.
+2- add command --> pod init
+```
+   pod init
+   ```
+3- open podfile
+4- Add blow for your pod file 
+   ```
+   pod 'Appgain'
+   ```
+5- run command 
+```
+   run pod update
+   ```
 ##MIT License
 
 Copyright (c) 2018 Appgain
