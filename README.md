@@ -24,7 +24,8 @@ visit provider webside.
 
 ##  Installing
 1- redirect to your project from terminal.
-2- add command 
+
+2- add command.
 ```
    pod init
    ```
