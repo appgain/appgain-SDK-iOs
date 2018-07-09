@@ -10,6 +10,7 @@
 #import "DataModels.h"
 #import <Parse/Parse.h>
 
+#import "SDKKeys.h"
 @interface Appgain : NSObject
 
 
@@ -18,6 +19,9 @@
 
 //MARK: inialize sdk Data
 +(void)initializeAppWithID:( NSString* )appID andApiKey :(NSString*)appApiKey  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
+//MARK: deinialize sdk Data
+
++(void)deInitializeApp ;
 
 //MARK: register device token for notification
 +(void)RegisterDeviceWithToken:(NSData*)deviceToken;
@@ -31,7 +35,7 @@
 
 
 //MARK: check match link for deep linking
-+(void)deefredDeepLinkingWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
++(void)CreateLinkMactcherWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
 
 //MARK: create single and slider landing mobile page
 +(void)createLandingPageWithObject:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;

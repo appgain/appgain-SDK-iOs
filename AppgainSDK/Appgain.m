@@ -31,6 +31,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
  
  */
 
+
+
+
+
+
 //get app keys and configure data
 //MARK: init sdk with response for link match of smart link.
 +(void)initializeAppWithID:(NSString *)appID andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete {
@@ -47,7 +52,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             //  NSLog(@"- init  response ==%@",response);
             // NSLog(@"- init matcher  result ==%@",result);
             
-            initDone(response,result);
             
             if (result != nil){
                 
@@ -55,17 +59,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                 [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
                 [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
                 [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
-                //if there is no server parse --> sent match link
-                //  if ([[tempSdkKeys getParseServerUrl] isEqualToString:@""]){
-                //                    [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
-                //                        dispatch_async(dispatch_get_main_queue(), ^{
-                //                            initDone(response,result);
-                //                        });
-                //                    }];
-                // }
-                //if parser server data available for this app call parser configuration
-                // else{//else call parser config
+                
                 [Appgain configuerServerParser:true];
+                
+                initDone(response,result);
+                
                 //  }
             }
             else{
@@ -82,16 +80,40 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         
         [Appgain configuerServerParser:false];
         
-        //called match inside this
-        //            [Appgain CreateLinkMactcherWithUserID:@"" whenFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
-        //                dispatch_async(dispatch_get_main_queue(), ^{
-        //                    initDone(response,result);
-        //                });
-        //            }];
+        
         
     }
 }
-
+//MARK: deInitializeApp
++(void)deInitializeApp{
+    
+    
+    //#define APP_API_KEY @"app_api_key"
+    //#define APP_ID @"app_id"
+    //#define APP_SUB_DOMAIN_NAME @"app_sub_domain_name"
+    //#define PARSE_APP_ID @"parse_app_id"
+    //
+    //#define PARSE_SERVER_URL @"parse-server_url"
+    //#define PARSE_MASTER_KEY @"parse-master_key"
+    //#define FIRST_RUN_APP @"first_run_app"
+    //#define USER_PARSER_ID @"user_parser_id"
+    //
+    //#define PUSH_DEVICE_TOKEN @"push_device_token"
+    
+    // [[NSUserDefaults standardUserDefaults] removeObjectForKey:APP_API_KEY];
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:APP_ID];
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:APP_SUB_DOMAIN_NAME];
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:PARSE_APP_ID];
+    // [[NSUserDefaults standardUserDefaults] removeObjectForKey:PARSE_SERVER_URL];
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:PARSE_MASTER_KEY];
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:FIRST_RUN_APP];
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_PARSER_ID];
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:PUSH_DEVICE_TOKEN];
+    
+    
+    [Appgain createUserID];
+    
+}
 
 
 //MARK: configure parser server
@@ -108,6 +130,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         configuration.server =[tempkeys getParseServerUrl];
         configuration.localDatastoreEnabled = YES; // If you need to enable local data store
     }]];
+    
     
     [PFUser enableAutomaticUser];
     PFACL *defaultACL = [PFACL ACL];
@@ -134,6 +157,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     else{
         
         [user incrementKey:@"usagecounter"];
+        //  NSLog([user valueForKey:@"usagecounter"]);
+        
+        [user saveInBackground];
+        
         
     }
     
@@ -287,7 +314,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 /*
  input parameter app user id
  */
-+(void)deefredDeepLinkingWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
++(void)CreateLinkMactcherWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
     
     [[ServiceLayer new] getRequestWithURL:[UrlData getmatcherUrlWithUserID:userID] didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
