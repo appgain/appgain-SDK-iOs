@@ -5,7 +5,7 @@
 //  Copyright © 2018 appgain.io All rights reserved.
 #import <Foundation/Foundation.h>
 
-@interface MobileLandingPageButton : NSObject
+@interface MobileDeepPageButton : NSObject
 
 
 

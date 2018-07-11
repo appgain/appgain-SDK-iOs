@@ -5,9 +5,9 @@
 //  Copyright © 2018 appgain.io All rights reserved.
 #import <Foundation/Foundation.h>
 #import "SocialmediaSettings.h"
-#import "MobileLandingPageButton.h"
+#import "MobileDeepPageButton.h"
 
-@interface MobileLandingPage : NSObject
+@interface MobileDeepPage : NSObject
 
 
 @property (nonatomic, strong) NSString *LogoUrl;
@@ -31,7 +31,7 @@
 
 
 
-- (MobileLandingPage*)initWithLogo :(NSString*)logoUrl andHeader :(NSString*) header andParagraph :(NSString*) paragraph withSliderUrlImages:(NSArray*)images andButtons:(NSArray*) button andSocialMediaSetting :(SocialmediaSettings*) mediaSetting language: (NSString*)lang andSubscription : (NSString*) sub andimage:(NSString*) image andlabel :(NSString*)label;
+- (MobileDeepPage*)initWithLogo :(NSString*)logoUrl andHeader :(NSString*) header andParagraph :(NSString*) paragraph withSliderUrlImages:(NSArray*)images andButtons:(NSArray*) button andSocialMediaSetting :(SocialmediaSettings*) mediaSetting language: (NSString*)lang andSubscription : (NSString*) sub andimage:(NSString*) image andlabel :(NSString*)label;
 
 
 

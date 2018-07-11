@@ -329,7 +329,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
 
 //MARK : create LandingPage for user
-+(void)createLandingPageWithObject:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
++(void)createLandingPageWithObject:(MobileDeepPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
     [[ServiceLayer new] postRequestWithURL:[UrlData getLandingPageUrl] withBodyData: [landingPage dictionaryValue] didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);

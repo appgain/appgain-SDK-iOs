@@ -18,18 +18,18 @@
 		81B452362073A325006CF6B6 /* NotificationStatus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationStatus.m; sourceTree = "<group>"; };
 		81B452372073A325006CF6B6 /* TargetPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TargetPlatform.h; sourceTree = "<group>"; };
 		81B452382073A325006CF6B6 /* UrlData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UrlData.h; sourceTree = "<group>"; };
-		81B452392073A325006CF6B6 /* MobileLandingPage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileLandingPage.h; sourceTree = "<group>"; };
+		81B452392073A325006CF6B6 /* MobileDeepPage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileDeepPage.h; sourceTree = "<group>"; };
 		81B4523A2073A326006CF6B6 /* SocialmediaSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SocialmediaSettings.m; sourceTree = "<group>"; };
 		81B4523B2073A326006CF6B6 /* TargetPlatform.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TargetPlatform.m; sourceTree = "<group>"; };
-		81B4523C2073A326006CF6B6 /* MobileLandingPageButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileLandingPageButton.h; sourceTree = "<group>"; };
+		81B4523C2073A326006CF6B6 /* MobileDeepPageButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileDeepPageButton.h; sourceTree = "<group>"; };
 		81B4523D2073A326006CF6B6 /* SDKKeys.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDKKeys.m; sourceTree = "<group>"; };
 		81B4523E2073A326006CF6B6 /* DataModels.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataModels.h; sourceTree = "<group>"; };
 		81B4523F2073A327006CF6B6 /* ServiceLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServiceLayer.m; sourceTree = "<group>"; };
-		81B452402073A327006CF6B6 /* MobileLandingPage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileLandingPage.m; sourceTree = "<group>"; };
+		81B452402073A327006CF6B6 /* MobileDeepPage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileDeepPage.m; sourceTree = "<group>"; };
 		81B452412073A327006CF6B6 /* UrlData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UrlData.m; sourceTree = "<group>"; };
 		81B452422073A327006CF6B6 /* Appgain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Appgain.h; sourceTree = "<group>"; };
 		81B452432073A327006CF6B6 /* SDKKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDKKeys.h; sourceTree = "<group>"; };
-		81B452442073A328006CF6B6 /* MobileLandingPageButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileLandingPageButton.m; sourceTree = "<group>"; };
+		81B452442073A328006CF6B6 /* MobileDeepPageButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileDeepPageButton.m; sourceTree = "<group>"; };
 		81B452452073A328006CF6B6 /* NotificationStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationStatus.h; sourceTree = "<group>"; };
 		81B452462073A328006CF6B6 /* ServiceLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServiceLayer.h; sourceTree = "<group>"; };
 		81B452472073A328006CF6B6 /* SmartDeepLink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SmartDeepLink.h; sourceTree = "<group>"; };
@@ -68,10 +68,10 @@
 				81B452422073A327006CF6B6 /* Appgain.h */,
 				81B452342073A325006CF6B6 /* Appgain.m */,
 				81B4523E2073A326006CF6B6 /* DataModels.h */,
-				81B452392073A325006CF6B6 /* MobileLandingPage.h */,
-				81B452402073A327006CF6B6 /* MobileLandingPage.m */,
-				81B4523C2073A326006CF6B6 /* MobileLandingPageButton.h */,
-				81B452442073A328006CF6B6 /* MobileLandingPageButton.m */,
+				81B452392073A325006CF6B6 /* MobileDeepPage.h */,
+				81B452402073A327006CF6B6 /* MobileDeepPage.m */,
+				81B4523C2073A326006CF6B6 /* MobileDeepPageButton.h */,
+				81B452442073A328006CF6B6 /* MobileDeepPageButton.m */,
 				81B452452073A328006CF6B6 /* NotificationStatus.h */,
 				81B452362073A325006CF6B6 /* NotificationStatus.m */,
 				81B452432073A327006CF6B6 /* SDKKeys.h */,
