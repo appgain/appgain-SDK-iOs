@@ -1,62 +1,81 @@
-# Appgain.io
-Smart salutation  for mobile app that help, your business to manage your notification and keep track for it. 
-Good one for create smart link for your app and keep track for it.
+**Features**
 
-# For more detail and full document and create your app.
-visit provider webside.
-- [Appgain.io](https://www.appgain.io)
+-   One-line to initialize and integrate in your the app ,published on iOs
+    cocapods and android bintary
+
+-   available for iOS and Android
+
+-   open source : its code is available for public on [Github](https://github.com/appgain/)
+
+-   Parse Server SDK initialization : no need to write extra code to initialize
+    parse server SDK , its initialization is embedded in the
+    [Appgain.io](http://appgain.io/) SDK initialization
+
+-   User Push token identification : link each user push token with his app
+    userId , enabling O2O communication
+
+-   Deferred Deep Linking :
+
+	-   for identifying the user app install acquisition channel
+
+	-   to route the user flow to target app screen even if he didn't have the app
+    installed before opening the smart Deep Link
+
+-   Smart deep linking creation : create smart deep links within your app , for example on user share app content , this enables use cases like user rewarding
+
+-   Mobile Deep Pages creation : create mobile deep pages  within your app , for example on user share app content , this enables use cases like user rewarding
 
 
-# What will be available for sdk.
-1-Push notification integration.
+-   Push Notifications Conversation Tracking :
 
-2- track notification status.
+	-   Track Push Message Received Event (Android only )
 
-3-Deep linking Match.
+	-   Track Push Message Dismissed Event (Android only )
 
-4- Create automator point for user.
+	-   Track Push Message Open Event
 
-5-Create smartlink for your app.
+	-   Track Push MessageConversion Event
 
-6-Create landingpage for you app.
+-   App Marketing Automation : trigger multi channel messaging predefined
+    scenarios based on user In-App actions
 
-# Install
+-   Built-in User communication preference management : user can opt-out /opt-in
+    to in app push, email, SMS channels
 
-##  Installing
-1- redirect to your project from terminal.
 
-2- add command.
-```
-   pod init
-   ```
-3- open podfile and add blow for your pod file 
-   ```
-   pod 'Appgain'
-   ```
-5- run command 
-```
-   run pod update
-   ```
-## MIT License
-```
 
-Copyright (c) 2018 Appgain
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+### Installing SDK
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1 - Install SDK from cocoa Pod
+  - Open terminal — $ cd <your application directory
+  - $ pod init.
+  - Navigate to project directory will find podFile
+  - Open it and add pod ‘Appgain’.
+  - press ctrl + S
+  - Terminal —$ pod update —$ pod install
+  - Wait until pod finish install.
+  - Open your project from <_____.xcworkspace
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+  2 - Configure SDK in app delegate.
+  -   Allow application to access network.
+
+1. You need to add your URL schema and Associated domain for your app , the value will be : <app subdomain. Appgain.io or your custom domain if you have confugured it
+![](https://lh5.googleusercontent.com/-ouixZJ-c8hoykNRZKe6cIeC1capil9lGUYE4SWV1l12N13DF-zDUjoTl4QVUyOkzIFMOhLZnVBInQj9iIUqPNWZS3NEGzpfF_GYj2jEvR6HpJaS7SMF39dtKgDBdOjjn4oZZ7_M)
+![](https://lh4.googleusercontent.com/jurvGVuWAMzY2MegbZ6yCTEjcc4wGCDzLrZ-gHaYMcgoNWZJg1LMPqtADliP2-O8pBwq7aVPo6WiSEd7uBhJ6wnDSFBXQZ4TqRRvbnc6qsT_Mhv1X4E8bpwmE0FC79maDvwFDAC0)
+2. In AppDelegate.h, add #import <Appgain/Appgain.h
+3. In AppDelegate.m
+
+	     (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	    [AppGain initializeAppWithID:<your app id  andApiKey: <—-your app api key —— whenFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
+	    //after app finish configure.
+	    //response for match app to link.
+	    //result show link matched data.}];
+	    return YES;
+	    }
+**Swift** —
+• Create <project-name -Bridging-Header.h
+• add this on it `#import <Appgain/Appgain.h`
+• AppGain.initializeApp(withID: <your app id , andApiKey: <your app api key )
+{ (response, result) in
+}
