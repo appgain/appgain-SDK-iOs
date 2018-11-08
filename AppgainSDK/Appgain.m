@@ -54,19 +54,26 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             
             
             if (result != nil){
-                
-                [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
-                [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
-                [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
-                [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
-                
-                [Appgain configuerServerParser:true];
-                
-                initDone(response,result);
-                
+                if ([result objectForKey:@"AppSubDomainName"] != nil){
+                    [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
+                    [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
+                    [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
+                    [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
+                    
+                    [Appgain configuerServerParser:true];
+                    
+                    initDone(response,result);
+                }
+                else{
+                    
+                    initDone(response,result);
+                    
+                }
                 //  }
             }
             else{
+                initDone(response,result);
+                
                 NSLog(@"AppGain SDK init is fail");
                 //NSLog(@"%@",response);
             }
@@ -319,6 +326,22 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     [[ServiceLayer new] getRequestWithURL:[UrlData getmatcherUrlWithUserID:userID] didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
+            if ([[result objectForKey:@"extra_data"] objectForKey:@"params"]){
+                PFUser *currentUser = [PFUser currentUser];
+                NSArray * parameter = [[result objectForKey:@"extra_data"] objectForKey:@"params"];
+                for (NSDictionary *item in parameter){
+                    for (id  key in item) {
+                        id value = item[key];
+                        // do stuff
+                        currentUser[key] = value;
+                    }
+                }
+                [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+
+                    
+                }];
+            }
+            
         });
         
     }];
