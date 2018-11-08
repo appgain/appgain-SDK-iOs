@@ -7,8 +7,8 @@
 
 #import "SmartDeepLink.h"
 #import "TargetPlatform.h"
-#import "MobileLandingPage.h"
-#import "MobileLandingPageButton.h"
+#import "MobileDeepPage.h"
+#import "MobileDeepPageButton.h"
 #import "SocialmediaSettings.h"
 #import "NotificationStatus.h"
 #import "ServiceLayer.h"

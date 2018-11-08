@@ -4,9 +4,12 @@
 //  Created by appgain.io on 2/13/18.
 //  Copyright © 2018 appgain.io All rights reserved.
 
-#import "MobileLandingPage.h"
 
-@implementation MobileLandingPage
+
+//MobileDeepPage
+#import "MobileDeepPage.h"
+
+@implementation MobileDeepPage
 
 
 @synthesize LogoUrl = _LogoUrl;
@@ -28,7 +31,7 @@
 
 
 
--(MobileLandingPage *)initWithLogo:(NSString *)logoUrl andHeader:(NSString *)header andParagraph:(NSString *)paragraph withSliderUrlImages:(NSArray *)images andButtons:(NSArray *)buttons andSocialMediaSetting:(SocialmediaSettings *)mediaSetting language:(NSString *)lang andSubscription:(NSString *)sub andimage:(NSString *)image andlabel:(NSString *)label{
+-(MobileDeepPage *)initWithLogo:(NSString *)logoUrl andHeader:(NSString *)header andParagraph:(NSString *)paragraph withSliderUrlImages:(NSArray *)images andButtons:(NSArray *)buttons andSocialMediaSetting:(SocialmediaSettings *)mediaSetting language:(NSString *)lang andSubscription:(NSString *)sub andimage:(NSString *)image andlabel:(NSString *)label{
 
     
     self = [super init];
@@ -74,7 +77,7 @@
 -(NSArray*)buttonsValues{
 
     NSMutableArray *buttons = [NSMutableArray new];
-    for (MobileLandingPageButton *item in _Buttons) {
+    for (MobileDeepPageButton *item in _Buttons) {
         [buttons addObject:item.dictionaryValue];
     }
     return buttons;
