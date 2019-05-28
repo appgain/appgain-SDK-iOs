@@ -84,9 +84,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     else{
         // add last
         //increment every time user run app
+        [Appgain configuerServerParser:false];
+
         initDone(nil,nil);
 
-        [Appgain configuerServerParser:false];
         
         
         
