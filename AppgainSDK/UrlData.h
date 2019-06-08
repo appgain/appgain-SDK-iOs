@@ -5,7 +5,7 @@
 //  Copyright © 2018 appgain.io All rights reserved.
 #import <Foundation/Foundation.h>
 
-#import "SDKKeys.h"
+#import "SdkKeys.h"
 
 
 @interface UrlData : NSObject

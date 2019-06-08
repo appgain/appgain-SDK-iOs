@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		81B4527C2073B193006CF6B6 /* SDKKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B4523D2073A326006CF6B6 /* SDKKeys.m */; };
+		81B4527C2073B193006CF6B6 /* SdkKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B4523D2073A326006CF6B6 /* SdkKeys.m */; };
 		DF6A39F2219488EF0096F48B /* Appgain.podspec in Resources */ = {isa = PBXBuildFile; fileRef = DF6A39F1219488EF0096F48B /* Appgain.podspec */; };
+		DFE4DCFE22AC209C00C06CC7 /* AppgainRich.m in Sources */ = {isa = PBXBuildFile; fileRef = DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,18 +24,20 @@
 		81B4523A2073A326006CF6B6 /* SocialmediaSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SocialmediaSettings.m; sourceTree = "<group>"; };
 		81B4523B2073A326006CF6B6 /* TargetPlatform.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TargetPlatform.m; sourceTree = "<group>"; };
 		81B4523C2073A326006CF6B6 /* MobileDeepPageButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileDeepPageButton.h; sourceTree = "<group>"; };
-		81B4523D2073A326006CF6B6 /* SDKKeys.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDKKeys.m; sourceTree = "<group>"; };
+		81B4523D2073A326006CF6B6 /* SdkKeys.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SdkKeys.m; sourceTree = "<group>"; };
 		81B4523E2073A326006CF6B6 /* DataModels.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataModels.h; sourceTree = "<group>"; };
 		81B4523F2073A327006CF6B6 /* ServiceLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServiceLayer.m; sourceTree = "<group>"; };
 		81B452402073A327006CF6B6 /* MobileDeepPage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileDeepPage.m; sourceTree = "<group>"; };
 		81B452412073A327006CF6B6 /* UrlData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UrlData.m; sourceTree = "<group>"; };
 		81B452422073A327006CF6B6 /* Appgain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Appgain.h; sourceTree = "<group>"; };
-		81B452432073A327006CF6B6 /* SDKKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDKKeys.h; sourceTree = "<group>"; };
+		81B452432073A327006CF6B6 /* SdkKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SdkKeys.h; sourceTree = "<group>"; };
 		81B452442073A328006CF6B6 /* MobileDeepPageButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileDeepPageButton.m; sourceTree = "<group>"; };
 		81B452452073A328006CF6B6 /* NotificationStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationStatus.h; sourceTree = "<group>"; };
 		81B452462073A328006CF6B6 /* ServiceLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServiceLayer.h; sourceTree = "<group>"; };
 		81B452472073A328006CF6B6 /* SmartDeepLink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SmartDeepLink.h; sourceTree = "<group>"; };
 		DF6A39F1219488EF0096F48B /* Appgain.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Appgain.podspec; sourceTree = SOURCE_ROOT; };
+		DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppgainRich.m; sourceTree = "<group>"; };
+		DFE4DCFD22AC209C00C06CC7 /* AppgainRich.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppgainRich.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +71,8 @@
 			isa = PBXGroup;
 			children = (
 				DF6A39F1219488EF0096F48B /* Appgain.podspec */,
+				DFE4DCFD22AC209C00C06CC7 /* AppgainRich.h */,
+				DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */,
 				81B452422073A327006CF6B6 /* Appgain.h */,
 				81B452342073A325006CF6B6 /* Appgain.m */,
 				81B4523E2073A326006CF6B6 /* DataModels.h */,
@@ -77,8 +82,8 @@
 				81B452442073A328006CF6B6 /* MobileDeepPageButton.m */,
 				81B452452073A328006CF6B6 /* NotificationStatus.h */,
 				81B452362073A325006CF6B6 /* NotificationStatus.m */,
-				81B452432073A327006CF6B6 /* SDKKeys.h */,
-				81B4523D2073A326006CF6B6 /* SDKKeys.m */,
+				81B452432073A327006CF6B6 /* SdkKeys.h */,
+				81B4523D2073A326006CF6B6 /* SdkKeys.m */,
 				81B452462073A328006CF6B6 /* ServiceLayer.h */,
 				81B4523F2073A327006CF6B6 /* ServiceLayer.m */,
 				81B452472073A328006CF6B6 /* SmartDeepLink.h */,
@@ -162,7 +167,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81B4527C2073B193006CF6B6 /* SDKKeys.m in Sources */,
+				DFE4DCFE22AC209C00C06CC7 /* AppgainRich.m in Sources */,
+				81B4527C2073B193006CF6B6 /* SdkKeys.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,13 +18,13 @@
 }
 //MARK:get smart link
 + (NSString*) getSmartUrl{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", @"https://api.appgain.io/apps/", [[SDKKeys new] getAppID], @"/smartlinks"];
+    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", @"https://api.appgain.io/apps/", [[SdkKeys new] getAppID], @"/smartlinks"];
     return urlString;
 }
 
 //MARK: get matche link
 + (NSString*) getmatcherUrlWithUserID :(NSString*)userID{
-    SDKKeys *temp = [SDKKeys new];
+    SdkKeys *temp = [SdkKeys new];
     NSString *userIDD = userID;
     if ( [userID isEqualToString:@""]){
         userIDD = [temp getParserUserID];
@@ -36,19 +36,19 @@
 
 //MARK : get create landing  page url.
 + (NSString*) getLandingPageUrl{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", @"https://api.appgain.io/apps/", [[SDKKeys new] getAppID], @"/landingpages"];
+    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", @"https://api.appgain.io/apps/", [[SdkKeys new] getAppID], @"/landingpages"];
     return urlString;
 }
 
 //MARK: notification track url.
 + (NSString*) getnotificationTrackUrl{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", @"https://notify.appgain.io/", [[SDKKeys new] getAppID], @"/recordstatus"];
+    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", @"https://notify.appgain.io/", [[SdkKeys new] getAppID], @"/recordstatus"];
     return urlString;
 }
 
 //MARK: Get automator url.
 + (NSString*) getAutomatorUrlWithTriggerPoint:(NSString *)trigger{
-    SDKKeys *temp = [SDKKeys new];
+    SdkKeys *temp = [SdkKeys new];
     NSString *urlString =  [NSString stringWithFormat:@"%@%@%@%@%@%@", @"https://automator.appgain.io/automessages/", [temp getAppID], @"/firevent/",trigger,@"/",[temp getParserUserID]];
     return urlString;
 }

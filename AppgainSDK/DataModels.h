@@ -12,6 +12,6 @@
 #import "SocialmediaSettings.h"
 #import "NotificationStatus.h"
 #import "ServiceLayer.h"
-#import "SDKKeys.h"
+#import "SdkKeys.h"
 #import "UrlData.h"
 

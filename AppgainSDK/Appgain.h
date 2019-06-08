@@ -10,7 +10,7 @@
 #import "DataModels.h"
 #import <Parse/Parse.h>
 
-#import "SDKKeys.h"
+#import "SdkKeys.h"
 @interface Appgain : NSObject
 
 

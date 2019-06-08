@@ -42,9 +42,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     initDone =  onComplete;
     
     //if no project or parser server is done sent to get parser server data
-    if ([[[SDKKeys new] getParserUserID]  isEqual: @""] ) {
+    if ([[[SdkKeys new] getParserUserID]  isEqual: @""] ) {
         
-        SDKKeys* tempSdkKeys = [SDKKeys new];
+        SdkKeys* tempSdkKeys = [SdkKeys new];
         [tempSdkKeys setAppApiKey:appApiKey];
         [tempSdkKeys setAppID:appID];
         [[ServiceLayer new] getRequestWithURL:[UrlData getAppKeysUrlWithID:appID] didFinish:^(NSURLResponse * response, NSMutableDictionary * result) {
@@ -134,7 +134,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     // If you would like all objects to be private by default, remove this line.
     [Parse initializeWithConfiguration:[ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         
-        SDKKeys * tempkeys = [SDKKeys new];
+        SdkKeys * tempkeys = [SdkKeys new];
         configuration.applicationId = [tempkeys getParseAppID];
         configuration.server =[tempkeys getParseServerUrl];
         configuration.localDatastoreEnabled = YES; // If you need to enable local data store
@@ -204,7 +204,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     });
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         //NSLog(user.objectId);
-        [[SDKKeys new] setParserUserID:user.objectId];
+        [[SdkKeys new] setParserUserID:user.objectId];
         if (!error) {
             if (user) {
                 //after create user update parser installation with new user id
@@ -216,7 +216,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                     // currentInstallation[@"appPush"] = @"true";
                     
                     currentInstallation[@"userId"] = [[PFUser currentUser] objectId];
-                    currentInstallation[@"deviceToken"] = [[SDKKeys new] getDeviceToken];
+                    currentInstallation[@"deviceToken"] = [[SdkKeys new] getDeviceToken];
                     // NSTimeZone *timeZone=[NSTimeZone localTimeZone];
                     
                     currentInstallation.channels = @[[NSString stringWithFormat:@"user_%@",[PFUser currentUser].objectId ]];
@@ -270,7 +270,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
     //NSLog(@"content---%@", token);
     
-    [[SDKKeys new] setDeviceToken:token];
+    [[SdkKeys new] setDeviceToken:token];
     
     //set server installion for this device
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
@@ -420,7 +420,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     NSDictionary *details = @{@"channel" :@"apppush",
                               @"action":
                                   @{@"name":action,@"value":@"NA"} ,//name could be received", --> or conversion or open
-                              @"userId":[[SDKKeys new] getParserUserID], //
+                              @"userId":[[SdkKeys new] getParserUserID], //
                               @"campaign_id": campaign ,
                               @"campaign_name":campaign_name
                               };
@@ -439,7 +439,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 //MARK: get parser user id
 
 +(NSString *)getUserID{
-    return  [[SDKKeys new] getParserUserID];
+    return  [[SdkKeys new] getParserUserID];
 }
 
 //
@@ -454,7 +454,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
     [currentInstallation saveInBackground];
     
-    [[SDKKeys new] setParserUserID:userId];
+    [[SdkKeys new] setParserUserID:userId];
     
     // update user id
     PFUser * currentUser = [PFUser currentUser];
