@@ -6,7 +6,7 @@
 
 #import "SdkKeys.h"
 
-@implementation SDKKeys
+@implementation SdkKeys : NSObject 
 
 //appApiKey   <—- that will create from your account in server side .
 //Response AppID
