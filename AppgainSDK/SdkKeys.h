@@ -14,7 +14,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-@interface SDKKeys : NSObject
+@interface SdkKeys : NSObject
 
 #define APP_API_KEY @"app_api_key"
 #define APP_ID @"app_id"
