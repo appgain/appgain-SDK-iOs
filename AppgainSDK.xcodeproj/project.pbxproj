@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		81B4527C2073B193006CF6B6 /* SdkKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B4523D2073A326006CF6B6 /* SdkKeys.m */; };
+		DF32D1FA22AFD8770072D026 /* Appgain-Rich.podspec in Resources */ = {isa = PBXBuildFile; fileRef = DF32D1F922AFD8770072D026 /* Appgain-Rich.podspec */; };
 		DF6A39F2219488EF0096F48B /* Appgain.podspec in Resources */ = {isa = PBXBuildFile; fileRef = DF6A39F1219488EF0096F48B /* Appgain.podspec */; };
 		DFE4DCFE22AC209C00C06CC7 /* AppgainRich.m in Sources */ = {isa = PBXBuildFile; fileRef = DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */; };
 /* End PBXBuildFile section */
@@ -35,7 +36,8 @@
 		81B452452073A328006CF6B6 /* NotificationStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationStatus.h; sourceTree = "<group>"; };
 		81B452462073A328006CF6B6 /* ServiceLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServiceLayer.h; sourceTree = "<group>"; };
 		81B452472073A328006CF6B6 /* SmartDeepLink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SmartDeepLink.h; sourceTree = "<group>"; };
-		DF6A39F1219488EF0096F48B /* Appgain.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Appgain.podspec; sourceTree = SOURCE_ROOT; };
+		DF32D1F922AFD8770072D026 /* Appgain-Rich.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Appgain-Rich.podspec"; sourceTree = SOURCE_ROOT; };
+		DF6A39F1219488EF0096F48B /* Appgain.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Appgain.podspec; path = AppgainSDK/podspec/Appgain.podspec; sourceTree = SOURCE_ROOT; };
 		DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppgainRich.m; sourceTree = "<group>"; };
 		DFE4DCFD22AC209C00C06CC7 /* AppgainRich.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppgainRich.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,10 +72,8 @@
 		81B4521B2073A190006CF6B6 /* AppgainSDK */ = {
 			isa = PBXGroup;
 			children = (
+				DF32D1F822AFD84A0072D026 /* podspec */,
 				DF32D1F722AFD3A10072D026 /* Appgain-rich */,
-				DF6A39F1219488EF0096F48B /* Appgain.podspec */,
-				DFE4DCFD22AC209C00C06CC7 /* AppgainRich.h */,
-				DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */,
 				81B452422073A327006CF6B6 /* Appgain.h */,
 				81B452342073A325006CF6B6 /* Appgain.m */,
 				81B4523E2073A326006CF6B6 /* DataModels.h */,
@@ -102,8 +102,19 @@
 		DF32D1F722AFD3A10072D026 /* Appgain-rich */ = {
 			isa = PBXGroup;
 			children = (
+				DFE4DCFD22AC209C00C06CC7 /* AppgainRich.h */,
+				DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */,
 			);
 			path = "Appgain-rich";
+			sourceTree = "<group>";
+		};
+		DF32D1F822AFD84A0072D026 /* podspec */ = {
+			isa = PBXGroup;
+			children = (
+				DF32D1F922AFD8770072D026 /* Appgain-Rich.podspec */,
+				DF6A39F1219488EF0096F48B /* Appgain.podspec */,
+			);
+			path = podspec;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF6A39F2219488EF0096F48B /* Appgain.podspec in Resources */,
+				DF32D1FA22AFD8770072D026 /* Appgain-Rich.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
