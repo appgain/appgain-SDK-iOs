@@ -70,6 +70,7 @@
 		81B4521B2073A190006CF6B6 /* AppgainSDK */ = {
 			isa = PBXGroup;
 			children = (
+				DF32D1F722AFD3A10072D026 /* Appgain-rich */,
 				DF6A39F1219488EF0096F48B /* Appgain.podspec */,
 				DFE4DCFD22AC209C00C06CC7 /* AppgainRich.h */,
 				DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */,
@@ -96,6 +97,13 @@
 				81B452412073A327006CF6B6 /* UrlData.m */,
 			);
 			path = AppgainSDK;
+			sourceTree = "<group>";
+		};
+		DF32D1F722AFD3A10072D026 /* Appgain-rich */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Appgain-rich";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
