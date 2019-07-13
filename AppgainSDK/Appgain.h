@@ -16,7 +16,8 @@
 
 //MARK: get current  user parser id
 +(NSString*)getUserID;
-
+//MARK: inialize sdk Data with client id
++(void)initializeAppWithID:( NSString* )appID andApiKey :(NSString*)appApiKey andClientId :(NSString*)clientId whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
 //MARK: inialize sdk Data
 +(void)initializeAppWithID:( NSString* )appID andApiKey :(NSString*)appApiKey  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
 //MARK: deinialize sdk Data

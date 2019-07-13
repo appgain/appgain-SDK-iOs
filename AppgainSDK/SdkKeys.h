@@ -20,6 +20,7 @@
 #define APP_ID @"app_id"
 #define APP_SUB_DOMAIN_NAME @"app_sub_domain_name"
 #define PARSE_APP_ID @"parse_app_id"
+#define PARSE_CLIENT_ID @"parse_client_id"
 
 #define PARSE_SERVER_URL @"parse-server_url"
 #define PARSE_MASTER_KEY @"parse-master_key"
@@ -42,6 +43,9 @@
 //MARK:Parse-AppID
 -(NSString*) getParseAppID;
 -(void) setParseAppID :(NSString*)  key;
+//MARK:Parse-ClientID
+-(NSString*) getParseClientID;
+-(void) setParseClientID :(NSString*)  key;
 
 
 //MARK:parse-serverUrl

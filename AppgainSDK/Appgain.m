@@ -33,6 +33,17 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
 
 
++(void)initializeAppWithID:(NSString *)appID andApiKey:(NSString *)appApiKey andClientId:(NSString *)clientId whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete{
+    
+    [[SdkKeys new] setParseClientID:clientId];
+    
+    [Appgain initializeAppWithID:appID andApiKey:appApiKey whenFinish:^(NSURLResponse * reponse, NSMutableDictionary * result) {
+        
+        onComplete(reponse,result);
+        
+        
+    }];
+}
 
 
 
@@ -53,6 +64,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             // NSLog(@"- init matcher  result ==%@",result);
             
             
+            
             if (result != nil){
                 if ([result objectForKey:@"AppSubDomainName"] != nil){
                     [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
@@ -60,7 +72,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                     [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
                     [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
                     
-                    [Appgain configuerServerParser:true];
+                    [Appgain configuerServerParser:YES];
                     
                     initDone(response,result);
                 }
@@ -84,10 +96,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     else{
         // add last
         //increment every time user run app
-        [Appgain configuerServerParser:false];
-
+        [Appgain configuerServerParser:FALSE];
+        
         initDone(nil,nil);
-
+        
         
         
         
@@ -137,7 +149,13 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         SdkKeys * tempkeys = [SdkKeys new];
         configuration.applicationId = [tempkeys getParseAppID];
         configuration.server =[tempkeys getParseServerUrl];
-        configuration.localDatastoreEnabled = YES; // If you need to enable local data store
+        configuration.localDatastoreEnabled = YES;// If you need to enable local data store
+        //set client id if it provided
+        if (![[[SdkKeys new] getParseClientID] isEqualToString:@""]){
+            configuration.clientKey = [[SdkKeys new] getParseClientID];
+        }
+        
+        
     }]];
     
     
@@ -323,24 +341,33 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 /*
  input parameter app user id
  */
+
+
+
 +(void)CreateLinkMactcherWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
     
     [[ServiceLayer new] getRequestWithURL:[UrlData getmatcherUrlWithUserID:userID] didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
+            
+            
+            //  NSLog(result);
+            
             if ([[result objectForKey:@"extra_data"] objectForKey:@"params"]){
                 PFUser *currentUser = [PFUser currentUser];
+                
+                
                 NSArray * parameter = [[result objectForKey:@"extra_data"] objectForKey:@"params"];
                 for (NSDictionary *item in parameter){
                     for (id  key in item) {
                         id value = item[key];
                         // do stuff
                         currentUser[key] = value;
+                        
                     }
+                    
                 }
                 [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-
-                    
                 }];
             }
             
@@ -351,10 +378,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 }
 
 
-
-
 //MARK : create LandingPage for user
-+(void)createLandingPageWithObject:(MobileDeepPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
++(void)createLandingPageWithObject:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
     [[ServiceLayer new] postRequestWithURL:[UrlData getLandingPageUrl] withBodyData: [landingPage dictionaryValue] didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
@@ -393,6 +418,56 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     }];
     
 }
+
+//MARK:create automator
+/*
+ input parameter
+ 1- trigger point
+ 2- userID *optional*
+ 3- with extra  parameters in NSDictionary [key,value]
+ */
+
++(NSString*)urlEscapeString:(NSString *)unencodedString
+{
+    CFStringRef originalStringRef = (__bridge_retained CFStringRef)unencodedString;
+    NSString *s = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,originalStringRef, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8);
+    CFRelease(originalStringRef);
+    return s;
+}
+
++(void)CreateAutomatorWithTrigger:(NSString *)trigger andUserId:(NSString *)userID andParameters:(NSMutableDictionary*) parameters whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
+    
+    
+    
+    NSMutableString *requestUrl = [[NSMutableString alloc] initWithFormat:@"%@",[UrlData getAutomatorUrlWithTriggerPoint:trigger]];
+    
+    NSMutableString *urlWithQuerystring = [[NSMutableString alloc] initWithString:[UrlData getAutomatorUrlWithTriggerPoint:trigger]];
+    
+    for (id key in parameters) {
+        NSString *keyString = [key description];
+        NSString *valueString = [[parameters objectForKey:key] description];
+        
+        if ([urlWithQuerystring rangeOfString:@"?"].location == NSNotFound) {
+            [urlWithQuerystring appendFormat:@"?%@=%@", [self urlEscapeString:keyString], [self urlEscapeString:valueString]];
+        } else {
+            [urlWithQuerystring appendFormat:@"&%@=%@", [self urlEscapeString:keyString], [self urlEscapeString:valueString]];
+        }
+    }
+    
+    [[ServiceLayer new] getRequestWithURL:urlWithQuerystring didFinish:^(NSURLResponse *response , NSMutableDictionary * result) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            onComplete(response,result);
+        });
+        
+        
+        
+    }];
+    
+}
+
+
+
 
 //Mark track notification
 /*
@@ -472,16 +547,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             
             user[@"userId"] = userId;
             [user saveInBackground];
-            
-            
         }
-        
-        
     }];
     
-    
-    
 }
+
 
 @end
 

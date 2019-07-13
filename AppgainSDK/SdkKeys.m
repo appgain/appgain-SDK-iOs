@@ -6,7 +6,7 @@
 
 #import "SdkKeys.h"
 
-@implementation SdkKeys : NSObject 
+@implementation SdkKeys
 
 //appApiKey   <—- that will create from your account in server side .
 //Response AppID
@@ -76,6 +76,27 @@
     [defaults synchronize];
 }
 
+
+
+//AppSubDomainName
+-(NSString*) getParseClientID{
+    
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *theKey = [defaults stringForKey:PARSE_CLIENT_ID];
+    if (theKey == NULL ){
+        return @"";
+    }
+    return theKey;
+    
+}
+
+-(void) setParseClientID:(NSString *)key {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:key forKey: PARSE_CLIENT_ID];
+    [defaults synchronize];
+}
 //Parse-AppID
 -(NSString*) getParseAppID{
     
@@ -150,7 +171,7 @@
 
 
 -(void)setFirstRun:(NSString *)key{
-
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:FIRST_RUN_APP];
     [defaults synchronize];
@@ -162,7 +183,7 @@
 ///userID in parser server
 
 -(NSString *)getParserUserID{
-
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:USER_PARSE_ID];
     
@@ -177,16 +198,16 @@
 -(void)setParserUserID:(NSString *)key{
     
     
-
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:USER_PARSE_ID];
     [defaults synchronize];
 }
 
 -(NSString *)getDeviceUDID{
-
-
-        return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    
+    
+    return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 }
 
 
