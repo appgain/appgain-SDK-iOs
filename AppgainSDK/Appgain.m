@@ -37,12 +37,12 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
     [[SdkKeys new] setParseClientID:clientId];
     
-    [Appgain initializeAppWithID:appID andApiKey:appApiKey whenFinish:^(NSURLResponse * reponse, NSMutableDictionary * result) {
-        
-        onComplete(reponse,result);
-        
-        
-    }];
+//    [Appgain initializeAppWithID:appID andApiKey:appApiKey whenFinish:^(NSURLResponse * reponse, NSMutableDictionary * result) {
+//        
+//        onComplete(reponse,result);
+//        
+//        
+//    }];
 }
 
 
