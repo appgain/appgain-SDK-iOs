@@ -96,7 +96,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     else{
         // add last
         //increment every time user run app
-        [Appgain configuerServerParser:FALSE];
+        [Appgain configuerServerParser:NO];
         
         initDone(nil,nil);
         
@@ -141,7 +141,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 /*
  No parameter that work form data that saved before in NsUserDefault
  */
-+(void)configuerServerParser : (BOOL*)newUser{
++(void)configuerServerParser : (BOOL)newUser{
     
     // If you would like all objects to be private by default, remove this line.
     [Parse initializeWithConfiguration:[ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
@@ -164,7 +164,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     defaultACL.publicReadAccess = YES;
     [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
     
-    PFUser *currentUser = [PFUser currentUser];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     });
@@ -266,7 +265,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                 //                    });
                 //                }];
             }
-        } else {   NSString *errorString = [error userInfo][@"error"];   // Show the
+        } else {
+            //NSString *errorString = [error userInfo][@"error"];   // Show the
             NSLog(@"AppGain Fail to create your id %@",error);
         }
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -439,7 +439,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
     
     
-    NSMutableString *requestUrl = [[NSMutableString alloc] initWithFormat:@"%@",[UrlData getAutomatorUrlWithTriggerPoint:trigger]];
     
     NSMutableString *urlWithQuerystring = [[NSMutableString alloc] initWithString:[UrlData getAutomatorUrlWithTriggerPoint:trigger]];
     
