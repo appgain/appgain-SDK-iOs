@@ -15,9 +15,9 @@
 
 
 //MARK: get current  user parser id
-+(NSString*)getUserID; appID
++(NSString*)getUserID; 
 //MARK: inialize sdk Data with client id
-+(void)initializeAppWithClientID:(NSString *)clientId andAppId:(NSString *)appId andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete;
+//+(void)initializeAppWithClientID:(NSString *)clientId andAppId:(NSString *)appId andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete;
 
 //MARK: inialize sdk Data
 +(void)initializeAppWithID:( NSString* )appID andApiKey :(NSString*)appApiKey  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;

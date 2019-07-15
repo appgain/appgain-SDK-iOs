@@ -30,7 +30,6 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
                 });
-                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
                 NSMutableDictionary *responseDictionary;// = [NSMutableDictionary new];
                                           
                 if( data != nil )
@@ -73,7 +72,6 @@
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
             });
             
-            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
             NSMutableDictionary *responseDictionary;// = [NSMutableDictionary new];
             if(data != nil )
             {
