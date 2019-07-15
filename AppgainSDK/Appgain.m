@@ -31,16 +31,16 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
  
  */
 
-//+(void)initializeAppWithClientID:(NSString *)clientId andAppId:(NSString *)appId andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete{
-//    [[SdkKeys new] setParseClientID:clientId];
-//
-//    [Appgain initializeAppWithID:appId andApiKey:appApiKey whenFinish:^(NSURLResponse * reponse, NSMutableDictionary * result) {
-//
-//        onComplete(reponse,result);
-//
-//
-//    }];
-//}
++(void)initializeAppWithClientID:(NSString *)clientId andAppId:(NSString *)appId andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete{
+    [[SdkKeys new] setParseClientID:clientId];
+
+    [Appgain initializeAppWithID:appId andApiKey:appApiKey whenFinish:^(NSURLResponse * reponse, NSMutableDictionary * result) {
+
+        onComplete(reponse,result);
+
+
+    }];
+}
 
 
 

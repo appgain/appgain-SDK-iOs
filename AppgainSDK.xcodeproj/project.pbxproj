@@ -10,7 +10,6 @@
 		81B4527C2073B193006CF6B6 /* SdkKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B4523D2073A326006CF6B6 /* SdkKeys.m */; };
 		DF32D1FC22AFDB0B0072D026 /* Appgain-Rich.podspec in Resources */ = {isa = PBXBuildFile; fileRef = DF32D1FB22AFDB0B0072D026 /* Appgain-Rich.podspec */; };
 		DF6A39F2219488EF0096F48B /* Appgain.podspec in Resources */ = {isa = PBXBuildFile; fileRef = DF6A39F1219488EF0096F48B /* Appgain.podspec */; };
-		DF91F63D22DCFD6700E528E9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF91F63C22DCFD6700E528E9 /* Info.plist */; };
 		DFE4DCFE22AC209C00C06CC7 /* AppgainRich.m in Sources */ = {isa = PBXBuildFile; fileRef = DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */; };
 /* End PBXBuildFile section */
 
@@ -39,7 +38,6 @@
 		81B452472073A328006CF6B6 /* SmartDeepLink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SmartDeepLink.h; sourceTree = "<group>"; };
 		DF32D1FB22AFDB0B0072D026 /* Appgain-Rich.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Appgain-Rich.podspec"; sourceTree = "<group>"; };
 		DF6A39F1219488EF0096F48B /* Appgain.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Appgain.podspec; sourceTree = SOURCE_ROOT; };
-		DF91F63C22DCFD6700E528E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppgainRich.m; sourceTree = "<group>"; };
 		DFE4DCFD22AC209C00C06CC7 /* AppgainRich.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppgainRich.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,7 +74,6 @@
 		81B4521B2073A190006CF6B6 /* AppgainSDK */ = {
 			isa = PBXGroup;
 			children = (
-				DF91F63C22DCFD6700E528E9 /* Info.plist */,
 				DF32D1F722AFD3A10072D026 /* Appgain-rich */,
 				81B452422073A327006CF6B6 /* Appgain.h */,
 				81B452342073A325006CF6B6 /* Appgain.m */,
@@ -172,7 +169,6 @@
 			files = (
 				DF6A39F2219488EF0096F48B /* Appgain.podspec in Resources */,
 				DF32D1FC22AFDB0B0072D026 /* Appgain-Rich.podspec in Resources */,
-				DF91F63D22DCFD6700E528E9 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
