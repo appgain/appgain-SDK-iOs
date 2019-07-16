@@ -40,7 +40,7 @@
 +(void)CreateLinkMactcherWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
 
 //MARK: create single and slider landing mobile page
-+(void)createLandingPageWithObject:(MobileDeepPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
++(void)createLandingPageWithObject:(MobileDeepPage *)landingPage whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete;
 
 
 //MARK: create trigger point for user
