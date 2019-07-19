@@ -325,6 +325,13 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
     
     [[ServiceLayer new] postRequestWithURL: [UrlData getSmartUrl] withBodyData: linkObject.dictionaryValue didFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
+        // update user id
+        if (result[@"smartlink"] != nil ){
+            PFUser * currentUser = [PFUser currentUser];
+            currentUser[@"SDL"] = result[@"smartlink"];
+            [currentUser saveInBackground];
+
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
         });
