@@ -9,18 +9,18 @@
 /// import all model you need
 #import "DataModels.h"
 #import <Parse/Parse.h>
-
 #import "SdkKeys.h"
 @interface Appgain : NSObject
 
-
 //MARK: get current  user parser id
-+(NSString*)getUserID; 
-//MARK: inialize sdk Data with client id
-+(void)initializeAppWithClientID:(NSString *)clientId andAppId:(NSString *)appId andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete;
++(NSString*)getUserID;
 
 //MARK: inialize sdk Data
 +(void)initializeAppWithID:( NSString* )appID andApiKey :(NSString*)appApiKey  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
+
+//MARK: inialize sdk Data with client id
++(void)initializeAppWithClientID:( NSString* )clientId andAppId :(NSString*)appId andApiKey :(NSString*)appApiKey  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
+
 //MARK: deinialize sdk Data
 
 +(void)deInitializeApp ;
@@ -40,17 +40,27 @@
 +(void)CreateLinkMactcherWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
 
 //MARK: create single and slider landing mobile page
-+(void)createLandingPageWithObject:(MobileDeepPage *)landingPage whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete;
++(void)createLandingPageWithObject:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
 
 
 //MARK: create trigger point for user
 +(void)CreateAutomatorWithTrigger :(NSString*) trigger andUserId :(NSString*)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
 
+//MARK: create trigger point for user with custom extra parameter
++(void)CreateAutomatorWithTrigger:(NSString *)trigger andUserId:(NSString *)userID andParameters:(NSMutableDictionary*) Parameters whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
+
 //MARK: sent notification status for server.
 +(void)trackNotificationWithAction:(NSString*)action andUserInfo:(NSDictionary *) userInfo whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
+
 
 //MARK: update parser user id with app user id
 
 +(void)updateUserId:(NSString*)userId ;
 
+//MARK: log item user purchase for his id
+
++(void)logPurchaseForItem:(PurchaseItem *)item;
+
+//MARK: enable and disable notification for user
++(void)enableReciveNotification:(BOOL)enable;
 @end

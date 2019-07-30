@@ -7,32 +7,38 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF1E6DFD22F0867500C191CA /* MobileLandingPageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF422F0867500C191CA /* MobileLandingPageButton.m */; };
+		DF1E6DFE22F0867500C191CA /* MobileLandingPage.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF722F0867500C191CA /* MobileLandingPage.m */; };
+		DF1E6DFF22F0867500C191CA /* PurchaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF822F0867500C191CA /* PurchaseItem.m */; };
+		DF1E6E0022F0867500C191CA /* Appgain.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF922F0867500C191CA /* Appgain.m */; };
 		DFFF36F622DE1E390071DF0B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DFFF36F522DE1E390071DF0B /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		81B452192073A190006CF6B6 /* AppgainSDK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppgainSDK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81B452332073A325006CF6B6 /* SmartDeepLink.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SmartDeepLink.m; sourceTree = "<group>"; };
-		81B452342073A325006CF6B6 /* Appgain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Appgain.m; sourceTree = "<group>"; };
 		81B452352073A325006CF6B6 /* SocialmediaSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SocialmediaSettings.h; sourceTree = "<group>"; };
 		81B452362073A325006CF6B6 /* NotificationStatus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationStatus.m; sourceTree = "<group>"; };
 		81B452372073A325006CF6B6 /* TargetPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TargetPlatform.h; sourceTree = "<group>"; };
 		81B452382073A325006CF6B6 /* UrlData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UrlData.h; sourceTree = "<group>"; };
-		81B452392073A325006CF6B6 /* MobileDeepPage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileDeepPage.h; sourceTree = "<group>"; };
 		81B4523A2073A326006CF6B6 /* SocialmediaSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SocialmediaSettings.m; sourceTree = "<group>"; };
 		81B4523B2073A326006CF6B6 /* TargetPlatform.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TargetPlatform.m; sourceTree = "<group>"; };
-		81B4523C2073A326006CF6B6 /* MobileDeepPageButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileDeepPageButton.h; sourceTree = "<group>"; };
 		81B4523D2073A326006CF6B6 /* SdkKeys.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SdkKeys.m; sourceTree = "<group>"; };
-		81B4523E2073A326006CF6B6 /* DataModels.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataModels.h; sourceTree = "<group>"; };
 		81B4523F2073A327006CF6B6 /* ServiceLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServiceLayer.m; sourceTree = "<group>"; };
-		81B452402073A327006CF6B6 /* MobileDeepPage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileDeepPage.m; sourceTree = "<group>"; };
 		81B452412073A327006CF6B6 /* UrlData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UrlData.m; sourceTree = "<group>"; };
-		81B452422073A327006CF6B6 /* Appgain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Appgain.h; sourceTree = "<group>"; };
 		81B452432073A327006CF6B6 /* SdkKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SdkKeys.h; sourceTree = "<group>"; };
-		81B452442073A328006CF6B6 /* MobileDeepPageButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileDeepPageButton.m; sourceTree = "<group>"; };
 		81B452452073A328006CF6B6 /* NotificationStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationStatus.h; sourceTree = "<group>"; };
 		81B452462073A328006CF6B6 /* ServiceLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServiceLayer.h; sourceTree = "<group>"; };
 		81B452472073A328006CF6B6 /* SmartDeepLink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SmartDeepLink.h; sourceTree = "<group>"; };
+		DF1E6DF422F0867500C191CA /* MobileLandingPageButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileLandingPageButton.m; sourceTree = "<group>"; };
+		DF1E6DF522F0867500C191CA /* MobileLandingPageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileLandingPageButton.h; sourceTree = "<group>"; };
+		DF1E6DF622F0867500C191CA /* DataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataModels.h; sourceTree = "<group>"; };
+		DF1E6DF722F0867500C191CA /* MobileLandingPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileLandingPage.m; sourceTree = "<group>"; };
+		DF1E6DF822F0867500C191CA /* PurchaseItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseItem.m; sourceTree = "<group>"; };
+		DF1E6DF922F0867500C191CA /* Appgain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appgain.m; sourceTree = "<group>"; };
+		DF1E6DFA22F0867500C191CA /* Appgain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appgain.h; sourceTree = "<group>"; };
+		DF1E6DFB22F0867500C191CA /* MobileLandingPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileLandingPage.h; sourceTree = "<group>"; };
+		DF1E6DFC22F0867500C191CA /* PurchaseItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseItem.h; sourceTree = "<group>"; };
 		DF32D1FB22AFDB0B0072D026 /* Appgain-Rich.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Appgain-Rich.podspec"; sourceTree = "<group>"; };
 		DF6A39F1219488EF0096F48B /* Appgain.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Appgain.podspec; sourceTree = SOURCE_ROOT; };
 		DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppgainRich.m; sourceTree = "<group>"; };
@@ -72,15 +78,17 @@
 		81B4521B2073A190006CF6B6 /* AppgainSDK */ = {
 			isa = PBXGroup;
 			children = (
+				DF1E6DFA22F0867500C191CA /* Appgain.h */,
+				DF1E6DF922F0867500C191CA /* Appgain.m */,
+				DF1E6DF622F0867500C191CA /* DataModels.h */,
+				DF1E6DFB22F0867500C191CA /* MobileLandingPage.h */,
+				DF1E6DF722F0867500C191CA /* MobileLandingPage.m */,
+				DF1E6DF522F0867500C191CA /* MobileLandingPageButton.h */,
+				DF1E6DF422F0867500C191CA /* MobileLandingPageButton.m */,
+				DF1E6DFC22F0867500C191CA /* PurchaseItem.h */,
+				DF1E6DF822F0867500C191CA /* PurchaseItem.m */,
 				DFFF36F522DE1E390071DF0B /* Info.plist */,
 				DF32D1F722AFD3A10072D026 /* Appgain-rich */,
-				81B452422073A327006CF6B6 /* Appgain.h */,
-				81B452342073A325006CF6B6 /* Appgain.m */,
-				81B4523E2073A326006CF6B6 /* DataModels.h */,
-				81B452392073A325006CF6B6 /* MobileDeepPage.h */,
-				81B452402073A327006CF6B6 /* MobileDeepPage.m */,
-				81B4523C2073A326006CF6B6 /* MobileDeepPageButton.h */,
-				81B452442073A328006CF6B6 /* MobileDeepPageButton.m */,
 				81B452452073A328006CF6B6 /* NotificationStatus.h */,
 				81B452362073A325006CF6B6 /* NotificationStatus.m */,
 				81B452432073A327006CF6B6 /* SdkKeys.h */,
@@ -177,6 +185,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF1E6E0022F0867500C191CA /* Appgain.m in Sources */,
+				DF1E6DFE22F0867500C191CA /* MobileLandingPage.m in Sources */,
+				DF1E6DFD22F0867500C191CA /* MobileLandingPageButton.m in Sources */,
+				DF1E6DFF22F0867500C191CA /* PurchaseItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

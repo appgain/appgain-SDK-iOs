@@ -7,11 +7,12 @@
 
 #import "SmartDeepLink.h"
 #import "TargetPlatform.h"
-#import "MobileDeepPage.h"
-#import "MobileDeepPageButton.h"
+#import "MobileLandingPage.h"
+#import "MobileLandingPageButton.h"
 #import "SocialmediaSettings.h"
 #import "NotificationStatus.h"
 #import "ServiceLayer.h"
 #import "SdkKeys.h"
 #import "UrlData.h"
+#import "PurchaseItem.h"
 
