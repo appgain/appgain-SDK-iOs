@@ -59,8 +59,10 @@
 
 //MARK: log item user purchase for his id
 
-+(void)logPurchaseForItem:(PurchaseItem *)item;
++(void)logPurchaseForItem:(PurchaseItem *)item whenFinish:(void (^)(BOOL, NSError*))onComplete;
 
 //MARK: enable and disable notification for user
-+(void)enableReciveNotification:(BOOL)enable;
++(void)enableReciveNotification:(BOOL)enable forType :(NSString*) type whenFinish:(void (^)(BOOL, NSError*))onComplete;
+//MARK: add new notification channel for different type of notification recieving
++(void)createNotificationChannelForType :(NSString *) notificationType andExtraItem :(NSString*) item whenFinish:(void (^)(BOOL, NSError*))onComplete;
 @end

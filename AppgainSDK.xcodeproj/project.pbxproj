@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF18D3C322F5C2A6005DC333 /* NotificationType.m in Sources */ = {isa = PBXBuildFile; fileRef = DF18D3C222F5C2A6005DC333 /* NotificationType.m */; };
 		DF1E6DFD22F0867500C191CA /* MobileLandingPageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF422F0867500C191CA /* MobileLandingPageButton.m */; };
 		DF1E6DFE22F0867500C191CA /* MobileLandingPage.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF722F0867500C191CA /* MobileLandingPage.m */; };
 		DF1E6DFF22F0867500C191CA /* PurchaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF822F0867500C191CA /* PurchaseItem.m */; };
@@ -30,6 +31,8 @@
 		81B452452073A328006CF6B6 /* NotificationStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationStatus.h; sourceTree = "<group>"; };
 		81B452462073A328006CF6B6 /* ServiceLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServiceLayer.h; sourceTree = "<group>"; };
 		81B452472073A328006CF6B6 /* SmartDeepLink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SmartDeepLink.h; sourceTree = "<group>"; };
+		DF18D3C122F5C2A6005DC333 /* NotificationType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationType.h; sourceTree = "<group>"; };
+		DF18D3C222F5C2A6005DC333 /* NotificationType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationType.m; sourceTree = "<group>"; };
 		DF1E6DF422F0867500C191CA /* MobileLandingPageButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileLandingPageButton.m; sourceTree = "<group>"; };
 		DF1E6DF522F0867500C191CA /* MobileLandingPageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileLandingPageButton.h; sourceTree = "<group>"; };
 		DF1E6DF622F0867500C191CA /* DataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataModels.h; sourceTree = "<group>"; };
@@ -103,6 +106,8 @@
 				81B4523B2073A326006CF6B6 /* TargetPlatform.m */,
 				81B452382073A325006CF6B6 /* UrlData.h */,
 				81B452412073A327006CF6B6 /* UrlData.m */,
+				DF18D3C122F5C2A6005DC333 /* NotificationType.h */,
+				DF18D3C222F5C2A6005DC333 /* NotificationType.m */,
 			);
 			path = AppgainSDK;
 			sourceTree = "<group>";
@@ -186,6 +191,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF1E6E0022F0867500C191CA /* Appgain.m in Sources */,
+				DF18D3C322F5C2A6005DC333 /* NotificationType.m in Sources */,
 				DF1E6DFE22F0867500C191CA /* MobileLandingPage.m in Sources */,
 				DF1E6DFD22F0867500C191CA /* MobileLandingPageButton.m in Sources */,
 				DF1E6DFF22F0867500C191CA /* PurchaseItem.m in Sources */,

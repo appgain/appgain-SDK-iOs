@@ -89,7 +89,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 }
 //MARK: deInitializeApp
 +(void)deInitializeApp{
-
+    
     [Appgain createUserID];
     
 }
@@ -132,9 +132,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     else{
         [user incrementKey:@"usagecounter"];
         [user saveInBackground];
+        [Appgain logAppSession];
+
     }
     //add record with user id for every time app open
-    [Appgain logAppSession];
     
 }
 
@@ -167,6 +168,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         [[SdkKeys new] setParserUserID:user.objectId];
         if (!error) {
             if (user) {
+                //log new app session for user after create user object
+                [Appgain logAppSession];
+
                 //after create user update parser installation with new user id
                 PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                 if ([PFUser currentUser].objectId)
@@ -219,7 +223,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
 //MARK:handle recive remote notification to register status track for it
 +(void)handlePush:(NSDictionary *)userInfo forApplication:(UIApplication *)application{
-
+    
     [Appgain trackNotificationWithAction: [NotificationStatus Opened]   andUserInfo:userInfo  whenFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
         //   NSLog(@"%@",result);
     }];
@@ -419,7 +423,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
 }
 
-+(void)logPurchaseForItem:(PurchaseItem *)item{
++(void)logPurchaseForItem:(PurchaseItem *)item whenFinish:(void (^)(BOOL, NSError *))onComplete{
     
     ///add user object for notification channels
     PFObject *purchaseItemObject = [PFObject objectWithClassName:@"PurchaseTransactions"];
@@ -427,19 +431,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     purchaseItemObject[@"productName"] = item.productName;
     purchaseItemObject[@"amount"] =  item.amount;
     purchaseItemObject[@"currency"] =  item.currency;
-    [purchaseItemObject saveInBackground];
-}
-
-
-+(void)enableReciveNotification:(BOOL)enable{
-    //update user id in notification channel
-    PFQuery *query = [PFQuery queryWithClassName:@"NotificationChannels"];
-    [query whereKey:@"userId" equalTo: [Appgain getUserID]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-        for (PFObject *user in objects) {
-            user[@"appPush"] = [[NSString alloc] initWithFormat:@"%@",enable ? @"YES" : @"NO"];
-            [user saveInBackground];
-        }
+    
+    [purchaseItemObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        
+        onComplete(succeeded,error);
     }];
 }
 //log new record for user every time, open app
@@ -447,6 +442,61 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     PFObject *appSessionObject = [PFObject objectWithClassName:@"appSessions"];
     appSessionObject[@"userId"] = [PFUser currentUser].objectId;
     [appSessionObject saveInBackground];
+}
+
++(void)enableReciveNotification:(BOOL)enable forType:(NSString *)type whenFinish:(void (^)(BOOL, NSError *))onComplete{
+    //update user id in notification channel
+    PFQuery *query = [PFQuery queryWithClassName:@"NotificationChannels"];
+    [query whereKey:@"userId" equalTo: [PFUser currentUser].objectId];
+    [query whereKey:@"type" equalTo:type];
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        for (PFObject *user in objects) {
+            user[@"appPush"] = [[NSString alloc] initWithFormat:@"%@",enable ? @"YES" : @"NO"];
+            [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                onComplete(succeeded,error);
+            }];
+        }
+    }];
+}
+
+
+
++(void)createNotificationChannelForType:(NSString *)notificationType andExtraItem:(NSString *)item whenFinish:(void (^)(BOOL, NSError *))onComplete{
+    PFObject *notificationChannnelsObject = [PFObject objectWithClassName:@"NotificationChannels"];
+    notificationChannnelsObject[@"userId"] = [PFUser currentUser].objectId;
+    notificationChannnelsObject[@"appPush"] = @YES;
+    ///add user object for notification channels
+    //mobile app notification
+    if([notificationType isEqualToString:[NotificationType Mobile]]){
+        
+        notificationChannnelsObject[@"type"] =  [NotificationType Mobile];
+        // notificationChannnelsObject[@"type"] = @"appPush";
+        
+    }
+    //email sent  notification
+    
+    if([notificationType isEqualToString:[NotificationType Email]]){
+        notificationChannnelsObject[@"type"] = [NotificationType Email];
+        notificationChannnelsObject[@"email"] = item;
+    }
+    //sms sent notification
+    if([notificationType isEqualToString:[NotificationType Sms]]){
+        notificationChannnelsObject[@"type"] =  [NotificationType Sms];
+        notificationChannnelsObject[@"mobileNum"] = item;
+    }
+    //
+    if([notificationType isEqualToString:[NotificationType Web]]){
+        notificationChannnelsObject[@"type"] =  [NotificationType Web];
+    }
+    
+    
+    
+    [notificationChannnelsObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        onComplete(succeeded,error);
+        
+    }];
+    
+    
 }
 @end
 
