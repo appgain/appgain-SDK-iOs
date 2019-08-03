@@ -133,7 +133,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         [user incrementKey:@"usagecounter"];
         [user saveInBackground];
         [Appgain logAppSession];
-
+        
     }
     //add record with user id for every time app open
     
@@ -168,9 +168,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         [[SdkKeys new] setParserUserID:user.objectId];
         if (!error) {
             if (user) {
-                //log new app session for user after create user object
                 [Appgain logAppSession];
-
+                
                 //after create user update parser installation with new user id
                 PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                 if ([PFUser currentUser].objectId)
@@ -433,8 +432,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     purchaseItemObject[@"currency"] =  item.currency;
     
     [purchaseItemObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        
-        onComplete(succeeded,error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            onComplete(succeeded,error);
+        });
     }];
 }
 //log new record for user every time, open app
@@ -453,7 +454,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         for (PFObject *user in objects) {
             user[@"appPush"] = [[NSString alloc] initWithFormat:@"%@",enable ? @"YES" : @"NO"];
             [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-                onComplete(succeeded,error);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    onComplete(succeeded,error);
+                });
             }];
         }
     }];
@@ -492,7 +496,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
     
     [notificationChannnelsObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        onComplete(succeeded,error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            onComplete(succeeded,error);
+        });
         
     }];
     
