@@ -9,6 +9,7 @@
 
 
 
+static  NSString  *smartLinkId;
 
 static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
@@ -43,7 +44,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
 
 //get app keys and configure data
-//MARK: init sdk with response for link match of smart link.
+//MARK: init sdk with response .
 +(void)initializeAppWithID:(NSString *)appID andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete {
     initDone =  onComplete;
     
@@ -74,7 +75,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             
         }];
     }
-    //else get match linker data
     else{
         // add last
         //increment every time user run app
@@ -242,13 +242,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
  */
 +(void)CreateSmartLinkWithObject:( SmartDeepLink*)linkObject whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
     [[ServiceLayer new] postRequestWithURL: [UrlData getSmartUrl] withBodyData: linkObject.dictionaryValue didFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
-        // update user id
-        if (result[@"smartlink"] != nil ){
-            PFUser * currentUser = [PFUser currentUser];
-            currentUser[@"SDL"] = result[@"smartlink"];
-            [currentUser saveInBackground];
-            
-        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
@@ -277,8 +270,19 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                         currentUser[key] = value;
                     }
                 }
-                [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-                }];
+                [currentUser saveInBackground];
+                
+                ///add key for smart link in first run
+                // update user id
+                //if case user first logging and have matching link id
+                //add link idto user and save id for app session
+                if (([[[SdkKeys new] getFirstRun] isEqualToString:@"true"]) && (result[@"smart_link_id"] != nil )){
+                    PFUser * currentUser = [PFUser currentUser];
+                    currentUser[@"smartlink_id"] = result[@"smart_link_id"];
+                    [currentUser saveInBackground];
+                    smartLinkId = result[@"smart_link_id"];
+                }
+                
             }
         });
     }];
@@ -430,6 +434,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     purchaseItemObject[@"productName"] = item.productName;
     purchaseItemObject[@"amount"] =  item.amount;
     purchaseItemObject[@"currency"] =  item.currency;
+    purchaseItemObject[@"platform"] =  @"ios";
+    //add smart link if user first login app and purchased item.
+    if (![smartLinkId isEqual: NULL]){
+        purchaseItemObject[@"smartlink_id"] = smartLinkId;
+    }
     
     [purchaseItemObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -442,6 +451,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 +(void)logAppSession{
     PFObject *appSessionObject = [PFObject objectWithClassName:@"appSessions"];
     appSessionObject[@"userId"] = [PFUser currentUser].objectId;
+    appSessionObject[@"platform"] = @"ios";
     [appSessionObject saveInBackground];
 }
 
