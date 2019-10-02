@@ -12,11 +12,12 @@
 
 //MARK : Rich notification part
 
+
+static UIViewController* viewControllerShared;
+static NSString * url;
 + (void)didReceiveNotificationRequest:(UNNotificationRequest *)request andNotificationContent :(UNMutableNotificationContent*) bestAttemptContent withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
     // self.contentHandler = contentHandler;
     bestAttemptContent = [request.content mutableCopy];
-    
-    
     if ( bestAttemptContent != nil ){
         // Modify the notification content here..
         NSString * urlString  = nil;
@@ -40,12 +41,10 @@
 
 
 + (void)didReceiveNotification:(UNNotification* _Nullable )notification inViewController : (UIViewController*) viewController{
-    
     //type
     NSString * type = notification.request.content.userInfo[@"type"];
     NSString * attachmentUrl = notification.request.content.userInfo[@"attachment"];
-    
-    
+    NSString * callForAction = notification.request.content.userInfo[@"call2action"];
     if ([type isEqual:NULL] || [attachmentUrl isEqual:NULL]){
         
         return;
@@ -96,13 +95,26 @@
         [viewController.view addSubview:myWebView];
         
     }
-    
-    
-    
-    
-    
+    if ([callForAction isKindOfClass:NSString.class]){
+        
+        viewControllerShared = viewController;
+        url = callForAction;
+        UIButton *action = [[UIButton alloc] initWithFrame:CGRectMake((viewController.view.frame.size.width / 2) - 50, viewController.view.frame.size.height - 40 , 120, 40)];
+        action.layer.cornerRadius = 20;
+        [action setTitle:@"View" forState:UIControlStateNormal];
+        action.backgroundColor = UIColor.blueColor;
+        [viewController.view addSubview:action];
+        [action addTarget:self action:@selector(openView:)
+         forControlEvents:UIControlEventTouchUpInside];
+    }
 }
-
++ (void) openView:(UIButton *) sender {
+    
+    WKWebView * myWebView = [[WKWebView alloc] initWithFrame:viewControllerShared.view.frame];
+    NSURL *theURL = [[NSURL alloc] initWithString:url];
+    [myWebView loadRequest:[NSURLRequest requestWithURL:theURL]];
+    [viewControllerShared.view addSubview:myWebView];
+}
 
 + (UNNotificationAttachment*)saveImageToDisk:(NSString *)fileIdentifier withData:(NSData *)data andOptions:(NSDictionary*) options {
     

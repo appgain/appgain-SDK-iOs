@@ -416,13 +416,17 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
     //update user id in notification channel
     PFQuery *query = [PFQuery queryWithClassName:@"NotificationChannels"];
-    [query whereKey:@"userId" equalTo:currentUser.objectId];
-    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-        for (PFObject *user in objects) {
-            user[@"userId"] = userId;
-            [user saveInBackground];
-        }
-    }];
+    if ([currentUser.objectId isKindOfClass: NSString.class]){
+        [query whereKey:@"userId" equalTo:currentUser.objectId];
+        [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+            for (PFObject *user in objects) {
+                user[@"userId"] = userId;
+                [user saveInBackground];
+            }
+        }];
+    }
+    
+    
     
 }
 
@@ -450,9 +454,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 //log new record for user every time, open app
 +(void)logAppSession{
     PFObject *appSessionObject = [PFObject objectWithClassName:@"appSessions"];
-    appSessionObject[@"userId"] = [PFUser currentUser].objectId;
-    appSessionObject[@"platform"] = @"ios";
-    [appSessionObject saveInBackground];
+    if ([[PFUser currentUser].objectId isKindOfClass: NSString.class]){
+        appSessionObject[@"userId"] = [PFUser currentUser].objectId;
+        appSessionObject[@"platform"] = @"ios";
+        [appSessionObject saveInBackground];
+    }
 }
 
 +(void)enableReciveNotification:(BOOL)enable forType:(NSString *)type whenFinish:(void (^)(BOOL, NSError *))onComplete{
