@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.platform = :ios
   s.name             = 'Appgain-Rich'
-  s.version          = '1.1.4'
+  s.version          = '1.2.7'
   s.summary          = 'Extension for Appgain sdk for rich notification '
  
   s.description      = <<-DESC 

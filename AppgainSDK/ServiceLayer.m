@@ -29,7 +29,7 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-                });
+               
                 NSMutableDictionary *responseDictionary;// = [NSMutableDictionary new];
                                           
                 if( data != nil )
@@ -39,7 +39,7 @@
                     }
                 
                 onComplete(response,responseDictionary);
-
+ });
                 
                 }];
     [dataTask resume];
@@ -70,7 +70,7 @@
             //hide network indecator 
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-            });
+            
             
             NSMutableDictionary *responseDictionary;// = [NSMutableDictionary new];
             if(data != nil )
@@ -80,6 +80,7 @@
                 responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parseError];
             }
             onComplete(response,responseDictionary);
+                });
             }];
     [dataTask resume];
     
