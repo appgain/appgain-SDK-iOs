@@ -16,10 +16,10 @@
 +(NSString*)getUserID;
 
 //MARK: inialize sdk Data
-+(void)initializeAppWithID:( NSString* )appID andApiKey :(NSString*)appApiKey  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
++(void)initializeAppWithID:( NSString* )appID andApiKey :(NSString*)appApiKey automaticConfiguration :(BOOL)configureAutomatic  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
 
 //MARK: inialize sdk Data with client id
-+(void)initializeAppWithClientID:( NSString* )clientId andAppId :(NSString*)appId andApiKey :(NSString*)appApiKey  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
+//+(void)initializeAppWithClientID:( NSString* )clientId andAppId :(NSString*)appId andApiKey :(NSString*)appApiKey  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
 
 //MARK: deinialize sdk Data
 
@@ -57,6 +57,10 @@
 
 +(void)updateUserId:(NSString*)userId ;
 
+//MARK: create anoynomse user with default user name and passsword
+
+
++(void)createUserID;
 //MARK: log item user purchase for his id
 
 +(void)logPurchaseForItem:(PurchaseItem *)item whenFinish:(void (^)(BOOL, NSError*))onComplete;
@@ -65,4 +69,11 @@
 +(void)enableReciveNotification:(BOOL)enable forType :(NSString*) type whenFinish:(void (^)(BOOL, NSError*))onComplete;
 //MARK: add new notification channel for different type of notification recieving
 +(void)createNotificationChannelForType :(NSString *) notificationType andExtraItem :(NSString*) item whenFinish:(void (^)(BOOL, NSError*))onComplete;
+
+
+//MARK: login in and register for sdk
++(void)loginWithEmail :(NSString *) email andPassword :(NSString*) password  whenFinish:(void (^)(PFUser*, NSError*))onComplete;
++(void)loginWithSocailAccountEmail :(NSString *) userEmail andId :(NSString*) userId  andUserName : (NSString *) userName whenFinish:(void (^)(BOOL, NSError*))onComplete;
+
++(void)signUpWithUser : (PFUser*) user whenFinish:(void (^)(BOOL, NSError*))onComplete;
 @end

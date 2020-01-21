@@ -25,6 +25,7 @@
 #define PARSE_SERVER_URL @"parse-server_url"
 #define PARSE_MASTER_KEY @"parse-master_key"
 #define FIRST_RUN_APP @"first_run_app"
+#define AUTOMATIC_CONFIGURATION_USER @"AutomaticConfigureUser"
 #define USER_PARSE_ID @"user_parse_id"
 
 #define PUSH_DEVICE_TOKEN @"push_device_token"
@@ -73,5 +74,8 @@
 //UDID value
 -(NSString*) getDeviceUDID;
 
+//automic configuration
+-(NSString* )getAutomaticConfigureUser;
+-(void)setAutomaticConfigureUser:(BOOL)key;
 
 @end

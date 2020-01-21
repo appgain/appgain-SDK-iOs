@@ -177,7 +177,31 @@
     [defaults synchronize];
 }
 
+///save value of automatic configuration
+-(NSString* )getAutomaticConfigureUser{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *theKey = [defaults stringForKey:AUTOMATIC_CONFIGURATION_USER];
+    
+    
+    if (theKey == NULL ){
+        theKey = @"false";
+    }
+    return theKey;
+}
 
+
+-(void)setAutomaticConfigureUser:(BOOL)key{
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if (key){
+        [defaults setValue:@"true" forKey:AUTOMATIC_CONFIGURATION_USER];
+    }
+    else{
+        [defaults setValue:@"false" forKey:AUTOMATIC_CONFIGURATION_USER];
+
+    }
+    [defaults synchronize];
+}
 
 
 ///userID in parser server
