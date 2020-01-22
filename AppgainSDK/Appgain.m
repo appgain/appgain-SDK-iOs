@@ -194,33 +194,36 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
 + (void)createUserID {
     
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-    // NSTimeInterval is defined as double
-    NSString *userTimeStamp = [NSString stringWithFormat:@"%.20lf", timeStamp];
-    PFUser *user = [PFUser user];
-    user.username = userTimeStamp;
-    user.password = userTimeStamp;
-    [user incrementKey:@"usagecounter"];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    });
-    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [[SdkKeys new] setParserUserID:user.objectId];
-        if (!error) {
-            if (user) {
-                //after create user update parser installation with new user id
-                
-                [self createUserInstallation];
-                [Appgain logAppSession];
-            }
-        } else {
-            NSLog(@"AppGain Fail to create your id %@",error);
-        }
+    if ([PFUser currentUser] == nil){
+        
+        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+        // NSTimeInterval is defined as double
+        NSString *userTimeStamp = [NSString stringWithFormat:@"%.20lf", timeStamp];
+        PFUser *user = [PFUser user];
+        user.username = userTimeStamp;
+        user.password = userTimeStamp;
+        [user incrementKey:@"usagecounter"];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         });
-    }];
+        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            [[SdkKeys new] setParserUserID:user.objectId];
+            if (!error) {
+                if (user) {
+                    //after create user update parser installation with new user id
+                    
+                    [self createUserInstallation];
+                    [Appgain logAppSession];
+                }
+            } else {
+                NSLog(@"AppGain Fail to create your id %@",error);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            });
+        }];
+    }
 }
 
 +(void)createUserInstallation{
@@ -420,7 +423,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                               @"userId":[[SdkKeys new] getParserUserID], //
                               @"campaign_id": campaign ,
                               @"campaign_name":campaign_name
-                              };
+    };
     [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result) {
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
@@ -449,8 +452,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     // update user id
     PFUser * currentUser = [PFUser currentUser];
     currentUser[@"userId"] = userId;
-   [currentUser saveInBackground];
-   
+    [currentUser saveInBackground];
+    
     //update user id in notification channel
     PFQuery *query = [PFQuery queryWithClassName:@"NotificationChannels"];
     if ([currentUser.objectId isKindOfClass: NSString.class]){
@@ -469,8 +472,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         [querySession findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
             for (PFObject *user in objects) {
                 user[@"userId"] = userId;
-               [user saveInBackground];
-
+                [user saveInBackground];
+                
             }
         }];
     }
@@ -487,8 +490,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     purchaseItemObject[@"platform"] =  @"ios";
     //add smart link if user first login app and purchased item.
     if ([smartLinkId isKindOfClass:[ NSString class] ]){
-          purchaseItemObject[@"smartlink_id"] = smartLinkId;
-      }
+        purchaseItemObject[@"smartlink_id"] = smartLinkId;
+    }
     [purchaseItemObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -607,7 +610,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                 user.email = userEmail;
                 user.password = userId;
                 user[@"fbID"] = userId;
-       
+                
                 [user incrementKey:@"usagecounter"];
                 [Appgain signUpWithUser:user whenFinish:onComplete];
             }
