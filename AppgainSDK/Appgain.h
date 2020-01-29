@@ -60,7 +60,7 @@
 //MARK: create anoynomse user with default user name and passsword
 
 
-+(void)createUserID;
++(void)skipUserLogin;
 //MARK: log item user purchase for his id
 
 +(void)logPurchaseForItem:(PurchaseItem *)item whenFinish:(void (^)(BOOL, NSError*))onComplete;

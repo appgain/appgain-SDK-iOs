@@ -180,6 +180,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     //add record with user id for every time app open
     
 }
++(void)skipUserLogin{
+    [Appgain createUserID];
+}
 
 
 //then call user id by register new user

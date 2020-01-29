@@ -5,7 +5,7 @@
 //  Copyright © 2018 appgain.io All rights reserved.
 
 #import "ServiceLayer.h"
-
+#import <WebKit/WebKit.h>
 @implementation ServiceLayer
 
 ///MARK:Get request for api
@@ -13,11 +13,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString: url]];
-    
-    //To get device user agent
-    UIWebView* webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    NSString* secretAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
-    
+    NSString* secretAgent  =  [self stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
     //create the Method "GET"
     [urlRequest setHTTPMethod:@"GET"];
     //add header parameters
@@ -29,7 +25,8 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-               
+                
+              //  NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
                 NSMutableDictionary *responseDictionary;// = [NSMutableDictionary new];
                                           
                 if( data != nil )
@@ -39,7 +36,7 @@
                     }
                 
                 onComplete(response,responseDictionary);
- });
+                });
                 
                 }];
     [dataTask resume];
@@ -67,11 +64,12 @@
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
         {
-            //hide network indecator 
+            //hide network indecator
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
+            });
             
-            
+           // NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
             NSMutableDictionary *responseDictionary;// = [NSMutableDictionary new];
             if(data != nil )
             {
@@ -80,7 +78,6 @@
                 responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parseError];
             }
             onComplete(response,responseDictionary);
-                });
             }];
     [dataTask resume];
     
@@ -88,4 +85,29 @@
 
 }
 
+
+- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
+{
+    __block NSString *resultString = nil;
+    __block BOOL finished = NO;
+    WKWebView* webView = [[WKWebView alloc] initWithFrame:CGRectZero];
+
+    [webView evaluateJavaScript:script completionHandler:^(id result, NSError *error) {
+        if (error == nil) {
+            if (result != nil) {
+                resultString = [NSString stringWithFormat:@"%@", result];
+            }
+        } else {
+            NSLog(@"Appgain..error evaluateJavaScript : %@", error.localizedDescription);
+        }
+        finished = YES;
+    }];
+
+    while (!finished)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
+
+    return resultString;
+}
 @end
