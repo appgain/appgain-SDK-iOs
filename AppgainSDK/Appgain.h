@@ -10,6 +10,7 @@
 #import "DataModels.h"
 #import <Parse/Parse.h>
 #import "SdkKeys.h"
+
 @interface Appgain : NSObject
 
 //MARK: get current  user parser id
@@ -60,7 +61,7 @@
 //MARK: create anoynomse user with default user name and passsword
 
 
-+(void)skipUserLogin;
++(void)createUserID;
 //MARK: log item user purchase for his id
 
 +(void)logPurchaseForItem:(PurchaseItem *)item whenFinish:(void (^)(BOOL, NSError*))onComplete;
@@ -76,4 +77,5 @@
 +(void)loginWithSocailAccountEmail :(NSString *) userEmail andId :(NSString*) userId  andUserName : (NSString *) userName whenFinish:(void (^)(BOOL, NSError*))onComplete;
 
 +(void)signUpWithUser : (PFUser*) user whenFinish:(void (^)(BOOL, NSError*))onComplete;
++(void)skipUserLogin;
 @end

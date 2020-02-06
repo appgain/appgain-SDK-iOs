@@ -180,10 +180,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     //add record with user id for every time app open
     
 }
+
 +(void)skipUserLogin{
     [Appgain createUserID];
 }
-
 
 //then call user id by register new user
 /*flow inside this function
@@ -196,15 +196,17 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
  */
 
 + (void)createUserID {
-    
-    if ([PFUser currentUser] == nil){
+
+    if ([[PFUser currentUser] objectId] == nil){
         
         NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
         // NSTimeInterval is defined as double
         NSString *userTimeStamp = [NSString stringWithFormat:@"%.20lf", timeStamp];
+        NSString *deviceID = [[SdkKeys new] getDeviceADID];
         PFUser *user = [PFUser user];
         user.username = userTimeStamp;
         user.password = userTimeStamp;
+        user[@"devices"] = @[deviceID];
         [user incrementKey:@"usagecounter"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -624,6 +626,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
 }
 +(void)signUpWithUser:(PFUser *)user whenFinish:(void (^)(BOOL, NSError *))onComplete{
+            NSString *deviceID = [[SdkKeys new] getDeviceADID];
+           user[@"devices"] = @[deviceID];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     });

@@ -228,10 +228,8 @@
     [defaults synchronize];
 }
 
--(NSString *)getDeviceUDID{
-    
-    
-    return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+-(NSString *)getDeviceADID{
+    return  [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
 }
 
 

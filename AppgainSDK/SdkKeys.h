@@ -13,7 +13,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <AdSupport/ASIdentifierManager.h>
+
 @interface SdkKeys : NSObject
 
 #define APP_API_KEY @"app_api_key"
@@ -71,11 +72,12 @@
 -(void) setDeviceToken :(NSString*)  key;
 
 
-//UDID value
--(NSString*) getDeviceUDID;
+//MARK: Advertising Identifier value
+-(NSString*) getDeviceADID;
 
 //automic configuration
 -(NSString* )getAutomaticConfigureUser;
 -(void)setAutomaticConfigureUser:(BOOL)key;
+
 
 @end
