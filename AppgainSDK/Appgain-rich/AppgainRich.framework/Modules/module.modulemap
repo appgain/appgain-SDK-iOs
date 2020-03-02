@@ -1,0 +1,6 @@
+framework module AppgainRich {
+  umbrella header "AppgainRich.h"
+
+  export *
+  module * { export * }
+}
