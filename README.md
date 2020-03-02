@@ -48,22 +48,42 @@
 ### Installing SDK
 
 1 - Install SDK from cocoa Pod
-  - Open terminal — $ cd <your application directory
-  - $ pod init.
+  - Open terminal — 
+ 
+  $ cd < your application directory>
+  
+  $ pod init.
+
   - Navigate to project directory will find podFile
-  - Open it and add pod ‘Appgain’.
+  
+  - Open it and add
+  
+  pod 'Appgain'.
+  
   - press ctrl + S
-  - Terminal —$ pod update —$ pod install
+  
+  - Terminal 
+  
+  —$ pod update
+  
+  -OR-
+  
+  —$ pod install
+  
   - Wait until pod finish install.
+  
   - Open your project from <_____.xcworkspace
 
   2 - Configure SDK in app delegate.
   -   Allow application to access network.
 
 1. You need to add your URL schema and Associated domain for your app , the value will be : <app subdomain. Appgain.io or your custom domain if you have confugured it
+
 ![](https://lh5.googleusercontent.com/-ouixZJ-c8hoykNRZKe6cIeC1capil9lGUYE4SWV1l12N13DF-zDUjoTl4QVUyOkzIFMOhLZnVBInQj9iIUqPNWZS3NEGzpfF_GYj2jEvR6HpJaS7SMF39dtKgDBdOjjn4oZZ7_M)
 ![](https://lh4.googleusercontent.com/jurvGVuWAMzY2MegbZ6yCTEjcc4wGCDzLrZ-gHaYMcgoNWZJg1LMPqtADliP2-O8pBwq7aVPo6WiSEd7uBhJ6wnDSFBXQZ4TqRRvbnc6qsT_Mhv1X4E8bpwmE0FC79maDvwFDAC0)
+
 2. In AppDelegate.h, add #import <Appgain/Appgain.h
+
 3. In AppDelegate.m
 
 	     (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -73,9 +93,13 @@
 	    //result show link matched data.}];
 	    return YES;
 	    }
+	    
 **Swift** —
+
 • Create <project-name -Bridging-Header.h
+
 • add this on it `#import <Appgain/Appgain.h`
+
 • AppGain.initializeApp(withID: <your app id , andApiKey: <your app api key )
 { (response, result) in
 }
