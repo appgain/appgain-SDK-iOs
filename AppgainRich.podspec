@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.platform = :ios
   s.name             = 'AppgainRich'
-  s.version          = '1.3.4'
+  s.version          = '1.3.6'
   s.summary          = 'Extension for Appgain sdk for rich notification '
  
   s.description      = <<-DESC 
@@ -20,5 +20,5 @@ Extension for Appgain sdk for rich notification.
 	s.vendored_frameworks = 'AppgainSDK/Appgain-rich/AppgainRich.framework'
 
 
- # s.source_files = 'AppgainSDK/Appgain-rich/Appgain-Rich.h'
+ s.source_files = 'AppgainSDK/Appgain-rich/AppgainRich.h'
 end
