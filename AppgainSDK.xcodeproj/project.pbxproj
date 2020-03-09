@@ -13,6 +13,7 @@
 		DF1E6DFF22F0867500C191CA /* PurchaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF822F0867500C191CA /* PurchaseItem.m */; };
 		DF1E6E0022F0867500C191CA /* Appgain.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF922F0867500C191CA /* Appgain.m */; };
 		DF6958C12417009D00B0AE38 /* LocationManger.m in Sources */ = {isa = PBXBuildFile; fileRef = DF6958BF2417009D00B0AE38 /* LocationManger.m */; };
+		DFA792F724170395003001FA /* AppgainRich.m in Sources */ = {isa = PBXBuildFile; fileRef = DFA792F624170395003001FA /* AppgainRich.m */; };
 		DFFF36F622DE1E390071DF0B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DFFF36F522DE1E390071DF0B /* Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -47,8 +48,8 @@
 		DF6958BF2417009D00B0AE38 /* LocationManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManger.m; sourceTree = "<group>"; };
 		DF6958C02417009D00B0AE38 /* LocationManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManger.h; sourceTree = "<group>"; };
 		DF6A39F1219488EF0096F48B /* Appgain.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Appgain.podspec; sourceTree = SOURCE_ROOT; };
-		DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppgainRich.m; sourceTree = "<group>"; };
-		DFE4DCFD22AC209C00C06CC7 /* AppgainRich.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppgainRich.h; sourceTree = "<group>"; };
+		DFA792F524170395003001FA /* AppgainRich.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppgainRich.h; sourceTree = "<group>"; };
+		DFA792F624170395003001FA /* AppgainRich.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppgainRich.m; sourceTree = "<group>"; };
 		DFFF36F522DE1E390071DF0B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,8 +121,8 @@
 		DF32D1F722AFD3A10072D026 /* Appgain-rich */ = {
 			isa = PBXGroup;
 			children = (
-				DFE4DCFD22AC209C00C06CC7 /* AppgainRich.h */,
-				DFE4DCFC22AC209C00C06CC7 /* AppgainRich.m */,
+				DFA792F524170395003001FA /* AppgainRich.h */,
+				DFA792F624170395003001FA /* AppgainRich.m */,
 			);
 			path = "Appgain-rich";
 			sourceTree = "<group>";
@@ -198,6 +199,7 @@
 				DF1E6E0022F0867500C191CA /* Appgain.m in Sources */,
 				DF18D3C322F5C2A6005DC333 /* NotificationType.m in Sources */,
 				DF1E6DFE22F0867500C191CA /* MobileLandingPage.m in Sources */,
+				DFA792F724170395003001FA /* AppgainRich.m in Sources */,
 				DF1E6DFD22F0867500C191CA /* MobileLandingPageButton.m in Sources */,
 				DF6958C12417009D00B0AE38 /* LocationManger.m in Sources */,
 				DF1E6DFF22F0867500C191CA /* PurchaseItem.m in Sources */,

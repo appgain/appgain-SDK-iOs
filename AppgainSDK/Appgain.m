@@ -825,15 +825,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (objects.count > 0){
                             if ( ![user[@"deviceToken"] isEqual:  [[SdkKeys new] getDeviceToken] ] ){
-                                //                        if ([smartLinkId isKindOfClass:[ NSString class] ]){
-                                //                            user[@"reinstall_source"]  = smartLinkId;
-                                //                        }
-                                //                        else{
-                                //                            user[@"reinstall_source"]  = @"organic";
-                                //                        }
-                                //                        [user incrementKey:@"reinstallcount"];
-                                //                        [user saveInBackground];
-                                
+                              
                                 [Appgain callMatchingApiAndUpdateUser];
                             }
                         }
@@ -855,19 +847,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             if (objects.count > 1){
                 
                 [Appgain callMatchingApiAndUpdateUser];
-                //                PFUser * user = [PFUser currentUser];
-                //               // for (PFUser *user in objects) {
-                //                    if ([smartLinkId isKindOfClass:[ NSString class] ]){
-                //                        user[@"reinstall_source"]  = smartLinkId;
-                //                    }
-                //                    else{
-                //                        user[@"reinstall_source"]  = @"organic";
-                //
-                //                    }
-                //                    [user incrementKey:@"reinstallcount"];
-                //
-                //                    [user saveInBackground];
-                // }
+           
                 
             }
             //end return to main thread
