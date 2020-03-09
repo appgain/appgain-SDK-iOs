@@ -21,36 +21,31 @@
 
 //appApiKey
 -(NSString*) getAppApiKey{
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:APP_API_KEY];
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
-    
 }
+
 -(void) setAppApiKey :(NSString*)  key{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:APP_API_KEY];
     [defaults synchronize];
 }
+
 //AppID
 -(NSString*) getAppID{
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:APP_ID];
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
-    
 }
+
 -(void) setAppID :(NSString*)  key{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:APP_ID];
     [defaults synchronize];
@@ -58,59 +53,47 @@
 
 //AppSubDomainName
 -(NSString*) getAppSubDomainName{
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:APP_SUB_DOMAIN_NAME];
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
-    
 }
 
 -(void) setAppSubDomainName :(NSString*)  key{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:APP_SUB_DOMAIN_NAME];
     [defaults synchronize];
 }
 
-
-
 //AppSubDomainName
 -(NSString*) getParseClientID{
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:PARSE_CLIENT_ID];
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
-    
 }
 
 -(void) setParseClientID:(NSString *)key {
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey: PARSE_CLIENT_ID];
     [defaults synchronize];
 }
+
 //Parse-AppID
 -(NSString*) getParseAppID{
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:PARSE_APP_ID];
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
-    
 }
+
 -(void) setParseAppID :(NSString*)  key{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:PARSE_APP_ID];
     [defaults synchronize];
@@ -119,18 +102,15 @@
 
 //parse-serverUrl
 -(NSString*) getParseServerUrl{
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:PARSE_SERVER_URL];
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
-    
 }
+
 -(void) setParseServerUrl :(NSString*)  key{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:PARSE_SERVER_URL];
     [defaults synchronize];
@@ -140,16 +120,13 @@
 -(NSString*) getParseMasterKey{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:PARSE_MASTER_KEY];
-    
-    
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
-    
 }
+
 -(void) setParseMasterKey :(NSString*)  key{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue: key forKey:PARSE_MASTER_KEY];
     [defaults synchronize];
@@ -159,21 +136,53 @@
 -(NSString *)getFirstRun{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:FIRST_RUN_APP];
-    
-    
     if (theKey == NULL ){
-        
         [self setFirstRun:@"false"];
+        [self setFirstMatch:@"true"];
         return @"true";
     }
+    [self setFirstMatch:theKey];
     return theKey;
 }
 
 
 -(void)setFirstRun:(NSString *)key{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:FIRST_RUN_APP];
+    [defaults synchronize];
+}
+
+
+-(NSString *)getFirstMatch{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *theKey = [defaults stringForKey:FIRST_MATCH];
+    if (theKey == NULL ){
+        return @"false";
+    }
+    return theKey;
+}
+
+
+-(void)setFirstMatch:(NSString *)key{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:key forKey:FIRST_MATCH];
+    [defaults synchronize];
+}
+
+////MARK:first install
+-(NSString*) getInstallRun{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *theKey = [defaults stringForKey:FIRST_INSTALL_APP];
+    if (theKey == NULL ){
+        [self setInstallRun:@"false"];
+        return @"true";
+    }
+    return theKey;
+}
+
+-(void) setInstallRun :(NSString*)  key{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:key forKey:FIRST_INSTALL_APP];
     [defaults synchronize];
 }
 
@@ -181,8 +190,6 @@
 -(NSString* )getAutomaticConfigureUser{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:AUTOMATIC_CONFIGURATION_USER];
-    
-    
     if (theKey == NULL ){
         theKey = @"false";
     }
@@ -191,38 +198,27 @@
 
 
 -(void)setAutomaticConfigureUser:(BOOL)key{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (key){
         [defaults setValue:@"true" forKey:AUTOMATIC_CONFIGURATION_USER];
     }
     else{
         [defaults setValue:@"false" forKey:AUTOMATIC_CONFIGURATION_USER];
-
     }
     [defaults synchronize];
 }
 
-
 ///userID in parser server
-
 -(NSString *)getParserUserID{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:USER_PARSE_ID];
-    
-    
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
 }
 
-
 -(void)setParserUserID:(NSString *)key{
-    
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:USER_PARSE_ID];
     [defaults synchronize];
@@ -232,25 +228,16 @@
     return  [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
 }
 
-
-
 -(NSString *)getDeviceToken{
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *theKey = [defaults stringForKey:PUSH_DEVICE_TOKEN];
-    
-    
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
-    
 }
 
 -(void)setDeviceToken:(NSString *)key{
-    
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:key forKey:PUSH_DEVICE_TOKEN];
     [defaults synchronize];

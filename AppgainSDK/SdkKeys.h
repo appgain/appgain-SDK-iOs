@@ -26,6 +26,9 @@
 #define PARSE_SERVER_URL @"parse-server_url"
 #define PARSE_MASTER_KEY @"parse-master_key"
 #define FIRST_RUN_APP @"first_run_app"
+#define FIRST_MATCH @"first_match"
+#define FIRST_INSTALL_APP @"first_install_app"
+
 #define AUTOMATIC_CONFIGURATION_USER @"AutomaticConfigureUser"
 #define USER_PARSE_ID @"user_parse_id"
 
@@ -61,6 +64,15 @@
 //MARK:first run
 -(NSString*) getFirstRun;
 -(void) setFirstRun :(NSString*)  key;
+
+////MARK:first install
+-(NSString*) getInstallRun;
+-(void) setInstallRun :(NSString*)  key;
+
+
+-(void)setFirstMatch:(NSString *)key;
+
+-(NSString *)getFirstMatch;
 
 
 //MARK:Parser user id

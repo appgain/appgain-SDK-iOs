@@ -9,7 +9,9 @@
 /// import all model you need
 #import "DataModels.h"
 #import <Parse/Parse.h>
+ #import <sys/utsname.h>
 #import "SdkKeys.h"
+#import "LocationManger.h"
 
 @interface Appgain : NSObject
 
