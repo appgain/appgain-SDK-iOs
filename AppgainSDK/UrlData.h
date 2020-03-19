@@ -18,6 +18,8 @@
 + (NSString*) getLandingPageUrl;
 + (NSString*) getnotificationTrackUrl;
 + (NSString*) getAutomatorUrlWithTriggerPoint :(NSString*)trigger;
++ (NSString*) getbaseServerUrl;
++ (NSString*) getLogEventUrl;
 
 
 @end

@@ -256,8 +256,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result);
             //old response
+            
+            PFUser * currentUser = [PFUser currentUser];
+
             if ([[result objectForKey:@"extra_data"] objectForKey:@"params"]){
-                PFUser *currentUser = [PFUser currentUser];
                 NSArray * parameter = [[result objectForKey:@"extra_data"] objectForKey:@"params"];
                 for (NSDictionary *item in parameter){
                     for (id  key in item) {
@@ -266,13 +268,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                         currentUser[key] = value;
                     }
                 }
-                [currentUser saveInBackground];
             }
             
             
             //new handle
             if ([result objectForKey:@"extra_data"] ){
-                PFUser *currentUser = [PFUser currentUser];
                 NSDictionary * parameter = [result objectForKey:@"extra_data"] ;
                 for (id  key in parameter){
                     id value = parameter[key];
@@ -280,7 +280,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                     currentUser[key] = value;
                     
                 }
-                [currentUser saveInBackground];
             }
             
             ///add key for smart link in first run
@@ -292,15 +291,18 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                 smartLinkId = result[@"smart_link_id"];
                 
             }
-            
-            
-            if (([[[SdkKeys new] getFirstMatch] isEqualToString:@"true"]) && (result[@"smart_link_id"] )){
-                PFUser * currentUser = [PFUser currentUser];
-                currentUser[@"smartlink_id"] = result[@"smart_link_id"];
-                [currentUser saveInBackground];
+            if ( result[@"smart_link_url"] ){
+                
+                currentUser[@"SDL"] = result[@"smart_link_url"];
             }
             
             
+            if (([[[SdkKeys new] getFirstMatch] isEqualToString:@"true"]) && (result[@"smart_link_id"] )){
+                currentUser[@"smartlink_id"] = result[@"smart_link_id"];
+            }
+            
+            [currentUser saveInBackground];
+
         });
     }];
 }
@@ -604,11 +606,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         PFUser *user = [PFUser user];
         user.username = userTimeStamp;
         user.password = userTimeStamp;
-        //        user[@"devices"] = @[deviceID];
-        //        user[@"madid"] = deviceID;
-        //        user[@"madidIdtype"] = deviceID;
-        //        [user incrementKey:@"usagecounter"];
-        //
         dispatch_async(dispatch_get_main_queue(), ^{
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         });
@@ -619,9 +616,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                 [[SdkKeys new] setParserUserID:user.objectId];
                 if (!error) {
                     if (user) {
-                        //after create user update parser installation with new user id
-                        //                        [self createUserInstallation];
-                        //                        [Appgain logAppSession];
                         [Appgain addExtraParameterUser];
                         //check if id added befoer update all object increment
                         [self checkReinstallUserForAynoumous];
@@ -682,43 +676,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         
     }];
     
-    
-    
-    
-    //
-    //
-    //    PFQuery * query = [PFUser query];
-    //    [query whereKey:@"email" equalTo:userEmail];
-    //    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-    //        dispatch_async(dispatch_get_main_queue(), ^{
-    //            if (objects.count > 0){
-    //                //login for same user
-    //                //and link notification channels for it
-    //                [PFUser logInWithUsernameInBackground:userEmail password:userId block:^(PFUser * _Nullable user, NSError * _Nullable error) {
-    //                    dispatch_async(dispatch_get_main_queue(), ^{
-    ////                        [self createUserInstallation];
-    ////                        [Appgain logAppSession];
-    //                        [Appgain addExtraParameterUser];
-    //
-    //                        [self checkReinstallUser];
-    //                    });
-    //                }];
-    //                onComplete(YES,error);
-    //            }
-    //            else{
-    //                PFUser *user = [PFUser user];
-    //                user.username = userName;
-    //                user.email = userEmail;
-    //                user.password = userId;
-    //                user[@"fbID"] = userId;
-    //
-    //                [user incrementKey:@"usagecounter"];
-    //                [Appgain signUpWithUser:user whenFinish:onComplete];
-    //            }
-    //            //end return to main thread
-    //        });
-    //    }];
-    //
+ 
     
 }
 +(void)signUpWithUser:(PFUser *)user whenFinish:(void (^)(BOOL, NSError *))onComplete{
@@ -785,6 +743,13 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     if ([[[SdkKeys new] getInstallRun] isEqualToString:@"true"]){
         user[@"installationAt"] = [NSDate new] ;
     }
+    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier  = [networkInfo subscriberCellularProvider];
+    if ([[carrier carrierName] isKindOfClass:[ NSString class] ]){
+        user[@"operator"] = [carrier carrierName];
+    }
+    
+    
     user[@"lastSeenAt"] = [NSDate new];
     if ([location city]){
         user[@"city"] = [location city];
@@ -825,7 +790,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (objects.count > 0){
                             if ( ![user[@"deviceToken"] isEqual:  [[SdkKeys new] getDeviceToken] ] ){
-                              
                                 [Appgain callMatchingApiAndUpdateUser];
                             }
                         }
@@ -847,8 +811,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             if (objects.count > 1){
                 
                 [Appgain callMatchingApiAndUpdateUser];
-           
-                
+            
             }
             //end return to main thread
         });
@@ -869,9 +832,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     else{
         [Appgain CreateLinkMactcherWithUserID: @"" whenFinish:^(NSURLResponse *response, NSMutableDictionary * result) {
             PFUser * user = [PFUser currentUser];
-            if (result[@"smart_link_id"]){
-                user[@"reinstall_source"]  = result[@"smart_link_id"];
-            }
+            
+            if ([smartLinkId isKindOfClass:[ NSString class] ]){
+                    user[@"reinstall_source"] = smartLinkId;
+               }
             else{
                 user[@"reinstall_source"]  = @"organic";
             }
@@ -882,7 +846,31 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
 }
 
++(void)logEventForAction:(NSString *)action andType:(NSString *)type whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
+    
+   NSDictionary *event = @{@"action":action,@"type":type};
+    [[ServiceLayer new] postRequestWithURL:[UrlData getLogEventUrl] withBodyData: event didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+              onComplete(response,result);
+          });
+      }];
+}
 
++(void)updateUserProfileFor:(PFUser *)user whenFinish:(void (^)(BOOL, NSError *))onComplete{
+    PFUser * currentUser = [PFUser currentUser];
+    if ([currentUser objectId]){
+          for (NSString *key in [user allKeys]){
+              if (user[key]){
+                  currentUser[key] = user[key];
+              }
+          }
+        [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                onComplete(succeeded,error);
+            });
+        }];
+    }
+}
 
 @end
 

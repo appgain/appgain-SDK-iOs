@@ -12,7 +12,8 @@
  #import <sys/utsname.h>
 #import "SdkKeys.h"
 #import "LocationManger.h"
-
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 @interface Appgain : NSObject
 
 //MARK: get current  user parser id
@@ -80,4 +81,10 @@
 
 +(void)signUpWithUser : (PFUser*) user whenFinish:(void (^)(BOOL, NSError*))onComplete;
 +(void)skipUserLogin;
+
++(void)logEventForAction:(NSString*)action andType :(NSString*) type whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete;
+
++(void)updateUserProfileFor : (PFUser*) user whenFinish:(void (^)(BOOL, NSError*))onComplete;
+
+
 @end
