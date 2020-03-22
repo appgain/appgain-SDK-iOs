@@ -8,7 +8,7 @@
 #import "SdkKeys.h"
 @interface ServiceLayer : NSObject
 
--(void)getRequestWithURL :(NSString*) url didFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete  ;
--(void)postRequestWithURL :(NSString*) url withBodyData :(NSDictionary* ) dictionaryBody  didFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
+-(void)getRequestWithURL :(NSString*) url didFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError*))onComplete  ;
+-(void)postRequestWithURL :(NSString*) url withBodyData :(NSDictionary* ) dictionaryBody  didFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError*))onComplete ;
 
 @end

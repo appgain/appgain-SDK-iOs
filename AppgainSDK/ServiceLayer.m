@@ -11,7 +11,7 @@
 WKWebView* webView;
 
 ///MARK:Get request for api
--(void)getRequestWithURL:(NSString *)url didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete{
+-(void)getRequestWithURL:(NSString *)url didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString: url]];
@@ -40,7 +40,7 @@ WKWebView* webView;
                         responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parseError];
                     }
                     
-                    onComplete(response,responseDictionary);
+                    onComplete(response,responseDictionary,error);
                 });
                 
             }];
@@ -54,7 +54,7 @@ WKWebView* webView;
 }
 
 //MARK: post request data.
--(void)postRequestWithURL:(NSString *)url withBodyData:(NSDictionary *)dictionaryBody didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete{
+-(void)postRequestWithURL:(NSString *)url withBodyData:(NSDictionary *)dictionaryBody didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
     // show network indicator
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
@@ -85,13 +85,16 @@ WKWebView* webView;
             NSError *parseError = nil;
             responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parseError];
         }
-        onComplete(response,responseDictionary);
+        onComplete(response,responseDictionary,error);
     }];
     [dataTask resume];
 }
 
 -(void)stringByEvaluatingJavaScript:(void (^)(NSString *))onComplete{
     //  NSString *resultString = @"";
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+
     webView = [[WKWebView alloc] initWithFrame:CGRectZero];
     [webView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id result, NSError *error) {
         if (error == nil) {
@@ -103,6 +106,7 @@ WKWebView* webView;
             onComplete(@"");
         }
     }];
+    });
 }
 
 

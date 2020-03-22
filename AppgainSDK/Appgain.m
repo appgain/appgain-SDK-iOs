@@ -12,7 +12,7 @@
 static  NSString  *smartLinkId;
 static LocationManger * location;
 
-static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
+static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 //MARK: init sdk with app_id and api_key
 
@@ -34,10 +34,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
  */
 
 
-+(void)initializeAppWithClientID:(NSString *)clientId andAppId:(NSString *)appId andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete{
++(void)initializeAppWithClientID:(NSString *)clientId andAppId:(NSString *)appId andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError * error))onComplete{
     [[SdkKeys new] setParseClientID:clientId];
-    [Appgain initializeAppWithID:appId andApiKey:appApiKey whenFinish:^(NSURLResponse * reponse, NSMutableDictionary * result) {
-        onComplete(reponse,result);
+    [Appgain initializeAppWithID:appId andApiKey:appApiKey whenFinish:^(NSURLResponse * reponse, NSMutableDictionary * result,NSError * error) {
+        onComplete(reponse,result,error);
     }];
 }
 
@@ -45,7 +45,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
 //get app keys and configure data
 //MARK: init sdk with response .
-+(void)initializeAppWithID:(NSString *)appID andApiKey:(NSString *)appApiKey automaticConfiguration:(BOOL)configureAutomatic whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete{
++(void)initializeAppWithID:(NSString *)appID andApiKey:(NSString *)appApiKey automaticConfiguration:(BOOL)configureAutomatic whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError *))onComplete{
     initDone =  onComplete;
     [[SdkKeys new] setAutomaticConfigureUser: configureAutomatic];
     location = [LocationManger new];
@@ -54,7 +54,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         SdkKeys* tempSdkKeys = [SdkKeys new];
         [tempSdkKeys setAppApiKey:appApiKey];
         [tempSdkKeys setAppID:appID];
-        [[ServiceLayer new] getRequestWithURL:[UrlData getAppKeysUrlWithID:appID] didFinish:^(NSURLResponse * response, NSMutableDictionary * result) {
+        [[ServiceLayer new] getRequestWithURL:[UrlData getAppKeysUrlWithID:appID] didFinish:^(NSURLResponse * response, NSMutableDictionary * result,NSError * error) {
             if (result != nil){
                 if ([result objectForKey:@"AppSubDomainName"] != nil){
                     [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
@@ -62,14 +62,14 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                     [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
                     [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
                     [Appgain configuerServerParser:YES andAutomaticConfiguration:configureAutomatic];
-                    initDone(response,result);
+                    initDone(response,result,error);
                 }
                 else{
-                    initDone(response,result);
+                    initDone(response,result,error);
                 }
             }
             else{
-                initDone(response,result);
+                initDone(response,result,error);
                 NSLog(@"AppGain SDK init is fail");
             }
         }];
@@ -78,39 +78,39 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         // add last
         //increment every time user run app
         [Appgain configuerServerParser:NO andAutomaticConfiguration:configureAutomatic];
-        initDone(nil,nil);
+        initDone(nil,nil,nil);
     }
 }
 
-+(void)initializeAppWithID:(NSString *)appID andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *))onComplete {
++(void)initializeAppWithID:(NSString *)appID andApiKey:(NSString *)appApiKey whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError *))onComplete {
     initDone =  onComplete;
     //if no project or parser server is done sent to get parser server data
     if ([[[SdkKeys new] getParserUserID]  isEqual: @""] ) {
         SdkKeys* tempSdkKeys = [SdkKeys new];
         [tempSdkKeys setAppApiKey:appApiKey];
         [tempSdkKeys setAppID:appID];
-        [[ServiceLayer new] getRequestWithURL:[UrlData getAppKeysUrlWithID:appID] didFinish:^(NSURLResponse * response, NSMutableDictionary * result) {
+        [[ServiceLayer new] getRequestWithURL:[UrlData getAppKeysUrlWithID:appID] didFinish:^(NSURLResponse * response, NSMutableDictionary * result,NSError * error) {
             if (result != nil){
                 if ([result objectForKey:@"AppSubDomainName"] != nil){
                     [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
                     [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
                     [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
                     [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
-                    initDone(response,result);
+                    initDone(response,result,error);
                 }
                 else{
-                    initDone(response,result);
+                    initDone(response,result,error);
                 }
             }
             else{
-                initDone(response,result);
+                initDone(response,result,error);
                 NSLog(@"AppGain SDK init is fail");
             }
             
         }];
     }
     else{
-        initDone(nil,nil);
+        initDone(nil,nil,nil);
     }
 }
 
@@ -218,7 +218,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 //MARK:handle recive remote notification to register status track for it
 +(void)handlePush:(NSDictionary *)userInfo forApplication:(UIApplication *)application{
     
-    [Appgain trackNotificationWithAction: [NotificationStatus Opened]   andUserInfo:userInfo  whenFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
+    [Appgain trackNotificationWithAction: [NotificationStatus Opened]   andUserInfo:userInfo  whenFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError *error) {
         //   NSLog(@"%@",result);
     }];
     if (application.applicationState == UIApplicationStateInactive) {
@@ -235,11 +235,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
  
  response in block
  */
-+(void)CreateSmartLinkWithObject:( SmartDeepLink*)linkObject whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
-    [[ServiceLayer new] postRequestWithURL: [UrlData getSmartUrl] withBodyData: linkObject.dictionaryValue didFinish:^(NSURLResponse * response, NSMutableDictionary *result) {
++(void)CreateSmartLinkWithObject:( SmartDeepLink*)linkObject whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
+    [[ServiceLayer new] postRequestWithURL: [UrlData getSmartUrl] withBodyData: linkObject.dictionaryValue didFinish:^(NSURLResponse * response, NSMutableDictionary *result,NSError * error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            onComplete(response,result);
+            onComplete(response,result,error);
         });
         
     }];
@@ -250,11 +250,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 /*
  input parameter app user id
  */
-+(void)CreateLinkMactcherWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
++(void)CreateLinkMactcherWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
     
-    [[ServiceLayer new] getRequestWithURL:[UrlData getmatcherUrlWithUserID:userID] didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
+    [[ServiceLayer new] getRequestWithURL:[UrlData getmatcherUrlWithUserID:userID] didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            onComplete(response,result);
+            onComplete(response,result,error);
             //old response
             
             PFUser * currentUser = [PFUser currentUser];
@@ -309,10 +309,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
 
 
 //MARK : create LandingPage for user
-+(void)createLandingPageWithObject:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
-    [[ServiceLayer new] postRequestWithURL:[UrlData getLandingPageUrl] withBodyData: [landingPage dictionaryValue] didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
++(void)createLandingPageWithObject:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
+    [[ServiceLayer new] postRequestWithURL:[UrlData getLandingPageUrl] withBodyData: [landingPage dictionaryValue] didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            onComplete(response,result);
+            onComplete(response,result,error);
         });
     }];
 }
@@ -328,10 +328,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
  2- userID *optional*
  3-
  */
-+(void)CreateAutomatorWithTrigger:(NSString *)trigger andUserId:(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
-    [[ServiceLayer new] getRequestWithURL:[UrlData getAutomatorUrlWithTriggerPoint:trigger] didFinish:^(NSURLResponse *response , NSMutableDictionary * result) {
++(void)CreateAutomatorWithTrigger:(NSString *)trigger andUserId:(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
+    [[ServiceLayer new] getRequestWithURL:[UrlData getAutomatorUrlWithTriggerPoint:trigger] didFinish:^(NSURLResponse *response , NSMutableDictionary * result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            onComplete(response,result);
+            onComplete(response,result,error);
         });
     }];
     
@@ -353,7 +353,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     return s;
 }
 
-+(void)CreateAutomatorWithTrigger:(NSString *)trigger andUserId:(NSString *)userID andParameters:(NSMutableDictionary*) parameters whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
++(void)CreateAutomatorWithTrigger:(NSString *)trigger andUserId:(NSString *)userID andParameters:(NSMutableDictionary*) parameters whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
     
     NSMutableString *urlWithQuerystring = [[NSMutableString alloc] initWithString:[UrlData getAutomatorUrlWithTriggerPoint:trigger]];
     for (id key in parameters) {
@@ -365,10 +365,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
             [urlWithQuerystring appendFormat:@"&%@=%@", [self urlEscapeString:keyString], [self urlEscapeString:valueString]];
         }
     }
-    [[ServiceLayer new] getRequestWithURL:urlWithQuerystring didFinish:^(NSURLResponse *response , NSMutableDictionary * result) {
+    [[ServiceLayer new] getRequestWithURL:urlWithQuerystring didFinish:^(NSURLResponse *response , NSMutableDictionary * result,NSError * error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            onComplete(response,result);
+            onComplete(response,result,error);
         });
         
         
@@ -386,7 +386,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
  1- notification user info
  2- action String (opend, recived, con..)
  */
-+(void)trackNotificationWithAction :(NSString*)action andUserInfo:(NSDictionary *) userInfo whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
++(void)trackNotificationWithAction :(NSString*)action andUserInfo:(NSDictionary *) userInfo whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
     NSString * campaign = @"";
     NSString * campaign_name = @"";
     if ([userInfo objectForKey:@"campaign_id"]) {
@@ -403,9 +403,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
                               @"campaign_id": campaign ,
                               @"campaign_name":campaign_name
     };
-    [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            onComplete(response,result);
+            onComplete(response,result,error);
         });
     }];
     
@@ -683,23 +683,33 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
     //first register there not user object
     if ([[PFUser currentUser] objectId] == nil){
-        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                onComplete(succeeded,error);
-            });
-            [[SdkKeys new] setParserUserID:user.objectId];
-            if (!error) {
-                if (user) {
-                    //after create user update parser installation with new user id
-                    [self checkReinstallUser];
-                    
-                    [Appgain addExtraParameterUser];
-                }
-            } else {
-                NSLog(@"AppGain Fail to create your id %@",error);
-            }
-            
-        }];
+        [Appgain loginWithEmail:user.email andPassword:user.password whenFinish:^(PFUser *user , NSError * error) {
+              if (user){
+                  [Appgain addExtraParameterUser];
+                  [self checkReinstallUser];
+                  [[SdkKeys new] setParserUserID:user.objectId];
+
+                  onComplete(YES,error);
+              }
+              else{
+                  [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                      dispatch_async(dispatch_get_main_queue(), ^{
+                          onComplete(succeeded,error);
+                      });
+                      [[SdkKeys new] setParserUserID:user.objectId];
+                      if (!error) {
+                          if (user) {
+                              //after create user update parser installation with new user id
+                              [self checkReinstallUser];
+                              [Appgain addExtraParameterUser];
+                              onComplete(YES,error);
+                          }
+                      } else {
+                          NSLog(@"AppGain Fail to create your id %@",error);
+                      }
+                  }];
+              }
+          }];
     }
     else {
         PFUser * curUser = [PFUser currentUser];
@@ -830,7 +840,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
         [user saveInBackground];
     }
     else{
-        [Appgain CreateLinkMactcherWithUserID: @"" whenFinish:^(NSURLResponse *response, NSMutableDictionary * result) {
+        [Appgain CreateLinkMactcherWithUserID: @"" whenFinish:^(NSURLResponse *response, NSMutableDictionary * result,NSError * error) {
             PFUser * user = [PFUser currentUser];
             
             if ([smartLinkId isKindOfClass:[ NSString class] ]){
@@ -846,12 +856,12 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*);
     
 }
 
-+(void)logEventForAction:(NSString *)action andType:(NSString *)type whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete{
++(void)logEventForAction:(NSString *)action andType:(NSString *)type whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
     
    NSDictionary *event = @{@"action":action,@"type":type};
-    [[ServiceLayer new] postRequestWithURL:[UrlData getLogEventUrl] withBodyData: event didFinish:^(NSURLResponse *response, NSMutableDictionary *result) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData getLogEventUrl] withBodyData: event didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
           dispatch_async(dispatch_get_main_queue(), ^{
-              onComplete(response,result);
+              onComplete(response,result,error);
           });
       }];
 }
