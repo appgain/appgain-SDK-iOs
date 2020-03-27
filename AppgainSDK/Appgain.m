@@ -422,14 +422,14 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(void)updateUserId:(NSString *)userId{
     //update current user id
+    PFUser * currentUser = [PFUser currentUser];
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    currentInstallation[@"user"] = [PFUser currentUser];
+    currentInstallation[@"user"] = currentUser;
     currentInstallation[@"userId"] = userId;
     [currentInstallation saveInBackground];
     [[SdkKeys new] setParserUserID:userId];
     
     // update user id
-    PFUser * currentUser = [PFUser currentUser];
     currentUser[@"userId"] = userId;
     if ([smartLinkId isKindOfClass:[ NSString class] ]){
         currentUser[@"smartlink_id"] = smartLinkId;
@@ -775,13 +775,16 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     user[@"platform"] = @"ios";
     [user incrementKey:@"usagecounter"];
     //if (![user[@"userId"] isKindOfClass:[ NSString class] ]){
-    [Appgain updateUserId:user.objectId];
     //  }
     
-    [user saveInBackground];
+    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        [Appgain updateUserId:user.objectId];
+
+        
+    }];
 }
 
-
+//I9ZZmG83fB
 
 +(void)checkReinstallUser{
     ////find user by IDFA
@@ -867,19 +870,23 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 }
 
 +(void)updateUserProfileFor:(PFUser *)user whenFinish:(void (^)(BOOL, NSError *))onComplete{
-    PFUser * currentUser = [PFUser currentUser];
-    if ([currentUser objectId]){
-          for (NSString *key in [user allKeys]){
-              if (user[key]){
-                  currentUser[key] = user[key];
-              }
-          }
-        [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                onComplete(succeeded,error);
-            });
-        }];
-    }
+    [Appgain signUpWithUser:user whenFinish:^(BOOL succeeded, NSError * error) {
+        onComplete(succeeded,error);
+
+    }];
+//    PFUser * currentUser = [PFUser currentUser];
+//    if ([currentUser objectId]){
+//          for (NSString *key in [user allKeys]){
+//              if (user[key]){
+//                  currentUser[key] = user[key];
+//              }
+//          }
+//        [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                onComplete(succeeded,error);
+//            });
+//        }];
+//    }
 }
 
 @end
