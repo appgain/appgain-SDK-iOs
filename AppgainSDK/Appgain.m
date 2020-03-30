@@ -639,9 +639,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     [PFUser logInWithUsernameInBackground:email password:password block:^(PFUser * _Nullable user, NSError * _Nullable error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [Appgain addExtraParameterUser];
-            [self checkReinstallUser];
-            
+            if (user){
+                   [Appgain addExtraParameterUser];
+                    [self checkReinstallUser];
+                                 
+                   }
             onComplete(user,error);
         });
     }];
@@ -652,7 +654,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     
     
     
-    [Appgain loginWithEmail:userEmail andPassword:userEmail whenFinish:^(PFUser *user , NSError * error) {
+    [Appgain loginWithEmail:userEmail andPassword:userId whenFinish:^(PFUser *user , NSError * error) {
         
         if (user){
             [Appgain addExtraParameterUser];
