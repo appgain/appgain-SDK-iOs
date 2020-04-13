@@ -468,39 +468,39 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 }
 
 +(void)logPurchaseForItem:(PurchaseItem *)item whenFinish:(void (^)(BOOL, NSError *))onComplete{
-    
-    ///add user object for notification channels
-    PFObject *purchaseItemObject = [PFObject objectWithClassName:@"PurchaseTransactions"];
-    purchaseItemObject[@"userId"] = [[SdkKeys new] getParserUserID];
-    purchaseItemObject[@"productName"] = item.productName;
-    purchaseItemObject[@"amount"] =  @([item.amount doubleValue]);
-    purchaseItemObject[@"currency"] =  item.currency;
-    purchaseItemObject[@"platform"] =  @"ios";
-    purchaseItemObject[@"transactionAt"] = [NSDate new] ;
-    //add smart link if user first login app and purchased item.
-    if ([smartLinkId isKindOfClass:[ NSString class] ]){
-        purchaseItemObject[@"smartlink_id"] = smartLinkId;
-    }
-    [purchaseItemObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            onComplete(succeeded,error);
-            //increse value of ltv by amount purchase item in user object
-            PFUser * currentUser = [PFUser currentUser];
-            PFQuery *querySession = [PFQuery queryWithClassName:@"user"];
-            if ([currentUser.objectId isKindOfClass: NSString.class]){
-                [querySession whereKey:@"userId" equalTo:currentUser.objectId];
-                [querySession findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-                    for (PFObject *user in objects) {
-                        user[@"ltv"] =  [NSNumber numberWithInteger: [user[@"ltv"] integerValue] + [item.amount integerValue]];
-                        [user saveInBackground];
-                        
-                    }
-                }];
-            }
-            
-        });
-    }];
+      
+      ///add user object for notification channels
+      PFObject *purchaseItemObject = [PFObject objectWithClassName:@"PurchaseTransactions"];
+      purchaseItemObject[@"userId"] = [[SdkKeys new] getParserUserID];
+      purchaseItemObject[@"productName"] = item.productName;
+      purchaseItemObject[@"amount"] =  @([item.amount doubleValue]);
+      purchaseItemObject[@"currency"] =  item.currency;
+      purchaseItemObject[@"platform"] =  @"ios";
+      purchaseItemObject[@"transactionAt"] = [NSDate new] ;
+      //add smart link if user first login app and purchased item.
+      if ([smartLinkId isKindOfClass:[ NSString class] ]){
+          purchaseItemObject[@"smartlink_id"] = smartLinkId;
+      }
+      [purchaseItemObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+              
+              onComplete(succeeded,error);
+              //increse value of ltv by amount purchase item in user object
+              PFUser * currentUser = [PFUser currentUser];
+              PFQuery *querySession = [PFQuery queryWithClassName:@"_User"];
+              if ([currentUser[@"userId"] isKindOfClass: NSString.class]){
+                  [querySession whereKey:@"userId" equalTo:currentUser[@"userId"]];
+                  [querySession findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+                      for (PFObject *user in objects) {
+                          user[@"ltv"] =  [NSNumber numberWithInteger: [user[@"ltv"] integerValue] + [item.amount integerValue]];
+                          [user saveInBackground];
+                          
+                      }
+                  }];
+              }
+              
+          });
+      }];
 }
 //log new record for user every time, open app
 +(void)logAppSession{
