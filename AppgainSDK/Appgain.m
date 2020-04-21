@@ -254,7 +254,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     
     [[ServiceLayer new] getRequestWithURL:[UrlData getmatcherUrlWithUserID:userID] didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            onComplete(response,result,error);
             //old response
             
             PFUser * currentUser = [PFUser currentUser];
@@ -302,6 +301,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
             }
             
             [currentUser saveInBackground];
+            onComplete(response,result,error);
 
         });
     }];
@@ -487,7 +487,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
               onComplete(succeeded,error);
               //increse value of ltv by amount purchase item in user object
               PFUser * currentUser = [PFUser currentUser];
-              PFQuery *querySession = [PFQuery queryWithClassName:@"_User"];
+              PFQuery *querySession = [PFUser query];
               if ([currentUser[@"userId"] isKindOfClass: NSString.class]){
                   [querySession whereKey:@"userId" equalTo:currentUser[@"userId"]];
                   [querySession findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
