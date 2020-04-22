@@ -202,17 +202,20 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
  */
 
 +(void)RegisterDeviceWithToken:(NSData*)deviceToken{
-    //  NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    //  token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    //  NSLog(@"content---%@", token);
-    //  NSString *str = [NSString stringWithFormat:@"Device Token=%@",deviceToken];
     NSString *token =   [deviceToken base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-    //  NSLog(@"content---%@", token);
-    [[SdkKeys new] setDeviceToken:token];
-    //set server installion for this device
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    [currentInstallation setDeviceTokenFromData:deviceToken];
-    [currentInstallation saveInBackground];
+       if (@available(iOS 13, *)) {
+           // Use iOS 11 APIs.
+           token =   [deviceToken base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+       } else {
+           // Alternative code for earlier versions of iOS.
+              token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+                token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+       }
+       [[SdkKeys new] setDeviceToken:token];
+       //set server installion for this device
+       PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+       [currentInstallation setDeviceTokenFromData:deviceToken];
+       [currentInstallation saveInBackground];
 }
 
 //MARK:handle recive remote notification to register status track for it
