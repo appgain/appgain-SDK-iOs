@@ -844,8 +844,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         PFUser * user = [PFUser currentUser];
         user[@"reinstall_source"]  = smartLinkId;
         user[@"reinstallcount"] =  [NSNumber numberWithInteger: [user[@"reinstallcount"] integerValue] + count];
-
-        //[user incrementKey:@"reinstallcount"];
         [user saveInBackground];
     }
     else{
@@ -856,11 +854,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                     user[@"reinstall_source"] = smartLinkId;
                }
             else{
-                user[@"reinstallcount"] =  [NSNumber numberWithInteger: [user[@"reinstallcount"] integerValue] + count];
-
-               // user[@"reinstall_source"]  = @"organic";
+                user[@"reinstall_source"]  = @"organic";
             }
-            [user incrementKey:@"reinstallcount"];
+            user[@"reinstallcount"] =  [NSNumber numberWithInteger: [user[@"reinstallcount"] integerValue] + count];
             [user saveInBackground];
         }];
     }
