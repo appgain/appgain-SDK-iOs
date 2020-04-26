@@ -186,6 +186,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         currentInstallation[@"enable"] = @YES;
         currentInstallation[@"enabled"] = @YES;
         currentInstallation[@"push_enabled"] = @YES;
+        NSString *ver = [[UIDevice currentDevice] systemVersion];
+        currentInstallation[@"os_ver"] = ver;
+        
         currentInstallation.channels = @[[NSString stringWithFormat:@"user_%@",[PFUser currentUser].objectId ]];
         [currentInstallation saveInBackground];
         ///add user object for notification channels
@@ -195,6 +198,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         notificationChannnelsObject[@"enable"] = @YES;
         notificationChannnelsObject[@"enabled"] = @YES;
         notificationChannnelsObject[@"appPush"] = @YES;
+        
         [notificationChannnelsObject saveInBackground];
     }
 }
@@ -205,17 +209,19 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
  */
 
 +(void)RegisterDeviceWithToken:(NSData*)deviceToken{
-    NSString *token =   [deviceToken base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-
-    if (@available(iOS 13, *)) {
-        // Use iOS 11 APIs.
-        token =   [deviceToken base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-
-    } else {
-        // Alternative code for earlier versions of iOS.
-           token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-             token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    }
+    NSString *token =  [Appgain stringFromDeviceToken:deviceToken];
+    
+//    [deviceToken base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+//
+//    if (@available(iOS 13, *)) {
+//        // Use iOS 11 APIs.
+//        token =   [deviceToken base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+//
+//    } else {
+//        // Alternative code for earlier versions of iOS.
+//           token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+//             token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+//    }
     [[SdkKeys new] setDeviceToken:token];
     //set server installion for this device
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
@@ -234,7 +240,18 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     }
 }
 
-
++ (NSString *)stringFromDeviceToken:(NSData *)deviceToken {
+    NSUInteger length = deviceToken.length;
+    if (length == 0) {
+        return nil;
+    }
+    const unsigned char *buffer = deviceToken.bytes;
+    NSMutableString *hexString  = [NSMutableString stringWithCapacity:(length * 2)];
+    for (int i = 0; i < length; ++i) {
+        [hexString appendFormat:@"%02x", buffer[i]];
+    }
+    return [hexString copy];
+}
 
 ///create smartLink for app
 /*
@@ -471,6 +488,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                 if ([smartLinkId isKindOfClass:[ NSString class] ]){
                     appSession[@"smartlink_id"] = smartLinkId;
                 }
+           
+                       else{
+                           appSession[@"smartlink_id"] = @"organic";
+
+                       }
                 [appSession saveInBackground];
                 
             }
@@ -484,6 +506,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     PFObject *purchaseItemObject = [PFObject objectWithClassName:@"PurchaseTransactions"];
     purchaseItemObject[@"userId"] = [[SdkKeys new] getParserUserID];
     purchaseItemObject[@"productName"] = item.productName;
+    purchaseItemObject[@"name"] = item.productName;
     purchaseItemObject[@"amount"] =  @([item.amount doubleValue]);
     purchaseItemObject[@"currency"] =  item.currency;
     purchaseItemObject[@"platform"] =  @"ios";
@@ -491,6 +514,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     //add smart link if user first login app and purchased item.
     if ([smartLinkId isKindOfClass:[ NSString class] ]){
         purchaseItemObject[@"smartlink_id"] = smartLinkId;
+    }
+    else{
+        purchaseItemObject[@"smartlink_id"] = @"organic";
     }
     [purchaseItemObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -524,6 +550,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         [user saveInBackground];
         if ([smartLinkId isKindOfClass:[ NSString class] ]){
             appSessionObject[@"smartlink_id"] = smartLinkId;
+        }
+        else{
+            appSessionObject[@"smartlink_id"] = @"organic";
+
         }
         [appSessionObject saveInBackground];
     }
@@ -647,6 +677,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(void)loginWithEmail:(NSString *)email andPassword:(NSString *)password whenFinish:(void (^)(PFUser *, NSError *))onComplete{
     
+
     [PFUser logInWithUsernameInBackground:email password:password block:^(PFUser * _Nullable user, NSError * _Nullable error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -679,6 +710,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
             user.email = userEmail;
             user.password = userId;
             user[@"fbID"] = userId;
+            user[@"userEmail"] = userEmail;
+
             
             [user incrementKey:@"usagecounter"];
             [Appgain signUpWithUser:user whenFinish:onComplete];
@@ -698,6 +731,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                   onComplete(YES,error);
               }
               else{
+                  user[@"userEmail"] = user.email;
+
                   [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                       dispatch_async(dispatch_get_main_queue(), ^{
                           onComplete(succeeded,error);
@@ -726,6 +761,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                 curUser[key] = user[key];
             }
         }
+        curUser[@"userEmail"] = curUser.email;
         [curUser saveInBackground];
         [Appgain addExtraParameterUser];
         onComplete(YES,nil);
@@ -753,7 +789,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     user[@"madidIdtype"] = @"idfa";
     
     if (![user[@"smartlink_id"] isKindOfClass:[ NSString class] ]){
-        user[@"smartlink_id"] = @"Organic";
+        user[@"smartlink_id"] = @"organic";
     }
     
     if ([[[SdkKeys new] getInstallRun] isEqualToString:@"true"]){
@@ -780,7 +816,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                                                encoding:NSUTF8StringEncoding];
     user[@"platform"] = @"ios";
     [user incrementKey:@"usagecounter"];
-      
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    user[@"os_ver"] = ver;
     
     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (![user[@"userId"] isKindOfClass:[ NSString class] ]){
