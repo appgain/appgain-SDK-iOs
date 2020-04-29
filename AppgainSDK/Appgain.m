@@ -198,6 +198,13 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         notificationChannnelsObject[@"enable"] = @YES;
         notificationChannnelsObject[@"enabled"] = @YES;
         notificationChannnelsObject[@"appPush"] = @YES;
+        if ([smartLinkId isKindOfClass:[ NSString class] ]){
+                notificationChannnelsObject[@"smartlink_id"] = smartLinkId;
+            }
+        else{
+            notificationChannnelsObject[@"smartlink_id"] = @"organic";
+
+        }
         
         [notificationChannnelsObject saveInBackground];
     }
@@ -313,6 +320,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
             
             if (result[@"smart_link_id"]){
                 smartLinkId = result[@"smart_link_id"];
+                currentUser[@"smartlink_id"] = result[@"smart_link_id"];
+
                 
             }
             if ( result[@"smart_link_url"] ){
@@ -320,11 +329,10 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                 currentUser[@"SDL"] = result[@"smart_link_url"];
             }
             
-            
-            if (([[[SdkKeys new] getFirstMatch] isEqualToString:@"true"]) && (result[@"smart_link_id"] )){
-                currentUser[@"smartlink_id"] = result[@"smart_link_id"];
-            }
-            
+            //to save it first time only.
+//            if (([[[SdkKeys new] getFirstMatch] isEqualToString:@"true"]) && (result[@"smart_link_id"] )){
+//                currentUser[@"smartlink_id"] = result[@"smart_link_id"];
+//            }
             [currentUser saveInBackground];
             //sent call back data.
             onComplete(response,result,error);
@@ -586,7 +594,13 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     notificationChannnelsObject[@"appPush"] = @YES;
     notificationChannnelsObject[@"enable"] = @YES;
     notificationChannnelsObject[@"enabled"] = @YES;
-    
+    if ([smartLinkId isKindOfClass:[ NSString class] ]){
+                   notificationChannnelsObject[@"smartlink_id"] = smartLinkId;
+               }
+           else{
+               notificationChannnelsObject[@"smartlink_id"] = @"organic";
+
+           }
     ///add user object for notification channels
     //mobile app notification
     if([notificationType isEqualToString:[NotificationType Mobile]]){
@@ -657,6 +671,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                 [[SdkKeys new] setParserUserID:user.objectId];
                 if (!error) {
                     if (user) {
+                        [Appgain createUserInstallation];
+
                         [Appgain addExtraParameterUser];
                         //check if id added befoer update all object increment
                         [self checkReinstallUserForAynoumous];
@@ -741,6 +757,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                       if (!error) {
                           if (user) {
                               //after create user update parser installation with new user id
+                              [Appgain createUserInstallation];
                               [self checkReinstallUser];
                               [Appgain addExtraParameterUser];
                               onComplete(YES,error);
@@ -777,7 +794,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(void)addExtraParameterUser{
     
-    [Appgain createUserInstallation];
     [Appgain logAppSession];
     
     PFUser * user = [PFUser currentUser];
@@ -862,7 +878,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     [query whereKey:@"madid" equalTo:[[SdkKeys new] getDeviceADID]  ];
     [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (objects.count > 1){
+            if (objects.count > 0){
                 
                 [Appgain callMatchingApiAndUpdateUser:objects.count];
             
@@ -915,19 +931,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         onComplete(succeeded,error);
 
     }];
-//    PFUser * currentUser = [PFUser currentUser];
-//    if ([currentUser objectId]){
-//          for (NSString *key in [user allKeys]){
-//              if (user[key]){
-//                  currentUser[key] = user[key];
-//              }
-//          }
-//        [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                onComplete(succeeded,error);
-//            });
-//        }];
-//    }
+
 }
 
 @end
