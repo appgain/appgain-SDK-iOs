@@ -10,6 +10,8 @@
 
 
 static  NSString  *smartLinkId;
+static  NSString  *campaignId;
+static  NSString  *campaignName ;
 static LocationManger * location;
 
 static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
@@ -425,9 +427,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     NSString * campaign_name = @"";
     if ([userInfo objectForKey:@"campaign_id"]) {
         campaign = [userInfo objectForKey:@"campaign_id"];
+        campaignId = [userInfo objectForKey:@"campaign_id"];
     }
     if ([userInfo objectForKey:@"campaignName"]) {
         campaign_name = [userInfo objectForKey:@"campaignName"];
+        campaignName = [userInfo objectForKey:@"campaignName"];
     }
     
     NSDictionary *details = @{@"channel" :@"apppush",
@@ -446,6 +450,24 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     
 }
 
++(void)logNotificationConverstion :(NSString*)value{
+ 
+   NSDictionary *details = @{@"channel" :@"apppush",
+                              @"action":
+                                  @{@"name":[NotificationStatus Conversion],@"value":[NSNumber numberWithDouble:[value doubleValue] ]} ,//name could be received", --> or conversion or open
+                              @"userId":[[SdkKeys new] getParserUserID], //
+                              @"campaign_id": campaignId ,
+                              @"campaign_name":campaignName
+    };
+    [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            campaignName = nil;
+            campaignId = nil;
+        });
+    }];
+    
+    
+}
 //MARK: get parser user id
 
 +(NSString *)getUserID{
@@ -526,6 +548,12 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     else{
         purchaseItemObject[@"smartlink_id"] = @"organic";
     }
+    //if there is an notification for buy item
+    if ([campaignName isKindOfClass:[ NSString class] ] &&  [campaignName isKindOfClass:[ NSString class] ]){
+        [Appgain logNotificationConverstion:item.amount];
+    }
+
+    
     [purchaseItemObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             
