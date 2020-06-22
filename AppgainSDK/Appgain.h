@@ -82,7 +82,7 @@
 +(void)signUpWithUser : (PFUser*) user whenFinish:(void (^)(BOOL, NSError*))onComplete;
 +(void)skipUserLogin;
 
-+(void)logEventForAction:(NSString*)action andType :(NSString*) type whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete;
++(void)logEventForAction:(NSString *)action andType:(NSString *)type parameter:(NSDictionary*) parameters whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete;
 
 +(void)updateUserProfileFor : (PFUser*) user whenFinish:(void (^)(BOOL, NSError*))onComplete;
 

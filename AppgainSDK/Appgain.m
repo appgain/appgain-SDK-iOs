@@ -944,9 +944,15 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     
 }
 
-+(void)logEventForAction:(NSString *)action andType:(NSString *)type whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
-    
-   NSDictionary *event = @{@"action":action,@"type":type};
++(void)logEventForAction:(NSString *)action andType:(NSString *)type parameter:(NSDictionary*) parameters whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
+    NSDictionary *event;
+    if (parameters != nil){
+       event = @{@"action":action,@"type":type,@"value":parameters};
+
+    }
+    else{
+    event = @{@"action":action,@"type":type};
+    }
     [[ServiceLayer new] postRequestWithURL:[UrlData getLogEventUrl] withBodyData: event didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
           dispatch_async(dispatch_get_main_queue(), ^{
               onComplete(response,result,error);
