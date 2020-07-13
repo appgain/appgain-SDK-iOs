@@ -135,6 +135,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 +(void)configuerServerParser : (BOOL)newUser andAutomaticConfiguration : (BOOL)configure{
     
     // If you would like all objects to be private by default, remove this line.
+    if (![Parse currentConfiguration]){
     [Parse initializeWithConfiguration:[ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
         SdkKeys * tempkeys = [SdkKeys new];
         configuration.applicationId = [tempkeys getParseAppID];
@@ -145,6 +146,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
             configuration.clientKey = [[SdkKeys new] getParseClientID];
         }
     }]];
+    }
     //call matching api for
     
     
@@ -951,7 +953,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
     }
     else{
-    event = @{@"action":action,@"type":type};
+     event = @{@"action":action,@"type":type};
     }
     [[ServiceLayer new] postRequestWithURL:[UrlData getLogEventUrl] withBodyData: event didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
           dispatch_async(dispatch_get_main_queue(), ^{
