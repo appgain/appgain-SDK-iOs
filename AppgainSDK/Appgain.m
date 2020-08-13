@@ -425,14 +425,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
  2- action String (opend, recived, con..)
  */
 +(void)trackNotificationWithAction :(NSString*)action andUserInfo:(NSDictionary *) userInfo whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
-    NSString * campaign = @"";
-    NSString * campaign_name = @"";
+ 
     if ([userInfo objectForKey:@"campaign_id"]) {
-        campaign = [userInfo objectForKey:@"campaign_id"];
         campaignId = [userInfo objectForKey:@"campaign_id"];
     }
     if ([userInfo objectForKey:@"campaignName"]) {
-        campaign_name = [userInfo objectForKey:@"campaignName"];
         campaignName = [userInfo objectForKey:@"campaignName"];
     }
     
@@ -440,8 +437,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                               @"action":
                                   @{@"name":action,@"value":@"NA"} ,//name could be received", --> or conversion or open
                               @"userId":[[SdkKeys new] getParserUserID], //
-                              @"campaign_id": campaign ,
-                              @"campaign_name":campaign_name
+                              @"campaign_id": campaignId ,
+                              @"campaign_name":campaignName
     };
     [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -551,7 +548,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         purchaseItemObject[@"smartlink_id"] = @"organic";
     }
     //if there is an notification for buy item
-    if ([campaignName isKindOfClass:[ NSString class] ] &&  [campaignName isKindOfClass:[ NSString class] ]){
+    if ([campaignId isKindOfClass:[ NSString class] ] ){
         [Appgain logNotificationConverstion:item.amount];
     }
 
