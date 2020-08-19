@@ -331,6 +331,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
             if ( result[@"smart_link_url"] ){
                 
                 currentUser[@"SDL"] = result[@"smart_link_url"];
+                currentUser[@"sdl"] = result[@"smart_link_url"];
+
             }
             
             //to save it first time only.
