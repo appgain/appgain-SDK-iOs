@@ -27,6 +27,9 @@ WKWebView* webView;
                 [urlRequest setAllHTTPHeaderFields: @{@"appApiKey": [[SdkKeys new] getAppApiKey] ,@"User-Agent": secretAgent}];
             }
             NSURLSession *session = [NSURLSession sharedSession];
+            NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+                  sessionConfig.timeoutIntervalForRequest = 30.0;
+                  sessionConfig.timeoutIntervalForResource = 60.0;
             NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
@@ -70,6 +73,9 @@ WKWebView* webView;
     [urlRequest setHTTPBody:bodyData];
     
     NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfig.timeoutIntervalForRequest = 30.0;
+    sessionConfig.timeoutIntervalForResource = 60.0;
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
                                       {
         //hide network indecator
