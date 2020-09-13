@@ -14,14 +14,12 @@
     return @"appPush";
 }
 +(NSString*)Sms{
-    return @"sms";
+    return @"SMS";
 }
 +(NSString*)Email{
     return @"email";
 }
-+(NSString*)Web{
-    return @"webPush";
-}
+
 
 
 @end

@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.platform = :ios
   s.name             = 'Appgain'
-  s.version          = '2.1.7'
+  s.version          = '3.0.1'
   s.summary          = 'Appgain   component for iOS '
  
   s.description      = <<-DESC
@@ -16,7 +16,6 @@ Appgain component for using in iOS!, that support many thing like push notificat
   s.framework = "UIKit"
   s.ios.deployment_target = '8.0'
 
-  s.dependency 'Parse', '~> 1.14.4'
   s.source_files = 'AppgainSDK/*.m','AppgainSDK/*.h'
 
 end

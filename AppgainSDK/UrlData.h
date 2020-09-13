@@ -12,6 +12,9 @@
 
 
 + (NSString*) getAppKeysUrlWithID :(NSString*)appID ;
++ (NSString*) initUser ;
++ (NSString*) updateUser ;
+
 
 + (NSString*) getSmartUrl;
 + (NSString*) getmatcherUrlWithUserID :(NSString*)userID;
@@ -20,7 +23,12 @@
 + (NSString*) getAutomatorUrlWithTriggerPoint :(NSString*)trigger;
 + (NSString*) getbaseServerUrl;
 + (NSString*) getLogEventUrl;
-
-
++(NSString *)getEnableNotifications;
++(NSString *) createNotificationChannels;
++(NSString *)updateMatchingData;
++(NSString *)logPurchase;
++(NSString *)updateUserId;
++(NSString *)getUserInfo;
++ (NSString*) getmatcherLink ;
 @end
 

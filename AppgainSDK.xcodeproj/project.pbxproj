@@ -10,7 +10,6 @@
 		DF18D3C322F5C2A6005DC333 /* NotificationType.m in Sources */ = {isa = PBXBuildFile; fileRef = DF18D3C222F5C2A6005DC333 /* NotificationType.m */; };
 		DF1E6DFD22F0867500C191CA /* MobileLandingPageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF422F0867500C191CA /* MobileLandingPageButton.m */; };
 		DF1E6DFE22F0867500C191CA /* MobileLandingPage.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF722F0867500C191CA /* MobileLandingPage.m */; };
-		DF1E6DFF22F0867500C191CA /* PurchaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF822F0867500C191CA /* PurchaseItem.m */; };
 		DF1E6E0022F0867500C191CA /* Appgain.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1E6DF922F0867500C191CA /* Appgain.m */; };
 		DF6958C12417009D00B0AE38 /* LocationManger.m in Sources */ = {isa = PBXBuildFile; fileRef = DF6958BF2417009D00B0AE38 /* LocationManger.m */; };
 		DFA792F724170395003001FA /* AppgainRich.m in Sources */ = {isa = PBXBuildFile; fileRef = DFA792F624170395003001FA /* AppgainRich.m */; };
@@ -39,11 +38,9 @@
 		DF1E6DF522F0867500C191CA /* MobileLandingPageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileLandingPageButton.h; sourceTree = "<group>"; };
 		DF1E6DF622F0867500C191CA /* DataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataModels.h; sourceTree = "<group>"; };
 		DF1E6DF722F0867500C191CA /* MobileLandingPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileLandingPage.m; sourceTree = "<group>"; };
-		DF1E6DF822F0867500C191CA /* PurchaseItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseItem.m; sourceTree = "<group>"; };
 		DF1E6DF922F0867500C191CA /* Appgain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appgain.m; sourceTree = "<group>"; };
 		DF1E6DFA22F0867500C191CA /* Appgain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appgain.h; sourceTree = "<group>"; };
 		DF1E6DFB22F0867500C191CA /* MobileLandingPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileLandingPage.h; sourceTree = "<group>"; };
-		DF1E6DFC22F0867500C191CA /* PurchaseItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseItem.h; sourceTree = "<group>"; };
 		DF32D1FB22AFDB0B0072D026 /* Appgain-Rich.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Appgain-Rich.podspec"; sourceTree = "<group>"; };
 		DF6958BF2417009D00B0AE38 /* LocationManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManger.m; sourceTree = "<group>"; };
 		DF6958C02417009D00B0AE38 /* LocationManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManger.h; sourceTree = "<group>"; };
@@ -94,8 +91,6 @@
 				DF1E6DF422F0867500C191CA /* MobileLandingPageButton.m */,
 				DF6958C02417009D00B0AE38 /* LocationManger.h */,
 				DF6958BF2417009D00B0AE38 /* LocationManger.m */,
-				DF1E6DFC22F0867500C191CA /* PurchaseItem.h */,
-				DF1E6DF822F0867500C191CA /* PurchaseItem.m */,
 				DFFF36F522DE1E390071DF0B /* Info.plist */,
 				DF32D1F722AFD3A10072D026 /* Appgain-rich */,
 				81B452452073A328006CF6B6 /* NotificationStatus.h */,
@@ -202,7 +197,6 @@
 				DFA792F724170395003001FA /* AppgainRich.m in Sources */,
 				DF1E6DFD22F0867500C191CA /* MobileLandingPageButton.m in Sources */,
 				DF6958C12417009D00B0AE38 /* LocationManger.m in Sources */,
-				DF1E6DFF22F0867500C191CA /* PurchaseItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

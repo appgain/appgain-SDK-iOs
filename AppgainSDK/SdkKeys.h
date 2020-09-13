@@ -28,10 +28,8 @@
 #define FIRST_RUN_APP @"first_run_app"
 #define FIRST_MATCH @"first_match"
 #define FIRST_INSTALL_APP @"first_install_app"
-
-#define AUTOMATIC_CONFIGURATION_USER @"AutomaticConfigureUser"
-#define USER_PARSE_ID @"user_parse_id"
-
+#define IS_RETURN_USER @"is_return_user"
+#define USER_ID @"user_id"
 #define PUSH_DEVICE_TOKEN @"push_device_token"
 
 //MARK:appApiKey
@@ -74,11 +72,6 @@
 
 -(NSString *)getFirstMatch;
 
-
-//MARK:Parser user id
--(NSString*) getParserUserID;
--(void) setParserUserID :(NSString*)  key;
-
 //MARK:device token
 -(NSString*) getDeviceToken;
 -(void) setDeviceToken :(NSString*)  key;
@@ -87,9 +80,11 @@
 //MARK: Advertising Identifier value
 -(NSString*) getDeviceADID;
 
-//automic configuration
--(NSString* )getAutomaticConfigureUser;
--(void)setAutomaticConfigureUser:(BOOL)key;
+///userID in parser server
+-(NSString *)getUserID;
+-(void)setUserID:(NSString *)key;
 
+-(NSString* )isReturnUser;
+-(void)setIsReturnUser:(NSString*)key;
 
 @end

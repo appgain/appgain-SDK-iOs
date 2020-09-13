@@ -20,16 +20,29 @@ WKWebView* webView;
             //create the Method "GET"
             [urlRequest setHTTPMethod:@"GET"];
             //add header parameters
+            SdkKeys *tempKeys = [SdkKeys new];
+
             if ([url containsString:@"match"]){
-                [urlRequest setAllHTTPHeaderFields: @{@"appApiKey": [[SdkKeys new] getAppApiKey] ,@"User-Agent": secretAgent, @"idfa":[[SdkKeys new] getDeviceADID]}];
+                [urlRequest setAllHTTPHeaderFields: @{@"appApiKey": [tempKeys getAppApiKey] ,@"User-Agent": secretAgent, @"idfa":[[SdkKeys new] getDeviceADID]}];
             }
             else{
-                [urlRequest setAllHTTPHeaderFields: @{@"appApiKey": [[SdkKeys new] getAppApiKey] ,@"User-Agent": secretAgent}];
+                [urlRequest setAllHTTPHeaderFields: @{@"appApiKey": [tempKeys getAppApiKey] ,@"User-Agent": secretAgent}];
             }
+            
+            
+            if (![[tempKeys getAppID] isEqualToString:@""]){
+                [urlRequest addValue:[tempKeys getAppID] forHTTPHeaderField:@"appId"];
+            }
+            if (![[tempKeys getParseMasterKey] isEqualToString:@""]){
+                [urlRequest addValue:[tempKeys getParseMasterKey] forHTTPHeaderField:@"x-parse-master-key"];
+            }
+            if (![[tempKeys getParseAppID] isEqualToString:@""]){
+                    [urlRequest addValue:[tempKeys getParseAppID] forHTTPHeaderField:@"x-parse-application-id"];
+                }
+            [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+  
             NSURLSession *session = [NSURLSession sharedSession];
-            NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-                  sessionConfig.timeoutIntervalForRequest = 30.0;
-                  sessionConfig.timeoutIntervalForResource = 60.0;
             NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
@@ -56,32 +69,53 @@ WKWebView* webView;
     
 }
 
+
+
 //MARK: post request data.
 -(void)postRequestWithURL:(NSString *)url withBodyData:(NSDictionary *)dictionaryBody didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
     // show network indicator
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+    SdkKeys *tempKeys = [SdkKeys new];
     
     [urlRequest setHTTPMethod:@"POST"];
-    [urlRequest setAllHTTPHeaderFields: @{@"appApiKey": [[SdkKeys new] getAppApiKey],@"content-type": @"application/json"}];
     
-    //    NSLog(@"---- url sent r : %@", [dictionaryBody description]);
-    //    NSLog(@"---- url sent r : %@", url);
+    [urlRequest setAllHTTPHeaderFields: @{@"appApiKey": [tempKeys getAppApiKey]}];
+    if (![[tempKeys getAppID] isEqualToString:@""]){
+        [urlRequest addValue:[tempKeys getAppID] forHTTPHeaderField:@"appId"];
+    }
+    if (![[tempKeys getParseMasterKey] isEqualToString:@""]){
+        [urlRequest addValue:[tempKeys getParseMasterKey] forHTTPHeaderField:@"x-parse-master-key"];
+    }
+    if (![[tempKeys getParseAppID] isEqualToString:@""]){
+        [urlRequest addValue:[tempKeys getParseAppID] forHTTPHeaderField:@"x-parse-application-id"];
+    }
+    [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    if ([url containsString:[[SdkKeys new] getParseServerUrl]]){
+        [urlRequest addValue:@"text/plain" forHTTPHeaderField:@"Content-Type"];
+        
+    }
+    else{
+        [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        
+    }
+    
     NSError *error;
-    NSData *bodyData = [NSJSONSerialization dataWithJSONObject:dictionaryBody options:NSJSONWritingPrettyPrinted error:&error];
-    
-    [urlRequest setHTTPBody:bodyData];
-    
+    if (dictionaryBody != nil){
+        NSData *bodyData = [NSJSONSerialization dataWithJSONObject:dictionaryBody options:NSJSONWritingPrettyPrinted error:&error];
+        NSLog(@"body details %@",bodyData);
+        [urlRequest setHTTPBody:bodyData];
+        
+        
+        
+    }
     NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-    sessionConfig.timeoutIntervalForRequest = 30.0;
-    sessionConfig.timeoutIntervalForResource = 60.0;
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
                                       {
         //hide network indecator
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-        });
+       
         
         // NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         NSMutableDictionary *responseDictionary;// = [NSMutableDictionary new];
@@ -92,6 +126,7 @@ WKWebView* webView;
             responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parseError];
         }
         onComplete(response,responseDictionary,error);
+    });
     }];
     [dataTask resume];
 }

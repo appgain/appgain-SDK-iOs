@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 +(NSString*)Mobile;
 +(NSString*)Sms;
 +(NSString*)Email;
-+(NSString*)Web;
 
 
 @end

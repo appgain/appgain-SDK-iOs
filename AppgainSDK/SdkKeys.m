@@ -186,43 +186,46 @@
     [defaults synchronize];
 }
 
+
+
 ///save value of automatic configuration
--(NSString* )getAutomaticConfigureUser{
+-(NSString* )isReturnUser{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *theKey = [defaults stringForKey:AUTOMATIC_CONFIGURATION_USER];
-    if (theKey == NULL ){
-        theKey = @"false";
-    }
+    NSString * theKey = [defaults stringForKey:IS_RETURN_USER];
+  
+    
+       if (theKey == NULL ){
+           return @"false";
+       }
+    
+    
     return theKey;
 }
 
 
--(void)setAutomaticConfigureUser:(BOOL)key{
+-(void)setIsReturnUser:(NSString*)key{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (key){
-        [defaults setValue:@"true" forKey:AUTOMATIC_CONFIGURATION_USER];
-    }
-    else{
-        [defaults setValue:@"false" forKey:AUTOMATIC_CONFIGURATION_USER];
-    }
+        [defaults setValue:key forKey:IS_RETURN_USER];
     [defaults synchronize];
 }
 
-///userID in parser server
--(NSString *)getParserUserID{
+
+///userID i
+-(NSString *)getUserID{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *theKey = [defaults stringForKey:USER_PARSE_ID];
+    NSString *theKey = [defaults stringForKey:USER_ID];
     if (theKey == NULL ){
         return @"";
     }
     return theKey;
 }
 
--(void)setParserUserID:(NSString *)key{
+-(void)setUserID:(NSString *)key{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:key forKey:USER_PARSE_ID];
+    [defaults setValue:key forKey:USER_ID];
     [defaults synchronize];
 }
+
 
 -(NSString *)getDeviceADID{
     return  [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];

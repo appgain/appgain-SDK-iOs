@@ -8,83 +8,96 @@
 
 /// import all model you need
 #import "DataModels.h"
-#import <Parse/Parse.h>
  #import <sys/utsname.h>
 #import "SdkKeys.h"
+#import <UIKit/UIKit.h>
 #import "LocationManger.h"
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
+
 @interface Appgain : NSObject
 
-//MARK: get current  user parser id
-+(NSString*)getUserID;
+//MARK: init sdk with app_id and api_key
 
-//MARK: inialize sdk Data
-+(void)initializeAppWithID:( NSString* )appID andApiKey :(NSString*)appApiKey automaticConfiguration :(BOOL)configureAutomatic  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete ;
+/*
+ #parameter
+ 1- appid --> String
+ 2- app api key --> string
+ #response
+ will be response for match link that call back every time app is run.
+ # flow of this init method
+ 1- save appid and app_api_key for NSUserdefault
+ if user id not found that mean that app first run or not set app data yet so-->
+ 1- call api to get app setting
+ 2- when sucess get data in NsUserdefault for parser setting
+ 3- then call parser server configuration if it is available for this app.
+ else if app data setting before then
+ 1-  call matcherLink api for app to sent response feedback to user.
+ 
+ */
+//get app keys and configure data
+//MARK: init sdk with response .
++(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey trackUserForAdvertising :(BOOL) trackAdvertisingId whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
++(void)updateUserData:(NSDictionary *)userData whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
+///is called only on the first app run if matching succeeded
++(void)updateMatchingData :(NSDictionary *)extra :(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
++(void)logPurchase:(NSString *)productName withAmount :(double ) amount forCurrency :(NSString*) currency whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
++(void)updateUserId:(NSString *)userId  whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
++(void)getUserData:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
++(void)matchLink:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
+//MARK:Register device token for push notifiaction
+/*
+ parameter device token data
+ */
 
-//MARK: inialize sdk Data with client id
-//+(void)initializeAppWithClientID:( NSString* )clientId andAppId :(NSString*)appId andApiKey :(NSString*)appApiKey  whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*))onComplete ;
-
-//MARK: deinialize sdk Data
-
-+(void)deInitializeApp ;
-
-//MARK: register device token for notification
 +(void)RegisterDeviceWithToken:(NSData*)deviceToken;
+    
+    //MARK:handle recive remote notification to register status track for it
++(void)handlePush:(NSDictionary *)userInfo forApplication:(UIApplication *)application;
+    
 
-//MARK: used to trak user notification when recived that handle parser and appgain.io
-+(void)handlePush:(NSDictionary *)userInfo forApplication : (UIApplication*) application;
+    ///create smartLink for app
+    /*
+     input parameter
+     smart link object
+     
+     response in block
+     */
++(void)createSmartLink:( SmartDeepLink*)linkObject whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
+    
+    //MARK : create LandingPage for user
++(void)createLandingPage:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
 
++(void)fireAutomator:(NSString *)triggerPoint  personalizationData:(NSMutableDictionary*) personalizationData whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
+    
+//Mark track notification
+/*
+    input parameter
+    1- notification user info
+    2- action String (opend, recived, con..)
+*/
++(void)recordPushStatus:(NSString*)action userInfo:(NSDictionary *) userInfo whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
++(void)logEvent:(NSString *)event andAction:(NSString *)action extras:(NSDictionary*) extras whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
 
-//MARK: create smartlink for mobile
-+(void)CreateSmartLinkWithObject:( SmartDeepLink*)linkObject whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete;
+//MARK: get parser user id
++(NSString *)getUserID;
+    //MARK: enable and disable notification for user
++(void)enableNotifications:(BOOL)isEnabled forType : (NSString*) type whenFinish:(void (^)(NSURLResponse*response, NSMutableDictionary*result,NSError *))onComplete;
+    //MARK: add new notification channel for different type of notification recieving
++(void)createNotificationChannel :(NSString *) type withData :(NSString*) data whenFinish:(void (^)(NSURLResponse*response, NSMutableDictionary*result,NSError *error))onComplete;
 
-
-//MARK: check match link for deep linking
-+(void)CreateLinkMactcherWithUserID :(NSString *)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete;
-
-//MARK: create single and slider landing mobile page
-+(void)createLandingPageWithObject:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete;
-
-
-//MARK: create trigger point for user
-+(void)CreateAutomatorWithTrigger :(NSString*) trigger andUserId :(NSString*)userID whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete;
-
-//MARK: create trigger point for user with custom extra parameter
-+(void)CreateAutomatorWithTrigger:(NSString *)trigger andUserId:(NSString *)userID andParameters:(NSMutableDictionary*) Parameters whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete;
-
-//MARK: sent notification status for server.
-+(void)trackNotificationWithAction:(NSString*)action andUserInfo:(NSDictionary *) userInfo whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete;
-
-
-//MARK: update parser user id with app user id
-
-+(void)updateUserId:(NSString*)userId ;
-
-//MARK: create anoynomse user with default user name and passsword
-
-
-+(void)createUserID;
-//MARK: log item user purchase for his id
-
-+(void)logPurchaseForItem:(PurchaseItem *)item whenFinish:(void (^)(BOOL, NSError*))onComplete;
-
-//MARK: enable and disable notification for user
-+(void)enableReciveNotification:(BOOL)enable forType :(NSString*) type whenFinish:(void (^)(BOOL, NSError*))onComplete;
-//MARK: add new notification channel for different type of notification recieving
-+(void)createNotificationChannelForType :(NSString *) notificationType andExtraItem :(NSString*) item whenFinish:(void (^)(BOOL, NSError*))onComplete;
-
-
-//MARK: login in and register for sdk
-+(void)loginWithEmail :(NSString *) email andPassword :(NSString*) password  whenFinish:(void (^)(PFUser*, NSError*))onComplete;
-+(void)loginWithSocailAccountEmail :(NSString *) userEmail andId :(NSString*) userId  andUserName : (NSString *) userName whenFinish:(void (^)(BOOL, NSError*))onComplete;
-
-+(void)signUpWithUser : (PFUser*) user whenFinish:(void (^)(BOOL, NSError*))onComplete;
-+(void)skipUserLogin;
-
-+(void)logEventForAction:(NSString *)action andType:(NSString *)type parameter:(NSDictionary*) parameters whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete;
-
-+(void)updateUserProfileFor : (PFUser*) user whenFinish:(void (^)(BOOL, NSError*))onComplete;
-
-
-@end
+    //MARK: init sdk with response .
++(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey trackUserForAdvertising :(BOOL) trackAdvertisingId ;
++(void)updateUserData:(NSDictionary *)userData ;
+    ///is called only on the first app run if matching succeeded
++(void)logPurchase:(NSString *)productName withAmount :(double ) amount forCurrency :(NSString*) currency ;
++(void)updateUserId:(NSString *)userId  ;
++(void)matchLink;
++(void)fireAutomator:(NSString *)triggerPoint  personalizationData:(NSMutableDictionary*) personalizationData;
++(void)recordPushStatus:(NSString*)action userInfo:(NSDictionary *) userInfo ;
++(void)logEvent:(NSString *)event andAction:(NSString *)action extras:(NSDictionary*) extras ;
+  //MARK: enable and disable notification for user
++(void)enableNotifications:(BOOL)isEnabled forType : (NSString*) type;
+  //MARK: add new notification channel for different type of notification recieving
++(void)createNotificationChannel :(NSString *) type withData :(NSString*) data;
+    @end
