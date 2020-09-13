@@ -14,5 +14,4 @@
 #import "ServiceLayer.h"
 #import "SdkKeys.h"
 #import "UrlData.h"
-#import "PurchaseItem.h"
 #import "NotificationType.h"
