@@ -21,7 +21,7 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
-            name: "Appgain",
+            name: "Appgain-rich",
             dependencies: [],  exclude: ["Appgain-Rich.podspec","AppgainRich.podspec","LICENSE","Appgain-rich/"])
       
     ]
