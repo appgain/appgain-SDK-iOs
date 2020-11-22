@@ -82,32 +82,20 @@
 		81B4521B2073A190006CF6B6 /* AppgainSDK */ = {
 			isa = PBXGroup;
 			children = (
-				DF1E6DFA22F0867500C191CA /* Appgain.h */,
+				DFA00FB1256AB87300CFE7D5 /* include */,
 				DF1E6DF922F0867500C191CA /* Appgain.m */,
-				DF1E6DF622F0867500C191CA /* DataModels.h */,
-				DF1E6DFB22F0867500C191CA /* MobileLandingPage.h */,
 				DF1E6DF722F0867500C191CA /* MobileLandingPage.m */,
-				DF1E6DF522F0867500C191CA /* MobileLandingPageButton.h */,
 				DF1E6DF422F0867500C191CA /* MobileLandingPageButton.m */,
-				DF6958C02417009D00B0AE38 /* LocationManger.h */,
 				DF6958BF2417009D00B0AE38 /* LocationManger.m */,
 				DFFF36F522DE1E390071DF0B /* Info.plist */,
 				DF32D1F722AFD3A10072D026 /* Appgain-rich */,
-				81B452452073A328006CF6B6 /* NotificationStatus.h */,
 				81B452362073A325006CF6B6 /* NotificationStatus.m */,
-				81B452432073A327006CF6B6 /* SdkKeys.h */,
 				81B4523D2073A326006CF6B6 /* SdkKeys.m */,
-				81B452462073A328006CF6B6 /* ServiceLayer.h */,
 				81B4523F2073A327006CF6B6 /* ServiceLayer.m */,
-				81B452472073A328006CF6B6 /* SmartDeepLink.h */,
 				81B452332073A325006CF6B6 /* SmartDeepLink.m */,
-				81B452352073A325006CF6B6 /* SocialmediaSettings.h */,
 				81B4523A2073A326006CF6B6 /* SocialmediaSettings.m */,
-				81B452372073A325006CF6B6 /* TargetPlatform.h */,
 				81B4523B2073A326006CF6B6 /* TargetPlatform.m */,
-				81B452382073A325006CF6B6 /* UrlData.h */,
 				81B452412073A327006CF6B6 /* UrlData.m */,
-				DF18D3C122F5C2A6005DC333 /* NotificationType.h */,
 				DF18D3C222F5C2A6005DC333 /* NotificationType.m */,
 			);
 			path = AppgainSDK;
@@ -120,6 +108,26 @@
 				DFA792F624170395003001FA /* AppgainRich.m */,
 			);
 			path = "Appgain-rich";
+			sourceTree = "<group>";
+		};
+		DFA00FB1256AB87300CFE7D5 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				DF1E6DFA22F0867500C191CA /* Appgain.h */,
+				DF1E6DF622F0867500C191CA /* DataModels.h */,
+				DF1E6DFB22F0867500C191CA /* MobileLandingPage.h */,
+				DF1E6DF522F0867500C191CA /* MobileLandingPageButton.h */,
+				DF6958C02417009D00B0AE38 /* LocationManger.h */,
+				81B452452073A328006CF6B6 /* NotificationStatus.h */,
+				81B452432073A327006CF6B6 /* SdkKeys.h */,
+				81B452462073A328006CF6B6 /* ServiceLayer.h */,
+				81B452472073A328006CF6B6 /* SmartDeepLink.h */,
+				81B452352073A325006CF6B6 /* SocialmediaSettings.h */,
+				81B452372073A325006CF6B6 /* TargetPlatform.h */,
+				81B452382073A325006CF6B6 /* UrlData.h */,
+				DF18D3C122F5C2A6005DC333 /* NotificationType.h */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
