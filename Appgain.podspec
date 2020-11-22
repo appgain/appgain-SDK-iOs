@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.platform = :ios
   s.name             = 'Appgain'
-  s.version          = '3.0.1'
+  s.version          = '3.0.2'
   s.summary          = 'Appgain   component for iOS '
  
   s.description      = <<-DESC
