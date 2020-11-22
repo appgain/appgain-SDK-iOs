@@ -21,7 +21,7 @@ let package = Package(
    
         .target(
             name: "Appgain",
-            dependencies: [], exclude: ["instructions.md"]),
+            dependencies: [], exclude: ["instructions.md","AppgainSDK","Appgain-Rich.podspec"]),
        
         .testTarget(
             name: "AppgainTests",
