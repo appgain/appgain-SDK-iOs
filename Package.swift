@@ -22,7 +22,8 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "Appgain-rich",
-            dependencies: [],  exclude: ["Appgain-Rich.podspec","AppgainRich.podspec","LICENSE","Appgain-rich/"])
+            dependencies: [],
+            path : "source",exclude: ["Appgain-Rich.podspec","AppgainRich.podspec","LICENSE","Appgain-rich/"])
       
     ]
     
