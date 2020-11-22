@@ -4,13 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "Appgain",
+    name: "Appgain-rich",
+    
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
-            name: "Appgain",
-            targets: ["Appgain"]),
+            name: "Appgain-rich",
+            targets: ["Appgain-rich"]),
     ],
+    
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
@@ -20,7 +22,8 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "Appgain",
-            dependencies: [], path: "AppgainSDK/",   exclude: ["Appgain-Rich.podspec","Appgain.podspec","AppgainRich.podspec","LICENSE","AppgainSDK/Appgain-rich"])
+            dependencies: [],  exclude: ["Appgain-Rich.podspec","AppgainRich.podspec","LICENSE","Appgain-rich/"])
       
     ]
+    
 )
