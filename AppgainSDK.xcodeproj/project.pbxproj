@@ -82,7 +82,19 @@
 		81B4521B2073A190006CF6B6 /* AppgainSDK */ = {
 			isa = PBXGroup;
 			children = (
-				DFA00FB1256AB87300CFE7D5 /* include */,
+				DF1E6DFA22F0867500C191CA /* Appgain.h */,
+				DF1E6DF622F0867500C191CA /* DataModels.h */,
+				DF1E6DFB22F0867500C191CA /* MobileLandingPage.h */,
+				DF1E6DF522F0867500C191CA /* MobileLandingPageButton.h */,
+				DF6958C02417009D00B0AE38 /* LocationManger.h */,
+				81B452452073A328006CF6B6 /* NotificationStatus.h */,
+				81B452432073A327006CF6B6 /* SdkKeys.h */,
+				81B452462073A328006CF6B6 /* ServiceLayer.h */,
+				81B452472073A328006CF6B6 /* SmartDeepLink.h */,
+				81B452352073A325006CF6B6 /* SocialmediaSettings.h */,
+				81B452372073A325006CF6B6 /* TargetPlatform.h */,
+				81B452382073A325006CF6B6 /* UrlData.h */,
+				DF18D3C122F5C2A6005DC333 /* NotificationType.h */,
 				DF1E6DF922F0867500C191CA /* Appgain.m */,
 				DF1E6DF722F0867500C191CA /* MobileLandingPage.m */,
 				DF1E6DF422F0867500C191CA /* MobileLandingPageButton.m */,
@@ -108,26 +120,6 @@
 				DFA792F624170395003001FA /* AppgainRich.m */,
 			);
 			path = "Appgain-rich";
-			sourceTree = "<group>";
-		};
-		DFA00FB1256AB87300CFE7D5 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				DF1E6DFA22F0867500C191CA /* Appgain.h */,
-				DF1E6DF622F0867500C191CA /* DataModels.h */,
-				DF1E6DFB22F0867500C191CA /* MobileLandingPage.h */,
-				DF1E6DF522F0867500C191CA /* MobileLandingPageButton.h */,
-				DF6958C02417009D00B0AE38 /* LocationManger.h */,
-				81B452452073A328006CF6B6 /* NotificationStatus.h */,
-				81B452432073A327006CF6B6 /* SdkKeys.h */,
-				81B452462073A328006CF6B6 /* ServiceLayer.h */,
-				81B452472073A328006CF6B6 /* SmartDeepLink.h */,
-				81B452352073A325006CF6B6 /* SocialmediaSettings.h */,
-				81B452372073A325006CF6B6 /* TargetPlatform.h */,
-				81B452382073A325006CF6B6 /* UrlData.h */,
-				DF18D3C122F5C2A6005DC333 /* NotificationType.h */,
-			);
-			path = include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
