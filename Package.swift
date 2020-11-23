@@ -9,7 +9,7 @@ let package = Package(
    // platforms: [.iOS(.v10), .macOS(.v10_12), .tvOS(.v10), .watchOS(.v3)],
     products: [
         .library(name: "Appgain", targets: ["Appgain"]),
-        .library(name: "Appgain-rich", targets: ["Appgian-rich"]),
+        .library(name: "Appgain-rich", targets: ["Appgain-rich"]),
         
     ],
     targets: [
@@ -20,7 +20,6 @@ let package = Package(
         ),
         .target(
             name: "Appgain-rich",
-            dependencies: ["Appgain"],
             path: "Sources",
             sources: ["Appgain-rich"]
         )
