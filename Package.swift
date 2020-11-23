@@ -15,13 +15,11 @@ let package = Package(
     targets: [
         .target(
             name: "Appgain",
-            path: "Sources",
-            exclude: ["Appgain-rich"]
+            path: "Sources"
         ),
         .target(
             name: "Appgain-rich",
-            path: "Sources",
-            sources: ["Appgain-rich"]
+            path: "AppgainRich"
         )
     ]
 )
