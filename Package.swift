@@ -20,6 +20,7 @@ let package = Package(
         ),
         .target(
             name: "Appgain-rich",
+            dependencies: ["Appgain"],
             path: "Sources",
             sources: ["Appgain-rich"]
         )
