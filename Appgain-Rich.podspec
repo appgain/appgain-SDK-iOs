@@ -18,6 +18,6 @@ Extension for Appgain sdk for rich notification.
   s.framework = "UIKit","Foundation","UserNotifications","UserNotificationsUI","AVKit","WebKit"
   s.ios.deployment_target = '10.0'
 
-  s.source_files = 'AppgainSDK/Appgain-rich/AppgainRich.m','AppgainSDK/Appgain-rich/AppgainRich.h'
+s.source_files = 'Sources-rich/AppgainRich.m','Sources-rich/include/AppgainRich.h'
 
 end

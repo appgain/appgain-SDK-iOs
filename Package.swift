@@ -19,7 +19,7 @@ let package = Package(
         ),
         .target(
             name: "Appgain-rich",
-            path: "AppgainRich"
+            path: "Sources-rich"
         )
     ]
 )

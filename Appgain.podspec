@@ -16,6 +16,6 @@ Appgain component for using in iOS!, that support many thing like push notificat
   s.framework = "UIKit"
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'AppgainSDK/*.m','AppgainSDK/*.h'
+  s.source_files = 'Sources/*.m','Sources/include/*.h'
 
 end
