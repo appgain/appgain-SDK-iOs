@@ -69,7 +69,9 @@
 +(void)createLandingPage:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
 
 +(void)fireAutomator:(NSString *)triggerPoint  personalizationData:(NSMutableDictionary*) personalizationData whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
-    
++(void)cancelAutomator:(NSString *)triggerPoint whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
+
+
 //Mark track notification
 /*
     input parameter
@@ -94,6 +96,8 @@
 +(void)updateUserId:(NSString *)userId  ;
 +(void)matchLink;
 +(void)fireAutomator:(NSString *)triggerPoint  personalizationData:(NSMutableDictionary*) personalizationData;
++(void)cancelAutomator:(NSString *)triggerPoint;
+
 +(void)recordPushStatus:(NSString*)action userInfo:(NSDictionary *) userInfo ;
 +(void)logEvent:(NSString *)event andAction:(NSString *)action extras:(NSDictionary*) extras ;
   //MARK: enable and disable notification for user

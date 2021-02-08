@@ -7,18 +7,20 @@
 #import "ServiceLayer.h"
 #import <WebKit/WebKit.h>
 @implementation ServiceLayer
-
 WKWebView* webView;
+///MARK: request for api
 
-///MARK:Get request for api
--(void)getRequestWithURL:(NSString *)url didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
+
+-(void)requestWithURL:(NSString *)url httpWay:(NSString *)way didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *, NSError *))onComplete{
+/////MARK:Get request for api
+//-(void)getRequestWithURL:(NSString *)url didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString: url]];
     [self stringByEvaluatingJavaScript:^(NSString * secretAgent) {
         dispatch_async(dispatch_get_main_queue(), ^{
             //create the Method "GET"
-            [urlRequest setHTTPMethod:@"GET"];
+            [urlRequest setHTTPMethod:way];
             //add header parameters
             SdkKeys *tempKeys = [SdkKeys new];
 

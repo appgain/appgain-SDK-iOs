@@ -44,7 +44,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         SdkKeys* tempSdkKeys = [SdkKeys new];
         [tempSdkKeys setAppApiKey:apiKey];
         [tempSdkKeys setAppID:projectId];
-        [[ServiceLayer new] getRequestWithURL:[UrlData getAppKeysUrlWithID:projectId] didFinish:^(NSURLResponse * response, NSMutableDictionary * result,NSError * error) {
+        [[ServiceLayer new] requestWithURL:[UrlData getAppKeysUrlWithID:projectId] httpWay:@"GET"  didFinish:^(NSURLResponse * response, NSMutableDictionary * result,NSError * error) {
             if (result != nil){
                 if ([result objectForKey:@"AppSubDomainName"] != nil){
                     [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
@@ -297,7 +297,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(void)matchLink:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
     
-    [[ServiceLayer new] getRequestWithURL:[UrlData getmatcherLink] didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
+    [[ServiceLayer new] requestWithURL:[UrlData getmatcherLink] httpWay:@"GET" didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
         NSLog(@"response %@",response);
         NSLog(@"result %@",result);
         NSLog(@"error %@",error);
@@ -435,15 +435,23 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
               [urlWithQuerystring appendFormat:@"&%@=%@", [self urlEscapeString:keyString], [self urlEscapeString:valueString]];
           }
       }
-      [[ServiceLayer new] getRequestWithURL:urlWithQuerystring didFinish:^(NSURLResponse *response , NSMutableDictionary * result,NSError * error) {
+      [[ServiceLayer new] requestWithURL:urlWithQuerystring httpWay:@"GET" didFinish:^(NSURLResponse *response , NSMutableDictionary * result,NSError * error) {
 
           dispatch_async(dispatch_get_main_queue(), ^{
               onComplete(response,result,error);
           });
       }];
 }
++(void)cancelAutomator:(NSString *)triggerPoint whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *, NSError *))onComplete{
+      NSMutableString *urlWithQuerystring = [[NSMutableString alloc] initWithString:[UrlData getAutomatorUrlWithTriggerPoint:triggerPoint]];
+     
+      [[ServiceLayer new] requestWithURL:urlWithQuerystring httpWay:@"DELETE" didFinish:^(NSURLResponse *response , NSMutableDictionary * result,NSError * error) {
 
-
+          dispatch_async(dispatch_get_main_queue(), ^{
+              onComplete(response,result,error);
+          });
+      }];
+}
 
 
 //Mark track notification
@@ -589,6 +597,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(void)fireAutomator:(NSString *)triggerPoint  personalizationData:(NSMutableDictionary*) personalizationData{
     [Appgain fireAutomator:triggerPoint personalizationData:personalizationData whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
+        
+    }];
+}
++(void)cancelAutomator:(NSString *)triggerPoint{
+    [Appgain cancelAutomator:triggerPoint whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
         
     }];
 }
