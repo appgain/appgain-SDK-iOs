@@ -186,7 +186,22 @@
     [defaults synchronize];
 }
 
+////MARK:first install
+-(NSString*) getIda{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *theKey = [defaults stringForKey:FIRST_IDA_RETRIVE];
+    if (theKey == NULL ){
+        [self setInstallRun:@"false"];
+        return @"true";
+    }
+    return theKey;
+}
 
+-(void) setIda :(NSString*)  key{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:key forKey:FIRST_IDA_RETRIVE];
+    [defaults synchronize];
+}
 
 ///save value of automatic configuration
 -(NSString* )isReturnUser{

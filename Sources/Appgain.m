@@ -89,8 +89,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         if (result[@"result"]){
             [[SdkKeys new] setUserID:result[@"result"][@"userId"]];
             [[SdkKeys new] setIsReturnUser: result[@"result"][@"isReturningUser"]];
+           
             [Appgain updateUserData:nil];
-            
+            [Appgain callIdaAttribution];
         }
         
     }];
@@ -108,6 +109,31 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     }];
 }
 
++(void)callIdaAttribution{
+    if ([[[SdkKeys new] getIda] isEqualToString:@"true"]){
+    
+    // Delay 2 seconds
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    if ([[ADClient sharedClient] respondsToSelector:@selector(requestAttributionDetailsWithBlock:)]) {
+    [[ADClient sharedClient] requestAttributionDetailsWithBlock:^(NSDictionary *attributionDetails, NSError *error) {
+    // Look inside of the returned dictionary for all attribution details
+        NSMutableDictionary *details = [NSMutableDictionary new];
+        if ([attributionDetails objectForKey:@"Version3.1"] ){
+            
+            NSDictionary * parameter = [attributionDetails objectForKey:@"Version3.1"] ;
+            for (id  key in parameter){
+                NSString * newKey = [(NSString*)key stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                id value = parameter[key];
+                details[newKey] = value;
+            }
+            [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+            }];
+        }
+    }];
+    }
+    });
+    }
+}
 
 +(void)updateUserData:(NSDictionary *)userData whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError * error))onComplete{
     if (![[[SdkKeys new] getUserID] isEqualToString:@""]){
@@ -163,9 +189,9 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
             }
         }
         [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
-            NSLog(@"response %@",response);
-            NSLog(@"result %@",result);
-            NSLog(@"error %@",error);
+//            NSLog(@"response %@",response);
+//            NSLog(@"result %@",result);
+//            NSLog(@"error %@",error);
 
             onComplete(response,result,error);
         }];

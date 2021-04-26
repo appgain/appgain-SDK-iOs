@@ -28,6 +28,7 @@
 #define FIRST_RUN_APP @"first_run_app"
 #define FIRST_MATCH @"first_match"
 #define FIRST_INSTALL_APP @"first_install_app"
+#define FIRST_IDA_RETRIVE @"first_ida_retrive"
 #define IS_RETURN_USER @"is_return_user"
 #define USER_ID @"user_id"
 #define PUSH_DEVICE_TOKEN @"push_device_token"
@@ -87,4 +88,6 @@
 -(NSString* )isReturnUser;
 -(void)setIsReturnUser:(NSString*)key;
 
+-(NSString*) getIda;
+-(void) setIda :(NSString*)  key;
 @end
