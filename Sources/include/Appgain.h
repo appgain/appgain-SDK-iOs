@@ -11,7 +11,6 @@
  #import <sys/utsname.h>
 #import "SdkKeys.h"
 #import <UIKit/UIKit.h>
-#import "LocationManger.h"
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <iAd/iAd.h>
