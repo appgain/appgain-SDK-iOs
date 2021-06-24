@@ -11,7 +11,6 @@
 static  NSString  *campaignId;
 static  NSString  *campaignName = @"" ;
 static  NSString  *smartLinkId;
-static LocationManger * location;
 
 static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
@@ -37,8 +36,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 //MARK: init sdk with response .
 +(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey trackUserForAdvertising :(BOOL) trackAdvertisingId whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError *))onComplete{
     initDone =  onComplete;
-    //  [[SdkKeys new] setAutomaticConfigureUser: configureAutomatic];
-    location = [LocationManger new];
     //if no project or parser server is done sent to get parser server data
     if ([[[SdkKeys new] getUserID]  isEqual: @""] ) {
         SdkKeys* tempSdkKeys = [SdkKeys new];
@@ -162,12 +159,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
             details[@"operator"] = [carrier carrierName];
         }
         details[@"lastSeenAt"] = date;
-        if ([location city]){
-            details[@"city"] = [location city];
-        }
-        if ([location country]){
-            details[@"country"] = [location country];
-        }
         struct utsname systemInfo;
         uname(&systemInfo);
         details[@"devicemodel"] =  [NSString stringWithCString:systemInfo.machine
