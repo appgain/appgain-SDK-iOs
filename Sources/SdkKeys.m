@@ -243,7 +243,25 @@
 
 
 -(NSString *)getDeviceADID{
-    return  [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    if (@available(iOS 14.0, *)) {
+
+        [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+        }];
+    }
+    if (@available(iOS 14.0, *)) {
+
+    ATTrackingManagerAuthorizationStatus status = [ATTrackingManager trackingAuthorizationStatus];
+        if (status == ATTrackingManagerAuthorizationStatusAuthorized){
+            return  [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+        }
+        else{
+            return @"Not allowed";
+        }
+    }
+    else{
+        return  [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+
+    }
 }
 
 -(NSString *)getDeviceToken{

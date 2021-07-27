@@ -14,6 +14,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AdSupport/ASIdentifierManager.h>
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
 
 @interface SdkKeys : NSObject
 
