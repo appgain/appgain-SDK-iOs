@@ -241,27 +241,40 @@
     [defaults synchronize];
 }
 
+// MARK: allow advidising id
+-(BOOL) getAllowIdfa{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL theKey = [defaults boolForKey:ALLOW_IDFA_RETRIVE];
+    if (theKey == YES ){
+//        [self setAllowIdfa:NO];
+        return YES;
+    }
+    return NO;
+}
+
+-(void) setAllowIdfa :(BOOL)  key{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:key forKey:ALLOW_IDFA_RETRIVE];
+    [defaults synchronize];
+}
 
 -(NSString *)getDeviceADID{
+    NSMutableString *idFA = [@"Not allowed" mutableCopy];
+    if ([[SdkKeys new] getAllowIdfa] == YES){
     if (@available(iOS 14.0, *)) {
-
         [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+                if (status == ATTrackingManagerAuthorizationStatusAuthorized){
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                    [idFA setString:[[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]]  ;
+                         });
+                }
         }];
     }
-    if (@available(iOS 14.0, *)) {
-
-    ATTrackingManagerAuthorizationStatus status = [ATTrackingManager trackingAuthorizationStatus];
-        if (status == ATTrackingManagerAuthorizationStatusAuthorized){
-            return  [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-        }
-        else{
-            return @"Not allowed";
-        }
-    }
     else{
-        return  [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-
+        [idFA setString:[[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]]  ;
     }
+    }
+    return  idFA;
 }
 
 -(NSString *)getDeviceToken{

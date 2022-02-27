@@ -35,6 +35,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 //get app keys and configure data
 //MARK: init sdk with response .
 +(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey trackUserForAdvertising :(BOOL) trackAdvertisingId whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError *))onComplete{
+    [[SdkKeys new] setAllowIdfa:trackAdvertisingId];
+
     initDone =  onComplete;
     //if no project or parser server is done sent to get parser server data
     if ([[[SdkKeys new] getUserID]  isEqual: @""] ) {
@@ -433,9 +435,15 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(NSString*)urlEscapeString:(NSString *)unencodedString
 {
-    CFStringRef originalStringRef = (__bridge_retained CFStringRef)unencodedString;
-    NSString *s = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,originalStringRef, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8);
-    CFRelease(originalStringRef);
+//    CFStringRef originalStringRef = (__bridge_retained CFStringRef)unencodedString;
+//    NSString *s = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,originalStringRef, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8);
+//    CFRelease(originalStringRef);
+//  
+//    
+//    NSString * toBeEscapedInQueryString = @"!*'\"();:@&=+$,/?%#[]% ";
+//    NSString * ss =   [unencodedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:toBeEscapedInQueryString]];
+    NSString* s = [unencodedString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+
     return s;
 }
 

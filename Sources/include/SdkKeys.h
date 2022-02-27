@@ -33,6 +33,7 @@
 #define IS_RETURN_USER @"is_return_user"
 #define USER_ID @"user_id"
 #define PUSH_DEVICE_TOKEN @"push_device_token"
+#define ALLOW_IDFA_RETRIVE @"allow_idfa_retrive"
 
 //MARK:appApiKey
 -(NSString*) getAppApiKey;
@@ -91,4 +92,7 @@
 
 -(NSString*) getIda;
 -(void) setIda :(NSString*)  key;
+// MARK: allow advidising id
+-(BOOL) getAllowIdfa;
+-(void) setAllowIdfa :(BOOL)  key;
 @end
