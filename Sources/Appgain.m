@@ -35,11 +35,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 //get app keys and configure data
 //MARK: init sdk with response .
 +(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey trackUserForAdvertising :(BOOL) trackAdvertisingId whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError *))onComplete{
-    [[SdkKeys new] setAllowIdfa:trackAdvertisingId];
 
     initDone =  onComplete;
     //if no project or parser server is done sent to get parser server data
     if ([[[SdkKeys new] getUserID]  isEqual: @""] ) {
+        [Appgain requestUserPermissionForUDID:trackAdvertisingId];
         SdkKeys* tempSdkKeys = [SdkKeys new];
         [tempSdkKeys setAppApiKey:apiKey];
         [tempSdkKeys setAppID:projectId];
@@ -66,7 +66,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     }
     else{
         // add last
-        [Appgain updateUserData:nil];
+        [Appgain updateUserData:@{@"session":@"false"}];
         NSMutableDictionary *details = [NSMutableDictionary new];
         details[@"success"] = @"Appgian sdk already initalized before.";
 
@@ -74,7 +74,23 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     }
 }
 
-
++(void) requestUserPermissionForUDID :(BOOL) allowed {
+    if (allowed) {
+      //  NSMutableString *idFA = [@"Not allowed" mutableCopy];
+        if (@available(iOS 14.0, *)) {
+            [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+                if (status == ATTrackingManagerAuthorizationStatusAuthorized){
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[SdkKeys new] setDeviceADID: [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]];
+                    });
+                }
+            }];
+        }
+        else{
+            [[SdkKeys new] setDeviceADID: [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]];
+        }
+    }
+}
 
 +(void) initUser {
     NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
@@ -100,9 +116,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     details[@"userId"] = [[SdkKeys new] getUserID];
     details[@"fcmToken"] = [[SdkKeys new] getDeviceToken];
     details[@"deviceToken"] = [[SdkKeys new] getDeviceToken];
-    
-  //  NSString * url = [Appgain getUrlWithParameter:[UrlData updateUser] andParameter:details];
-    
     [[ServiceLayer new] postRequestWithURL:[UrlData updateUser] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         
     }];
@@ -141,9 +154,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
         details[@"fcmToken"] = [[SdkKeys new] getDeviceToken];
         details[@"deviceToken"] = [[SdkKeys new] getDeviceToken];
-        
-      //  details[@"smartlink_id"] = [smartLinkId isKindOfClass:[ NSString class] ] ? smartLinkId : @"organic";
-        // details[@"devices"] = @[[[SdkKeys new] getDeviceADID]];
         details[@"appversion"] =  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
         details[@"madidIdtype"] = @"idfa";
         NSDateFormatter *dateFormatter = [NSDateFormatter new];
@@ -168,12 +178,14 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         details[@"platform"] = @"ios";
         NSString *ver = [[UIDevice currentDevice] systemVersion];
         details[@"os_ver"] = ver;
-//        details[@"localeId"] =  [[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0];
         details[@"localeId"] = [[NSLocale preferredLanguages] firstObject];
         NSTimeZone * timezone = [NSTimeZone localTimeZone];
         details[@"timeZone"] =   timezone.name;
         details[@"appName"] = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
         details[@"usagecounter"] = [[NSNumber alloc] initWithInt:1];
+        if (!userData[@"session"]){
+            details[@"session"] = @"true";
+        }
         if (userData != nil ){
             for (id  key in userData){
                 id value = userData[key];
@@ -182,10 +194,6 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
             }
         }
         [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
-//            NSLog(@"response %@",response);
-//            NSLog(@"result %@",result);
-//            NSLog(@"error %@",error);
-
             onComplete(response,result,error);
         }];
     }
@@ -438,8 +446,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 //    CFStringRef originalStringRef = (__bridge_retained CFStringRef)unencodedString;
 //    NSString *s = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,originalStringRef, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8);
 //    CFRelease(originalStringRef);
-//  
-//    
+//
+//
 //    NSString * toBeEscapedInQueryString = @"!*'\"();:@&=+$,/?%#[]% ";
 //    NSString * ss =   [unencodedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:toBeEscapedInQueryString]];
     NSString* s = [unencodedString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];

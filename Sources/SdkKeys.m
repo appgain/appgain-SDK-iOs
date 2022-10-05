@@ -241,40 +241,19 @@
     [defaults synchronize];
 }
 
-// MARK: allow advidising id
--(BOOL) getAllowIdfa{
+-(void)setDeviceADID :(NSString *) adid{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL theKey = [defaults boolForKey:ALLOW_IDFA_RETRIVE];
-    if (theKey == YES ){
-//        [self setAllowIdfa:NO];
-        return YES;
-    }
-    return NO;
-}
-
--(void) setAllowIdfa :(BOOL)  key{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:key forKey:ALLOW_IDFA_RETRIVE];
+    [defaults setValue:adid forKey:IDFA_ID];
     [defaults synchronize];
 }
 
 -(NSString *)getDeviceADID{
-    NSMutableString *idFA = [@"Not allowed" mutableCopy];
-    if ([[SdkKeys new] getAllowIdfa] == YES){
-    if (@available(iOS 14.0, *)) {
-        [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
-                if (status == ATTrackingManagerAuthorizationStatusAuthorized){
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                    [idFA setString:[[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]]  ;
-                         });
-                }
-        }];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *theKey = [defaults stringForKey:IDFA_ID];
+    if (theKey == NULL ){
+        return @"Not allowed";
     }
-    else{
-        [idFA setString:[[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]]  ;
-    }
-    }
-    return  idFA;
+    return theKey;
 }
 
 -(NSString *)getDeviceToken{

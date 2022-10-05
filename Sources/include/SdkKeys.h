@@ -33,7 +33,7 @@
 #define IS_RETURN_USER @"is_return_user"
 #define USER_ID @"user_id"
 #define PUSH_DEVICE_TOKEN @"push_device_token"
-#define ALLOW_IDFA_RETRIVE @"allow_idfa_retrive"
+#define IDFA_ID @"idfa_id"
 
 //MARK:appApiKey
 -(NSString*) getAppApiKey;
@@ -81,6 +81,7 @@
 
 
 //MARK: Advertising Identifier value
+-(void)setDeviceADID :(NSString *) adid;
 -(NSString*) getDeviceADID;
 
 ///userID in parser server
@@ -92,7 +93,6 @@
 
 -(NSString*) getIda;
 -(void) setIda :(NSString*)  key;
-// MARK: allow advidising id
--(BOOL) getAllowIdfa;
--(void) setAllowIdfa :(BOOL)  key;
+
+
 @end
