@@ -11,7 +11,7 @@
 static  NSString  *campaignId;
 static  NSString  *campaignName = @"" ;
 static  NSString  *smartLinkId;
-
+static  bool  logSession = NO;
 static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 //MARK: init sdk with app_id and api_key
@@ -66,7 +66,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     }
     else{
         // add last
-        [Appgain updateUserData:@{@"session":@"false"}];
+        [Appgain updateUserData:nil];
         NSMutableDictionary *details = [NSMutableDictionary new];
         details[@"success"] = @"Appgian sdk already initalized before.";
 
@@ -94,11 +94,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(void) initUser {
     NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
-    NSDictionary *queryDictionary = @{ @"platform":@"ios",
-                                       @"appId": bundleIdentifier,
-                                       @"deviceId" : [[SdkKeys new] getDeviceADID]
-    };
-    [[ServiceLayer new] postRequestWithURL:[UrlData initUser] withBodyData:queryDictionary didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    NSMutableDictionary *details = [NSMutableDictionary new];
+    details[@"platform"] = @"ios";
+    details[@"appId"] = bundleIdentifier;
+    details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
+    [[ServiceLayer new] postRequestWithURL:[UrlData initUser] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         // need to save user id
         // save is returning user or not
         if (result[@"result"]){
@@ -116,6 +116,14 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     details[@"userId"] = [[SdkKeys new] getUserID];
     details[@"fcmToken"] = [[SdkKeys new] getDeviceToken];
     details[@"deviceToken"] = [[SdkKeys new] getDeviceToken];
+    // log session
+    if (![[[SdkKeys new] getUserID] isEqual:@""]){
+        if (logSession){
+            details[@"session"] = @"true";
+        } else {
+            logSession = YES;
+        }
+    }
     [[ServiceLayer new] postRequestWithURL:[UrlData updateUser] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         
     }];
@@ -137,6 +145,12 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                 NSString * newKey = [(NSString*)key stringByReplacingOccurrencesOfString:@"-" withString:@""];
                 id value = parameter[key];
                 details[newKey] = value;
+            }
+            // log session
+            if (logSession){
+                details[@"session"] = @"true";
+            } else {
+                logSession = YES;
             }
             [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
             }];
@@ -183,9 +197,13 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         details[@"timeZone"] =   timezone.name;
         details[@"appName"] = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
         details[@"usagecounter"] = [[NSNumber alloc] initWithInt:1];
-        if (!userData[@"session"]){
+        // log session
+        if (logSession){
             details[@"session"] = @"true";
+        } else {
+            logSession = YES;
         }
+
         if (userData != nil ){
             for (id  key in userData){
                 id value = userData[key];
@@ -446,8 +464,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 //    CFStringRef originalStringRef = (__bridge_retained CFStringRef)unencodedString;
 //    NSString *s = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,originalStringRef, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8);
 //    CFRelease(originalStringRef);
-//
-//
+//  
+//    
 //    NSString * toBeEscapedInQueryString = @"!*'\"();:@&=+$,/?%#[]% ";
 //    NSString * ss =   [unencodedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:toBeEscapedInQueryString]];
     NSString* s = [unencodedString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
