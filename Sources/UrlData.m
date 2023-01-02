@@ -107,7 +107,19 @@
 
 +(NSString*)getLogEventUrl{
     SdkKeys *temp = [SdkKeys new];
-       NSString *urlString =  [NSString stringWithFormat:@"%@%@%@%@", @"https://api.appgain.io/user_log_event/", [temp getAppID],@"/",[temp getUserID]];
-       return urlString;
+    
+    
+    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@%@", @"https://api.appgain.io/user_log_event/", [temp getAppID],@"/",[temp getUserID]];
+    
+    
+    if ([urlString containsString:@"api.appgain.io"] &&
+        [temp getAppSubDomainName] != NULL &&
+        ![[temp getAppSubDomainName] isEqualToString:@""]) {
+        
+        urlString = [urlString stringByReplacingOccurrencesOfString:@"api" withString: [temp getAppSubDomainName]];
+    }
+    
+    
+    return urlString;
 }
 @end

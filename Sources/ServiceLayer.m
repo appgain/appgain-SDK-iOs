@@ -15,6 +15,17 @@ WKWebView* webView;
 /////MARK:Get request for api
 //-(void)getRequestWithURL:(NSString *)url didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
     
+    // override with subdomain
+    SdkKeys* tempSdkKeys = [SdkKeys new];
+    if ([url containsString:@"api.appgain.io"] &&
+        [tempSdkKeys getAppSubDomainName] != NULL &&
+        ![[tempSdkKeys getAppSubDomainName] isEqualToString:@""]) {
+        
+        url = [url stringByReplacingOccurrencesOfString:@"api" withString: [tempSdkKeys getAppSubDomainName]];
+    }
+    
+    
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString: url]];
     [self stringByEvaluatingJavaScript:^(NSString * secretAgent) {

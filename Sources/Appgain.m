@@ -34,8 +34,12 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
  */
 //get app keys and configure data
 //MARK: init sdk with response .
-+(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey trackUserForAdvertising :(BOOL) trackAdvertisingId whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError *))onComplete{
-
++(void)initialize:(NSString *)projectId
+           apiKey:(NSString *)apiKey
+           subDomain:(NSString *)subDomain
+trackUserForAdvertising :(BOOL) trackAdvertisingId
+       whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError *))onComplete{
+    
     initDone =  onComplete;
     //if no project or parser server is done sent to get parser server data
     if ([[[SdkKeys new] getUserID]  isEqual: @""] ) {
@@ -43,10 +47,11 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         SdkKeys* tempSdkKeys = [SdkKeys new];
         [tempSdkKeys setAppApiKey:apiKey];
         [tempSdkKeys setAppID:projectId];
+        [tempSdkKeys setAppSubDomainName:subDomain];
         [[ServiceLayer new] requestWithURL:[UrlData getAppKeysUrlWithID:projectId] httpWay:@"GET"  didFinish:^(NSURLResponse * response, NSMutableDictionary * result,NSError * error) {
             if (result != nil){
                 if ([result objectForKey:@"AppSubDomainName"] != nil){
-                    [tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
+                    //[tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
                     [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
                     [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
                     [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
@@ -69,14 +74,14 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         [Appgain updateUserData:nil];
         NSMutableDictionary *details = [NSMutableDictionary new];
         details[@"success"] = @"Appgian sdk already initalized before.";
-
+        
         initDone(nil,details,nil);
     }
 }
 
 +(void) requestUserPermissionForUDID :(BOOL) allowed {
     if (allowed) {
-      //  NSMutableString *idFA = [@"Not allowed" mutableCopy];
+        //  NSMutableString *idFA = [@"Not allowed" mutableCopy];
         if (@available(iOS 14.0, *)) {
             [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
                 if (status == ATTrackingManagerAuthorizationStatusAuthorized){
@@ -104,7 +109,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         if (result[@"result"]){
             [[SdkKeys new] setUserID:result[@"result"][@"userId"]];
             [[SdkKeys new] setIsReturnUser: result[@"result"][@"isReturningUser"]];
-           
+            
             [Appgain updateUserData:nil];
             [Appgain callIdaAttribution];
         }
@@ -131,33 +136,33 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(void)callIdaAttribution{
     if ([[[SdkKeys new] getIda] isEqualToString:@"true"]){
-    
-    // Delay 2 seconds
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    if ([[ADClient sharedClient] respondsToSelector:@selector(requestAttributionDetailsWithBlock:)]) {
-    [[ADClient sharedClient] requestAttributionDetailsWithBlock:^(NSDictionary *attributionDetails, NSError *error) {
-    // Look inside of the returned dictionary for all attribution details
-        NSMutableDictionary *details = [NSMutableDictionary new];
-        if ([attributionDetails objectForKey:@"Version3.1"] ){
-            
-            NSDictionary * parameter = [attributionDetails objectForKey:@"Version3.1"] ;
-            for (id  key in parameter){
-                NSString * newKey = [(NSString*)key stringByReplacingOccurrencesOfString:@"-" withString:@""];
-                id value = parameter[key];
-                details[newKey] = value;
+        
+        // Delay 2 seconds
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([[ADClient sharedClient] respondsToSelector:@selector(requestAttributionDetailsWithBlock:)]) {
+                [[ADClient sharedClient] requestAttributionDetailsWithBlock:^(NSDictionary *attributionDetails, NSError *error) {
+                    // Look inside of the returned dictionary for all attribution details
+                    NSMutableDictionary *details = [NSMutableDictionary new];
+                    if ([attributionDetails objectForKey:@"Version3.1"] ){
+                        
+                        NSDictionary * parameter = [attributionDetails objectForKey:@"Version3.1"] ;
+                        for (id  key in parameter){
+                            NSString * newKey = [(NSString*)key stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                            id value = parameter[key];
+                            details[newKey] = value;
+                        }
+                        // log session
+                        if (logSession){
+                            details[@"session"] = @"true";
+                        } else {
+                            logSession = YES;
+                        }
+                        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+                        }];
+                    }
+                }];
             }
-            // log session
-            if (logSession){
-                details[@"session"] = @"true";
-            } else {
-                logSession = YES;
-            }
-            [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
-            }];
-        }
-    }];
-    }
-    });
+        });
     }
 }
 
@@ -178,7 +183,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         }
         details[@"madid"] =  [[SdkKeys new] getDeviceADID];
         details[@"localeId"] =  @"ar";
-
+        
         CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
         CTCarrier *carrier  = [networkInfo subscriberCellularProvider];
         if ([[carrier carrierName] isKindOfClass:[ NSString class] ]){
@@ -203,7 +208,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         } else {
             logSession = YES;
         }
-
+        
         if (userData != nil ){
             for (id  key in userData){
                 id value = userData[key];
@@ -225,14 +230,14 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     details[@"isReturningUser"] =  [[[SdkKeys new] isReturnUser] isEqualToString:@"1"] ? @"true" : @"false";
     //[NSNumber numberWithBool:[[SdkKeys new] isReturnUser]];
     if ( extra[@"smart_link_url"] ){
-                  
-           details[@"SDL"]  = extra[@"smart_link_url"];
-        }
- 
+        
+        details[@"SDL"]  = extra[@"smart_link_url"];
+    }
+    
     
     NSLog(@"smart_link_id %@",extra[@"smart_link_id"]);
     if (extra[@"smart_link_id"]){
-            details[@"smartlink_id"] = extra[@"smart_link_id"];
+        details[@"smartlink_id"] = extra[@"smart_link_id"];
     }else{
         details[@"smartlink_id"] = @"organic";
     }
@@ -284,7 +289,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     if ([campaignId isKindOfClass:[ NSString class] ] ){
         [Appgain logNotificationConverstion:amount];
     }
-   // NSString * url = [Appgain getUrlWithParameter:[UrlData logPurchase] andParameter:details];
+    // NSString * url = [Appgain getUrlWithParameter:[UrlData logPurchase] andParameter:details];
     
     [[ServiceLayer new] postRequestWithURL:[UrlData logPurchase] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         onComplete(response,result,error);
@@ -302,7 +307,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
                               @"campaign_id": campaignId ,
                               @"campaign_name":campaignName
     };
-   // NSString * url = [Appgain getUrlWithParameter:[UrlData getnotificationTrackUrl] andParameter:(NSMutableDictionary *)details];
+    // NSString * url = [Appgain getUrlWithParameter:[UrlData getnotificationTrackUrl] andParameter:(NSMutableDictionary *)details];
     
     [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -319,7 +324,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     NSMutableDictionary *details = [NSMutableDictionary new];
     details[@"userId"] = [[SdkKeys new] getUserID];
     details[@"newUserId"] = userId;
-   // NSString * url = [Appgain getUrlWithParameter:[UrlData updateUserId] andParameter:details];
+    // NSString * url = [Appgain getUrlWithParameter:[UrlData updateUserId] andParameter:details];
     
     [[ServiceLayer new] postRequestWithURL:[UrlData updateUserId] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         [[SdkKeys new] setUserID:userId];
@@ -332,7 +337,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 +(void)getUserData:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError * error))onComplete{
     NSMutableDictionary *details = [NSMutableDictionary new];
     details[@"userId"] = [[SdkKeys new] getUserID];
-  //  NSString * url = [Appgain getUrlWithParameter:[UrlData getUserInfo] andParameter:details];
+    //  NSString * url = [Appgain getUrlWithParameter:[UrlData getUserInfo] andParameter:details];
     
     [[ServiceLayer new] postRequestWithURL:[UrlData getUserInfo] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         onComplete(response,result,error);
@@ -346,15 +351,15 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
         NSLog(@"response %@",response);
         NSLog(@"result %@",result);
         NSLog(@"error %@",error);
-
+        
         if (result[@"smart_link_id"]){
             smartLinkId = result[@"smart_link_id"];
         }
         //old response
         if (([[[SdkKeys new] getFirstMatch] isEqualToString:@"true"]) && result ){
-//            NSMutableDictionary *details = [NSMutableDictionary new];
-//            details[@"smartlink_id"] = result[@"smart_link_id"];
-//            [Appgain updateUserData:details];
+            //            NSMutableDictionary *details = [NSMutableDictionary new];
+            //            details[@"smartlink_id"] = result[@"smart_link_id"];
+            //            [Appgain updateUserData:details];
             [Appgain updateMatchingData:result :^(NSURLResponse *response, NSMutableDictionary *info, NSError *error) {
                 
             }];
@@ -372,27 +377,27 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(void)RegisterDeviceWithToken:(NSData*)deviceToken{
     NSString *token = @"";
-   if (@available(iOS 13, *)) {
-       NSUInteger length = deviceToken.length;
-              if (length == 0) {
-                //  return nil;
-              }
-              const unsigned char *buffer = deviceToken.bytes;
-              NSMutableString *hexString  = [NSMutableString stringWithCapacity:(length * 2)];
-              for (int i = 0; i < length; ++i) {
-                  [hexString appendFormat:@"%02x", buffer[i]];
-              }
-       token = [hexString copy];
-   }
-   else{
-       token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-         token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-   }
+    if (@available(iOS 13, *)) {
+        NSUInteger length = deviceToken.length;
+        if (length == 0) {
+            //  return nil;
+        }
+        const unsigned char *buffer = deviceToken.bytes;
+        NSMutableString *hexString  = [NSMutableString stringWithCapacity:(length * 2)];
+        for (int i = 0; i < length; ++i) {
+            [hexString appendFormat:@"%02x", buffer[i]];
+        }
+        token = [hexString copy];
+    }
+    else{
+        token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+        token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    }
     
     
- 
     
-   // NSString *token =   [deviceToken base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+    
+    // NSString *token =   [deviceToken base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
     //  NSLog(@"content---%@", token);
     [[SdkKeys new] setDeviceToken:token];
     [Appgain updateDeviceToken];
@@ -461,47 +466,47 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 
 +(NSString*)urlEscapeString:(NSString *)unencodedString
 {
-//    CFStringRef originalStringRef = (__bridge_retained CFStringRef)unencodedString;
-//    NSString *s = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,originalStringRef, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8);
-//    CFRelease(originalStringRef);
-//  
-//    
-//    NSString * toBeEscapedInQueryString = @"!*'\"();:@&=+$,/?%#[]% ";
-//    NSString * ss =   [unencodedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:toBeEscapedInQueryString]];
+    //    CFStringRef originalStringRef = (__bridge_retained CFStringRef)unencodedString;
+    //    NSString *s = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,originalStringRef, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8);
+    //    CFRelease(originalStringRef);
+    //
+    //
+    //    NSString * toBeEscapedInQueryString = @"!*'\"();:@&=+$,/?%#[]% ";
+    //    NSString * ss =   [unencodedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:toBeEscapedInQueryString]];
     NSString* s = [unencodedString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
-
+    
     return s;
 }
 
 
 
 +(void)fireAutomator:(NSString *)triggerPoint  personalizationData:(NSMutableDictionary*) personalizationData whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
-      NSMutableString *urlWithQuerystring = [[NSMutableString alloc] initWithString:[UrlData getAutomatorUrlWithTriggerPoint:triggerPoint]];
-      for (id key in personalizationData) {
-          NSString *keyString = [key description];
-          NSString *valueString = [[personalizationData objectForKey:key] description];
-          if ([urlWithQuerystring rangeOfString:@"?"].location == NSNotFound) {
-              [urlWithQuerystring appendFormat:@"?%@=%@", [self urlEscapeString:keyString], [self urlEscapeString:valueString]];
-          } else {
-              [urlWithQuerystring appendFormat:@"&%@=%@", [self urlEscapeString:keyString], [self urlEscapeString:valueString]];
-          }
-      }
-      [[ServiceLayer new] requestWithURL:urlWithQuerystring httpWay:@"GET" didFinish:^(NSURLResponse *response , NSMutableDictionary * result,NSError * error) {
-
-          dispatch_async(dispatch_get_main_queue(), ^{
-              onComplete(response,result,error);
-          });
-      }];
+    NSMutableString *urlWithQuerystring = [[NSMutableString alloc] initWithString:[UrlData getAutomatorUrlWithTriggerPoint:triggerPoint]];
+    for (id key in personalizationData) {
+        NSString *keyString = [key description];
+        NSString *valueString = [[personalizationData objectForKey:key] description];
+        if ([urlWithQuerystring rangeOfString:@"?"].location == NSNotFound) {
+            [urlWithQuerystring appendFormat:@"?%@=%@", [self urlEscapeString:keyString], [self urlEscapeString:valueString]];
+        } else {
+            [urlWithQuerystring appendFormat:@"&%@=%@", [self urlEscapeString:keyString], [self urlEscapeString:valueString]];
+        }
+    }
+    [[ServiceLayer new] requestWithURL:urlWithQuerystring httpWay:@"GET" didFinish:^(NSURLResponse *response , NSMutableDictionary * result,NSError * error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            onComplete(response,result,error);
+        });
+    }];
 }
 +(void)cancelAutomator:(NSString *)triggerPoint whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *, NSError *))onComplete{
-      NSMutableString *urlWithQuerystring = [[NSMutableString alloc] initWithString:[UrlData getAutomatorUrlWithTriggerPoint:triggerPoint]];
-     
-      [[ServiceLayer new] requestWithURL:urlWithQuerystring httpWay:@"DELETE" didFinish:^(NSURLResponse *response , NSMutableDictionary * result,NSError * error) {
-
-          dispatch_async(dispatch_get_main_queue(), ^{
-              onComplete(response,result,error);
-          });
-      }];
+    NSMutableString *urlWithQuerystring = [[NSMutableString alloc] initWithString:[UrlData getAutomatorUrlWithTriggerPoint:triggerPoint]];
+    
+    [[ServiceLayer new] requestWithURL:urlWithQuerystring httpWay:@"DELETE" didFinish:^(NSURLResponse *response , NSMutableDictionary * result,NSError * error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            onComplete(response,result,error);
+        });
+    }];
 }
 
 
@@ -516,7 +521,7 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     NSMutableDictionary *details = [NSMutableDictionary new];
     if (userInfo != nil){
         //NSString * campaign = @"";
-      //  NSString * campaign_name = @"";
+        //  NSString * campaign_name = @"";
         if ([userInfo objectForKey:@"campaign_id"]) {
             campaignId = [userInfo objectForKey:@"campaign_id"];
         }
@@ -583,8 +588,8 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
     details[@"isEnabled"] = isEnabled == YES ? @"true" : @"false";//[[NSString alloc] initWithFormat:@"%i",isEnabled];
     details[@"type"] = type;
     details[@"userId"] = [[SdkKeys new] getUserID];
-
-   //NSString * url = [Appgain getUrlWithParameter:[UrlData getEnableNotifications] andParameter:details];
+    
+    //NSString * url = [Appgain getUrlWithParameter:[UrlData getEnableNotifications] andParameter:details];
     
     [[ServiceLayer new] postRequestWithURL:[UrlData getEnableNotifications] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         onComplete(response,result,error);
@@ -598,14 +603,14 @@ static void  (^initDone)(NSURLResponse*, NSMutableDictionary*,NSError * );
 //MARK: add new notification channel for different type of notification recieving
 +(void)createNotificationChannel :(NSString *) type withData :(NSString*) data whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
     NSMutableDictionary *details = [NSMutableDictionary new];
- 
-  
+    
+    
     details[@"smartlink_id"] = smartLinkId;
     details[@"type"] = type;
     details[@"data"] = data;
     
     details[@"userId"] = [[SdkKeys new] getUserID];
-
+    
     [[ServiceLayer new] postRequestWithURL:[UrlData createNotificationChannels]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         onComplete(response,result,error);
     }];
