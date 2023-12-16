@@ -121,6 +121,9 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     details[@"userId"] = [[SdkKeys new] getUserID];
     details[@"fcmToken"] = [[SdkKeys new] getDeviceToken];
     details[@"deviceToken"] = [[SdkKeys new] getDeviceToken];
+    if (![[[SdkKeys new] getDeviceADID]  isEqual: @"Not allowed"]) {
+        details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
+    }
     // log session
     if (![[[SdkKeys new] getUserID] isEqual:@""]){
         if (logSession){
@@ -151,6 +154,9 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                             id value = parameter[key];
                             details[newKey] = value;
                         }
+                        if (![[[SdkKeys new] getDeviceADID]  isEqual: @"Not allowed"]) {
+                            details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
+                        }
                         // log session
                         if (logSession){
                             details[@"session"] = @"true";
@@ -170,7 +176,9 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     if (![[[SdkKeys new] getUserID] isEqualToString:@""]){
         NSMutableDictionary *details = [NSMutableDictionary new];
         details[@"userId"] = [[SdkKeys new] getUserID];
-        details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
+        if (![[[SdkKeys new] getDeviceADID]  isEqual: @"Not allowed"]) {
+            details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
+        }
         details[@"fcmToken"] = [[SdkKeys new] getDeviceToken];
         details[@"deviceToken"] = [[SdkKeys new] getDeviceToken];
         details[@"appversion"] =  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
