@@ -17,6 +17,19 @@ WKWebView* webView;
     
     // override with subdomain
     SdkKeys* tempSdkKeys = [SdkKeys new];
+    
+    if ( [[[SdkKeys new] getUserID]  isEqual: @""] &&
+        ![url containsString:@"/initSDK"] ) {
+        NSString *errorDomain = @"ErrorDomain";
+        NSInteger errorCode = 123;
+        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey: @"init not fired" };
+
+        NSError *error = [NSError errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
+        onComplete(nil,nil,error);
+        return;
+    }
+    
+    
     if ([url containsString:@"api.appgain.io"] &&
         [tempSdkKeys getAppSubDomainName] != NULL &&
         ![[tempSdkKeys getAppSubDomainName] isEqualToString:@""]) {
@@ -86,6 +99,18 @@ WKWebView* webView;
 
 //MARK: post request data.
 -(void)postRequestWithURL:(NSString *)url withBodyData:(NSDictionary *)dictionaryBody didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
+    
+    if ( [[[SdkKeys new] getUserID]  isEqual: @""] &&
+        ![url containsString:@"/initSDK"] ) {
+        NSString *errorDomain = @"ErrorDomain";
+        NSInteger errorCode = 123;
+        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey: @"init not fired" };
+
+        NSError *error = [NSError errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
+        onComplete(nil,nil,error);
+        return;
+    }
+    
     // show network indicator
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
@@ -105,7 +130,7 @@ WKWebView* webView;
     }
     [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    if ([url containsString:[[SdkKeys new] getParseServerUrl]]){
+    if ([url containsString:[[SdkKeys new] getAppSubDomainName]]){
         [urlRequest addValue:@"text/plain" forHTTPHeaderField:@"Content-Type"];
         
     }

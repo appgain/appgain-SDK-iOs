@@ -629,11 +629,12 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
 
 
 ///funcs without callbacks
-+(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey trackUserForAdvertising :(BOOL) trackAdvertisingId {
-    [Appgain initialize:projectId apiKey:apiKey trackUserForAdvertising:trackAdvertisingId whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
++(void) initialize:(NSString *)projectId apiKey:(NSString *)apiKey subDomain:(NSString *)subDomain trackUserForAdvertising:(BOOL)trackAdvertisingId {
+    [Appgain initialize:projectId apiKey:apiKey subDomain:subDomain trackUserForAdvertising:trackAdvertisingId whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
         
     }];
 }
+
 +(void)updateUserData:(NSDictionary *)userData {
     [Appgain updateUserData:userData whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
         NSLog(@"response %@",response);

@@ -21,7 +21,11 @@
 + (NSString*) getLandingPageUrl;
 + (NSString*) getnotificationTrackUrl;
 + (NSString*) getAutomatorUrlWithTriggerPoint :(NSString*)trigger;
+
 + (NSString*) getbaseServerUrl;
++ (NSString*) getSubDomainServerUrl;
++ (NSString*) getSDKSubFolderServerUrl;
+
 + (NSString*) getLogEventUrl;
 +(NSString *)getEnableNotifications;
 +(NSString *) createNotificationChannels;

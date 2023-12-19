@@ -36,7 +36,7 @@
  */
 //get app keys and configure data
 //MARK: init sdk with response .
-+(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey trackUserForAdvertising :(BOOL) trackAdvertisingId whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
++(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey subDomain:(NSString *)subDomain trackUserForAdvertising :(BOOL) trackAdvertisingId whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
 +(void)updateUserData:(NSDictionary *)userData whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
 ///is called only on the first app run if matching succeeded
 +(void)updateMatchingData :(NSDictionary *)extra :(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
@@ -88,7 +88,7 @@
 +(void)createNotificationChannel :(NSString *) type withData :(NSString*) data whenFinish:(void (^)(NSURLResponse*response, NSMutableDictionary*result,NSError *error))onComplete;
 
     //MARK: init sdk with response .
-+(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey trackUserForAdvertising :(BOOL) trackAdvertisingId ;
++(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey subDomain:(NSString *)subDomain trackUserForAdvertising :(BOOL) trackAdvertisingId ;
 +(void)updateUserData:(NSDictionary *)userData ;
     ///is called only on the first app run if matching succeeded
 +(void)logPurchase:(NSString *)productName withAmount :(double ) amount forCurrency :(NSString*) currency ;
