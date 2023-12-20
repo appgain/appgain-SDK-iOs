@@ -28,7 +28,7 @@
 //MARK: url for get product setting and data
 //MARK : init sdk
 +(NSString *)getAppKeysUrlWithID:(NSString *)appID{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", [UrlData getSubDomainServerUrl], [UrlData getSDKSubFolderServerUrl], @"/initSDK"];
+    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", [UrlData getSubDomainServerUrl], [[SdkKeys new] getAppID] , @"/initSDK"];
     return urlString;
 }
 //Mark : init user
