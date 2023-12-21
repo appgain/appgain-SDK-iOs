@@ -102,13 +102,16 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     NSMutableDictionary *details = [NSMutableDictionary new];
     details[@"platform"] = @"ios";
     details[@"appId"] = bundleIdentifier;
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary new];
     details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
-    [[ServiceLayer new] postRequestWithURL:[UrlData initUser] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    
+    [[ServiceLayer new] postRequestWithURL:[UrlData initUser] withBodyData:details withParameters:parameters  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         // need to save user id
         // save is returning user or not
-        if (result[@"result"]){
-            [[SdkKeys new] setUserID:result[@"result"][@"userId"]];
-            [[SdkKeys new] setIsReturnUser: result[@"result"][@"isReturningUser"]];
+        if (result != nil) {
+            [[SdkKeys new] setUserID:result[@"userId"]];
+            [[SdkKeys new] setIsReturnUser: result[@"isReturningUser"]];
             
             [Appgain updateUserData:nil];
             [Appgain callIdaAttribution];
@@ -118,7 +121,6 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
 }
 +(void)updateDeviceToken{
     NSMutableDictionary *details = [NSMutableDictionary new];
-    details[@"userId"] = [[SdkKeys new] getUserID];
     details[@"fcmToken"] = [[SdkKeys new] getDeviceToken];
     details[@"deviceToken"] = [[SdkKeys new] getDeviceToken];
     if (![[[SdkKeys new] getDeviceADID]  isEqual: @"Not allowed"]) {
@@ -132,7 +134,11 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
             logSession = YES;
         }
     }
-    [[ServiceLayer new] postRequestWithURL:[UrlData updateUser] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary new];
+    details[@"userId"] = [[SdkKeys new] getUserID];
+    
+    [[ServiceLayer new] postRequestWithURL:[UrlData updateUser] withBodyData:details  withParameters:parameters didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         
     }];
 }
@@ -163,7 +169,11 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                         } else {
                             logSession = YES;
                         }
-                        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+                        
+                        NSMutableDictionary *parameters = [NSMutableDictionary new];
+                        details[@"userId"] = [[SdkKeys new] getUserID];
+                        
+                        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:parameters  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
                         }];
                     }
                 }];
@@ -224,7 +234,11 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                 details[key] = value;
             }
         }
-        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+        
+        NSMutableDictionary *parameters = [NSMutableDictionary new];
+        details[@"userId"] = [[SdkKeys new] getUserID];
+        
+        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:parameters  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
             onComplete(response,result,error);
         }];
     }
@@ -273,7 +287,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         }
     }
     
-    [[ServiceLayer new] postRequestWithURL: [UrlData updateMatchingData] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL: [UrlData updateMatchingData] withBodyData:details withParameters:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         NSLog(@"result %@",result);
         NSLog(@"response %@",response);
         NSLog(@"error %@",error);
@@ -299,7 +313,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     }
     // NSString * url = [Appgain getUrlWithParameter:[UrlData logPurchase] andParameter:details];
     
-    [[ServiceLayer new] postRequestWithURL:[UrlData logPurchase] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData logPurchase] withBodyData:nil withParameters:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         onComplete(response,result,error);
     }];
     
@@ -317,7 +331,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     };
     // NSString * url = [Appgain getUrlWithParameter:[UrlData getnotificationTrackUrl] andParameter:(NSMutableDictionary *)details];
     
-    [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl]  withBodyData:details  withParameters:nil didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             campaignName = @"";
             campaignId = nil;
@@ -334,7 +348,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     details[@"newUserId"] = userId;
     // NSString * url = [Appgain getUrlWithParameter:[UrlData updateUserId] andParameter:details];
     
-    [[ServiceLayer new] postRequestWithURL:[UrlData updateUserId] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData updateUserId] withBodyData:nil withParameters:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         [[SdkKeys new] setUserID:userId];
         onComplete(response,result,error);
     }];
@@ -347,7 +361,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     details[@"userId"] = [[SdkKeys new] getUserID];
     //  NSString * url = [Appgain getUrlWithParameter:[UrlData getUserInfo] andParameter:details];
     
-    [[ServiceLayer new] postRequestWithURL:[UrlData getUserInfo] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData getUserInfo] withBodyData:nil withParameters:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         onComplete(response,result,error);
     }];
     
@@ -432,7 +446,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
  response in block
  */
 +(void)createSmartLink:( SmartDeepLink*)linkObject whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
-    [[ServiceLayer new] postRequestWithURL: [UrlData getSmartUrl] withBodyData: linkObject.dictionaryValue didFinish:^(NSURLResponse * response, NSMutableDictionary *result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL: [UrlData getSmartUrl] withBodyData: linkObject.dictionaryValue withParameters:nil didFinish:^(NSURLResponse * response, NSMutableDictionary *result,NSError * error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result,error);
@@ -445,7 +459,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
 
 //MARK : create LandingPage for user
 +(void)createLandingPage:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
-    [[ServiceLayer new] postRequestWithURL:[UrlData getLandingPageUrl] withBodyData: [landingPage dictionaryValue] didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData getLandingPageUrl] withBodyData: [landingPage dictionaryValue] withParameters:nil didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result,error);
         });
@@ -545,7 +559,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         details[@"campaign_name"] = campaignName;
     }
     
-    [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData getnotificationTrackUrl] withBodyData:details withParameters:nil didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result,error);
         });
@@ -570,7 +584,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     else{
         info = @{@"action":action,@"type":event};
     }
-    [[ServiceLayer new] postRequestWithURL:[UrlData getLogEventUrl] withBodyData: info didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData getLogEventUrl] withBodyData: info withParameters:nil didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             onComplete(response,result,error);
         });
@@ -599,7 +613,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     
     //NSString * url = [Appgain getUrlWithParameter:[UrlData getEnableNotifications] andParameter:details];
     
-    [[ServiceLayer new] postRequestWithURL:[UrlData getEnableNotifications] withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData getEnableNotifications] withBodyData:nil withParameters:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         onComplete(response,result,error);
     }];
     
@@ -619,7 +633,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     
     details[@"userId"] = [[SdkKeys new] getUserID];
     
-    [[ServiceLayer new] postRequestWithURL:[UrlData createNotificationChannels]  withBodyData:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData createNotificationChannels]  withBodyData:nil withParameters:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         onComplete(response,result,error);
     }];
 }

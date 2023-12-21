@@ -19,7 +19,8 @@ WKWebView* webView;
     SdkKeys* tempSdkKeys = [SdkKeys new];
     
     if ( [[[SdkKeys new] getUserID]  isEqual: @""] &&
-        ![url containsString:@"/initSDK"] ) {
+        ![url containsString:@"/initSDK"] &&
+        ![url containsString:@"/initUser"] ) {
         NSString *errorDomain = @"ErrorDomain";
         NSInteger errorCode = 123;
         NSDictionary *userInfo = @{ NSLocalizedDescriptionKey: @"init not fired" };
@@ -98,10 +99,11 @@ WKWebView* webView;
 
 
 //MARK: post request data.
--(void)postRequestWithURL:(NSString *)url withBodyData:(NSDictionary *)dictionaryBody didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
+-(void)postRequestWithURL:(NSString *)url withBodyData:(NSDictionary *)dictionaryBody  withParameters:(NSDictionary *)dictionaryParameters didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
     
     if ( [[[SdkKeys new] getUserID]  isEqual: @""] &&
-        ![url containsString:@"/initSDK"] ) {
+        ![url containsString:@"/initSDK"]  &&
+        ![url containsString:@"/initUser"] ) {
         NSString *errorDomain = @"ErrorDomain";
         NSInteger errorCode = 123;
         NSDictionary *userInfo = @{ NSLocalizedDescriptionKey: @"init not fired" };
@@ -110,6 +112,19 @@ WKWebView* webView;
         onComplete(nil,nil,error);
         return;
     }
+    
+    if ( dictionaryParameters != nil ) {
+        NSMutableArray *parameterArray = [NSMutableArray array];
+        [dictionaryParameters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+            NSString *parameter = [NSString stringWithFormat:@"%@=%@", key, [value stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+            [parameterArray addObject:parameter];
+        }];
+
+        NSString *parameterString = [parameterArray componentsJoinedByString:@"&"];
+        NSLog(@"Parameter String: %@", parameterString);
+        [url stringByAppendingString:parameterString];
+    }
+    
     
     // show network indicator
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];

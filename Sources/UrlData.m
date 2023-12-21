@@ -71,14 +71,14 @@
 + (NSString*) getmatcherLink {
     SdkKeys *temp = [SdkKeys new];
   
-    NSString *urlStringg  = [NSString stringWithFormat:@"%@%@%@%@%@", [UrlData getSubDomainServerUrl],@"smartlinks/match?isfirstRun=" , [temp getFirstRun] , @"&userId=",[temp getUserID]];
-    return urlStringg;
+    NSString *urlString  = [NSString stringWithFormat:@"%@%@%@%@%@", [UrlData getSubDomainServerUrl],@"smartlinks/match?isfirstRun=" , [temp getFirstRun] , @"&userId=",[temp getUserID]];
+    return urlString;
 }
 
 
 //MARK:get smart link
 + (NSString*) getSmartUrl{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@%@%@", [UrlData getSubDomainServerUrl],@"apps/", [[SdkKeys new] getAppID], @"/smartlinks"];
+    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@%@", [UrlData getSubDomainServerUrl],@"apps/", [[SdkKeys new] getAppID], @"/smartlinks"];
     return urlString;
 }
 

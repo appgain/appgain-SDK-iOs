@@ -10,6 +10,6 @@
 
 
 -(void)requestWithURL :(NSString*) url httpWay: (NSString*) way didFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError*))onComplete  ;
--(void)postRequestWithURL :(NSString*) url withBodyData :(NSDictionary* ) dictionaryBody  didFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError*))onComplete ;
+-(void)postRequestWithURL :(NSString*) url withBodyData :(NSDictionary* ) dictionaryBody withParameters: (NSDictionary* ) dictionaryParameters  didFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError*))onComplete ;
 
 @end
