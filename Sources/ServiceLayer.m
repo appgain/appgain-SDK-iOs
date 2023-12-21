@@ -122,7 +122,8 @@ WKWebView* webView;
 
         NSString *parameterString = [parameterArray componentsJoinedByString:@"&"];
         NSLog(@"Parameter String: %@", parameterString);
-        [url stringByAppendingString:parameterString];
+        url = [url stringByAppendingString:@"?"];
+        url = [url stringByAppendingString:parameterString];
     }
     
     

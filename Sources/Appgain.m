@@ -104,7 +104,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     details[@"appId"] = bundleIdentifier;
     
     NSMutableDictionary *parameters = [NSMutableDictionary new];
-    details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
+    parameters[@"deviceId"] = [[SdkKeys new] getDeviceADID];
     
     [[ServiceLayer new] postRequestWithURL:[UrlData initUser] withBodyData:details withParameters:parameters  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         // need to save user id
@@ -136,7 +136,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     }
     
     NSMutableDictionary *parameters = [NSMutableDictionary new];
-    details[@"userId"] = [[SdkKeys new] getUserID];
+    parameters[@"userId"] = [[SdkKeys new] getUserID];
     
     [[ServiceLayer new] postRequestWithURL:[UrlData updateUser] withBodyData:details  withParameters:parameters didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         
@@ -171,7 +171,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                         }
                         
                         NSMutableDictionary *parameters = [NSMutableDictionary new];
-                        details[@"userId"] = [[SdkKeys new] getUserID];
+                        parameters[@"userId"] = [[SdkKeys new] getUserID];
                         
                         [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:parameters  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
                         }];
@@ -236,7 +236,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         }
         
         NSMutableDictionary *parameters = [NSMutableDictionary new];
-        details[@"userId"] = [[SdkKeys new] getUserID];
+        parameters[@"userId"] = [[SdkKeys new] getUserID];
         
         [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:parameters  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
             onComplete(response,result,error);
