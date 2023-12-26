@@ -61,7 +61,7 @@
     return urlString;
 }
 +(NSString *)getEnableNotifications{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", [UrlData getSubDomainServerUrl], [UrlData getSDKSubFolderServerUrl], @"/toggleNotifications"];
+    NSString *urlString =  [NSString stringWithFormat:@"%@%@",[[SdkKeys new] getParseServerUrl],@"/functions/toggleNotifications"];
     return urlString;
 }
 

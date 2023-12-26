@@ -146,17 +146,10 @@ WKWebView* webView;
     }
     [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    if ([url containsString:[[SdkKeys new] getAppSubDomainName]]){
-        [urlRequest addValue:@"text/plain" forHTTPHeaderField:@"Content-Type"];
-        
-    }
-    else{
-        [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        
-    }
-    
     NSError *error;
     if (dictionaryBody != nil){
+        [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        
         NSData *bodyData = [NSJSONSerialization dataWithJSONObject:dictionaryBody options:NSJSONWritingPrettyPrinted error:&error];
         NSLog(@"body details %@",bodyData);
         [urlRequest setHTTPBody:bodyData];
