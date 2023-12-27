@@ -153,10 +153,9 @@ WKWebView* webView;
         NSData *bodyData = [NSJSONSerialization dataWithJSONObject:dictionaryBody options:NSJSONWritingPrettyPrinted error:&error];
         NSLog(@"body details %@",bodyData);
         [urlRequest setHTTPBody:bodyData];
-        
-        
-        
     }
+    
+    
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
                                       {

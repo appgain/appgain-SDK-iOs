@@ -110,7 +110,6 @@
 + (NSString*) getAutomatorUrlWithTriggerPoint:(NSString *)trigger{
     SdkKeys *temp = [SdkKeys new];
     NSString *urlString =  [NSString stringWithFormat:@"%@%@%@%@%@%@%@", @"https://automator",[UrlData getbaseServerUrl],@"automessages/", [temp getAppID], @"/firevent/",[trigger stringByAppendingString:@"/"] ,[temp getUserID]];
-   // NSString *urlString =  [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@", @"https://automator",[UrlData getbaseServerUrl],@"automessages/", [temp getAppID], @"/firevent/",trigger,@"/",[temp getUserID]];
     return urlString;
 }
 
