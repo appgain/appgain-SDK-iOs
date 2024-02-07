@@ -48,26 +48,26 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         [tempSdkKeys setAppApiKey:apiKey];
         [tempSdkKeys setAppID:projectId];
         [tempSdkKeys setAppSubDomainName:subDomain];
-        [[ServiceLayer new] requestWithURL:[UrlData getAppKeysUrlWithID:projectId] httpWay:@"GET"  didFinish:^(NSURLResponse * response, NSMutableDictionary * result,NSError * error) {
-            if (result != nil){
-                if ([result objectForKey:@"AppSubDomainName"] != nil){
-                    //[tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
-                    [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
-                    [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
-                    [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
+//        [[ServiceLayer new] requestWithURL:[UrlData getAppKeysUrlWithID:projectId] httpWay:@"GET"  didFinish:^(NSURLResponse * response, NSMutableDictionary * result,NSError * error) {
+//            if (result != nil){
+//                if ([result objectForKey:@"AppSubDomainName"] != nil){
+//                    //[tempSdkKeys setAppSubDomainName: [result objectForKey:@"AppSubDomainName"]];
+//                    [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
+//                    [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
+//                    [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
                     [Appgain initUser];
                     //call init user to replace this one
-                    initDone(response,result,error);
-                }
-                else{
-                    initDone(response,result,error);
-                }
-            }
-            else{
-                initDone(response,result,error);
-                NSLog(@"AppGain SDK init is fail");
-            }
-        }];
+//                    initDone(response,result,error);
+//                }
+//                else{
+//                    initDone(response,result,error);
+//                }
+//            }
+//            else{
+//                initDone(response,result,error);
+//                NSLog(@"AppGain SDK init is fail");
+//            }
+//        }];
     }
     else{
         // add last
@@ -102,11 +102,12 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     NSMutableDictionary *details = [NSMutableDictionary new];
     details[@"platform"] = @"ios";
     details[@"appId"] = bundleIdentifier;
+    details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
     
-    NSMutableDictionary *parameters = [NSMutableDictionary new];
-    parameters[@"deviceId"] = [[SdkKeys new] getDeviceADID];
+//    NSMutableDictionary *parameters = [NSMutableDictionary new];
+//    parameters[@"deviceId"] = [[SdkKeys new] getDeviceADID];
     
-    [[ServiceLayer new] postRequestWithURL:[UrlData initUser] withBodyData:details withParameters:parameters  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData initUser] withBodyData:details withParameters:[NSMutableDictionary new]  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         // need to save user id
         // save is returning user or not
         if (result != nil) {
@@ -220,6 +221,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         details[@"timeZone"] =   timezone.name;
         details[@"appName"] = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
         details[@"usagecounter"] = [[NSNumber alloc] initWithInt:1];
+        details[@"userId"] = [[SdkKeys new] getUserID];
         // log session
         if (logSession){
             details[@"session"] = @"true";
@@ -235,10 +237,10 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
             }
         }
         
-        NSMutableDictionary *parameters = [NSMutableDictionary new];
-        parameters[@"userId"] = [[SdkKeys new] getUserID];
+//        NSMutableDictionary *parameters = [NSMutableDictionary new];
+//        parameters[@"userId"] = [[SdkKeys new] getUserID];
         
-        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:parameters  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:[NSMutableDictionary new]  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
             onComplete(response,result,error);
         }];
     }
