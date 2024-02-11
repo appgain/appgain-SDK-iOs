@@ -55,7 +55,9 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
 //                    [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
 //                    [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
 //                    [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
-                    [Appgain initUser];
+        [Appgain initUser:^(NSURLResponse * response, NSMutableDictionary * result, NSError * error) {
+            initDone(response,result,error);
+        } ];
                     //call init user to replace this one
 //                    initDone(response,result,error);
 //                }
@@ -71,7 +73,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     }
     else{
         // add last
-        [Appgain updateUserData:nil];
+//        [Appgain updateUserData:nil];
         NSMutableDictionary *details = [NSMutableDictionary new];
         details[@"success"] = @"Appgian sdk already initalized before.";
         
@@ -97,7 +99,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     }
 }
 
-+(void) initUser {
++(void) initUser: (void (^)(NSURLResponse *, NSMutableDictionary *,NSError *))onComplete {
     NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
     NSMutableDictionary *details = [NSMutableDictionary new];
     details[@"platform"] = @"ios";
@@ -116,6 +118,8 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
             
             [Appgain updateUserData:nil];
             [Appgain callIdaAttribution];
+            
+            onComplete(response, result, error);
         }
         
     }];
@@ -217,6 +221,8 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         NSString *ver = [[UIDevice currentDevice] systemVersion];
         details[@"os_ver"] = ver;
         details[@"localeId"] = [[NSLocale preferredLanguages] firstObject];
+        details[@"language"] = [[[NSLocale preferredLanguages] firstObject] substringToIndex: 2];
+        
         NSTimeZone * timezone = [NSTimeZone localTimeZone];
         details[@"timeZone"] =   timezone.name;
         details[@"appName"] = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
@@ -236,6 +242,16 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                 details[key] = value;
             }
         }
+        
+        
+        if ([[[SdkKeys new] getDeviceToken] isEqualToString:@""]) {
+            details[@"pushEnabled"] = @"false";
+        }else{
+            details[@"pushEnabled"] = @"true";
+        }
+        
+        
+        details[@"extra_params"] = @"{\"params\":[],\"userId\":\"\"}";
         
 //        NSMutableDictionary *parameters = [NSMutableDictionary new];
 //        parameters[@"userId"] = [[SdkKeys new] getUserID];
