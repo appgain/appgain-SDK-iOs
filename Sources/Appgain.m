@@ -222,6 +222,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         details[@"os_ver"] = ver;
         details[@"localeId"] = [[NSLocale preferredLanguages] firstObject];
         details[@"language"] = [[[NSLocale preferredLanguages] firstObject] substringToIndex: 2];
+        details[@"sdk_version"] = sdkVersion;
         
         NSTimeZone * timezone = [NSTimeZone localTimeZone];
         details[@"timeZone"] =   timezone.name;
@@ -244,10 +245,13 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         }
         
         
-        if ([[[SdkKeys new] getDeviceToken] isEqualToString:@""]) {
-            details[@"pushEnabled"] = @"false";
-        }else{
+        UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if (notificationSettings.types != UIUserNotificationTypeNone) {
+            // push notifications are enabled
             details[@"pushEnabled"] = @"true";
+        } else {
+            // push notifications are disabled
+            details[@"pushEnabled"] = @"false";
         }
         
         

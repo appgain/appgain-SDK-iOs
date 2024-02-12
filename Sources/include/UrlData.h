@@ -7,6 +7,7 @@
 
 #import "SdkKeys.h"
 
+static NSString* sdkVersion = @"4.4.0";
 
 @interface UrlData : NSObject
 
