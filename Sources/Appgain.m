@@ -55,9 +55,9 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
 //                    [tempSdkKeys setParseAppID: [result objectForKey:@"Parse-AppID"]];
 //                    [tempSdkKeys setParseMasterKey:  [result objectForKey:@"Parse-masterKey"]];
 //                    [tempSdkKeys setParseServerUrl:  [result objectForKey:@"Parse-serverUrl"]];
-        [Appgain initUser:^(NSURLResponse * response, NSMutableDictionary * result, NSError * error) {
-            initDone(response,result,error);
-        } ];
+//        [Appgain initUser:^(NSURLResponse * response, NSMutableDictionary * result, NSError * error) {
+//            initDone(response,result,error);
+//        } ];
                     //call init user to replace this one
 //                    initDone(response,result,error);
 //                }
@@ -91,6 +91,11 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                         [[SdkKeys new] setDeviceADID: [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]];
                     });
                 }
+                
+                [Appgain initUser:^(NSURLResponse * response, NSMutableDictionary * result, NSError * error) {
+                    initDone(response,result,error);
+                } ];
+                
             }];
         }
         else{
