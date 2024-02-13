@@ -448,8 +448,10 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     
     // NSString *token =   [deviceToken base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
     //  NSLog(@"content---%@", token);
-    [[SdkKeys new] setDeviceToken:token];
-    [Appgain updateDeviceToken];
+    if (![[[SdkKeys new] getDeviceToken] isEqualToString:token]) {
+        [[SdkKeys new] setDeviceToken:token];
+        [Appgain updateDeviceToken];
+    }
     
     //set server installion for this device
 }
