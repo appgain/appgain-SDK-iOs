@@ -73,11 +73,14 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     }
     else{
         // add last
-//        [Appgain updateUserData:nil];
-        NSMutableDictionary *details = [NSMutableDictionary new];
-        details[@"success"] = @"Appgian sdk already initalized before.";
-        
-        initDone(nil,details,nil);
+//        NSMutableDictionary *details = [NSMutableDictionary new];
+//        details[@"success"] = @"Appgian sdk already initalized before.";
+        [Appgain updateUserData:nil whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
+            NSLog(@"response %@",response);
+            NSLog(@"result %@",result);
+            NSLog(@"error %@",error);
+            initDone(response,result,error);
+        }];
     }
 }
 
@@ -89,17 +92,19 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                 if (status == ATTrackingManagerAuthorizationStatusAuthorized){
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [[SdkKeys new] setDeviceADID: [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]];
+                        [Appgain initUser:^(NSURLResponse * response, NSMutableDictionary * result, NSError * error) {
+                            initDone(response,result,error);
+                        } ];
                     });
                 }
-                
-                [Appgain initUser:^(NSURLResponse * response, NSMutableDictionary * result, NSError * error) {
-                    initDone(response,result,error);
-                } ];
                 
             }];
         }
         else{
             [[SdkKeys new] setDeviceADID: [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]];
+            [Appgain initUser:^(NSURLResponse * response, NSMutableDictionary * result, NSError * error) {
+                initDone(response,result,error);
+            } ];
         }
     }
 }
