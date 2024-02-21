@@ -464,7 +464,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
 //MARK:handle recive remote notification to register status track for it
 +(void)handlePush:(NSDictionary *)userInfo forApplication:(UIApplication *)application{
     
-    [Appgain recordPushStatus:[NotificationStatus Opened]  userInfo:userInfo whenFinish:^(NSURLResponse *response , NSMutableDictionary *info , NSError *error) {
+    [Appgain recordPushStatus:[NotificationStatus Received]  userInfo:userInfo whenFinish:^(NSURLResponse *response , NSMutableDictionary *info , NSError *error) {
         
     }];
     
@@ -587,7 +587,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         
         
         details[@"channel"] = @"apppush";
-        details[@"action"] =  @{@"name":action,@"value":@"NA"};
+        details[@"action"] =  @{@"name":action,@"value":@0.0};
         details[@"userId"] = [[SdkKeys new] getUserID];
         details[@"campaign_id"] = campaignId;
         details[@"campaign_name"] = campaignName;
@@ -602,11 +602,6 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     
     
 }
-
-
-
-
-
 
 
 +(void)logEvent:(NSString *)event andAction:(NSString *)action extras:(NSDictionary*) extras whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
@@ -720,9 +715,25 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
 }
 
 +(void)recordPushStatus:(NSString*)action userInfo:(NSDictionary *) userInfo {
-    [Appgain recordPushStatus:action userInfo:userInfo whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
+//    [Appgain recordPushStatus:action userInfo:userInfo whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
+//
+//    }];
+    
+    NSMutableDictionary *details = [NSMutableDictionary new];
+    if (userInfo != nil){
+        if ([userInfo objectForKey:@"campaign_id"]) {
+            details[@"campaign_id"] = [userInfo objectForKey:@"campaign_id"];
+        }
+        
+        if ([userInfo objectForKey:@"campaignName"]) {
+            details[@"campaign_name"] = [userInfo objectForKey:@"campaignName"];
+        }
+    }
+        
+    [Appgain logEvent:@"" andAction:action extras:details whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
         
     }];
+    
 }
 +(void)logEvent:(NSString *)event andAction:(NSString *)action extras:(NSDictionary*) extras {
     [Appgain logEvent:event andAction:action extras:extras whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {

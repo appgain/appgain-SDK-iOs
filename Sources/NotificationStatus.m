@@ -8,15 +8,19 @@
 
 @implementation NotificationStatus
 
-
-
 +(NSString *)Opened{
- return @"open";
-    
+    return @"appPush_open";
+}
+
++(NSString *)Received{
+    return @"received";
+}
+
++(NSString *)Dismissed{
+    return @"appPush_dismiss";
 }
 
 +(NSString *)Conversion{
-
-return @"conversion";
+    return @"conversion";
 }
 @end

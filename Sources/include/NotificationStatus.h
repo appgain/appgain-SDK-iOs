@@ -8,6 +8,8 @@
 
 @interface NotificationStatus : NSObject
 +(NSString*)Opened;
++(NSString*)Received;
++(NSString*)Dismissed;
 +(NSString*)Conversion;
 
 @end
