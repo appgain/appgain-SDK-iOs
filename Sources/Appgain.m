@@ -730,8 +730,12 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         }
     }
         
-    [Appgain logEvent:@"" andAction:action extras:details whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
-        
+    [Appgain logEvent:@"appPush" andAction:action extras:details whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
+        if (userInfo[@"url"] != NULL) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString: userInfo[@"url"]] options:@{} completionHandler:^(BOOL success) {
+                
+            }];
+        }
     }];
     
 }
