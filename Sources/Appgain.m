@@ -175,9 +175,9 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                             id value = parameter[key];
                             details[newKey] = value;
                         }
-                        if (![[[SdkKeys new] getDeviceADID]  isEqual: @"Not allowed"]) {
-                            details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
-                        }
+//                        if (![[[SdkKeys new] getDeviceADID]  isEqual: @"Not allowed"]) {
+//                            details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
+//                        }
                         // log session
                         if (logSession){
                             details[@"session"] = @"true";
@@ -185,10 +185,10 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                             logSession = YES;
                         }
                         
-                        NSMutableDictionary *parameters = [NSMutableDictionary new];
-                        parameters[@"userId"] = [[SdkKeys new] getUserID];
+//                        NSMutableDictionary *parameters = [NSMutableDictionary new];
+                        details[@"userId"] = [[SdkKeys new] getUserID];
                         
-                        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:parameters  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+                        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:nil  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
                         }];
                     }
                 }];
@@ -637,18 +637,14 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     NSMutableDictionary *details = [NSMutableDictionary new];
     
     details[@"isEnabled"] = isEnabled == YES ? @"true" : @"false";//[[NSString alloc] initWithFormat:@"%i",isEnabled];
-    details[@"type"] = type;
+//    details[@"type"] = type;
     details[@"userId"] = [[SdkKeys new] getUserID];
     
     //NSString * url = [Appgain getUrlWithParameter:[UrlData getEnableNotifications] andParameter:details];
     
-    [[ServiceLayer new] postRequestWithURL:[UrlData getEnableNotifications] withBodyData:nil withParameters:details didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+    [[ServiceLayer new] postRequestWithURL:[UrlData getEnableNotifications] withBodyData:details withParameters:nil didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
         onComplete(response,result,error);
     }];
-    
-    
-    
-    
 }
 
 //MARK: add new notification channel for different type of notification recieving

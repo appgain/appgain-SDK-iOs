@@ -33,11 +33,11 @@
 }
 //Mark : init user
 +(NSString *)initUser{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", [UrlData getSubDomainServerUrl], [UrlData getSDKSubFolderServerUrl], @"/initUser"];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@%@", [UrlData getSubDomainServerUrl], [UrlData getSDKSubFolderServerUrl], @"/initUser"];
        return urlString;
 }
 +(NSString *)updateUser{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@", [UrlData getSubDomainServerUrl], [UrlData getSDKSubFolderServerUrl] ,@"/updateUser"];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@%@", [UrlData getSubDomainServerUrl], [UrlData getSDKSubFolderServerUrl] ,@"/updateUser"];
     return urlString;
 }
 +(NSString *)createNotificationChannels{
@@ -61,7 +61,7 @@
     return urlString;
 }
 +(NSString *)getEnableNotifications{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@",[[SdkKeys new] getParseServerUrl],@"/functions/toggleNotifications"];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@%@", [UrlData getSubDomainServerUrl], [UrlData getSDKSubFolderServerUrl] ,@"/toggleNotifications"];
     return urlString;
 }
 
@@ -78,7 +78,7 @@
 
 //MARK:get smart link
 + (NSString*) getSmartUrl{
-    NSString *urlString =  [NSString stringWithFormat:@"%@%@%@%@", [UrlData getSubDomainServerUrl],@"apps/", [[SdkKeys new] getAppID], @"/smartlinks"];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@%@%@", [UrlData getSubDomainServerUrl],@"apps/", [[SdkKeys new] getAppID], @"/smartlinks"];
     return urlString;
 }
 
