@@ -8,7 +8,7 @@
 
 /// import all model you need
 #import "DataModels.h"
- #import <sys/utsname.h>
+#import <sys/utsname.h>
 #import "SdkKeys.h"
 #import <UIKit/UIKit.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -50,21 +50,21 @@
  */
 
 +(void)RegisterDeviceWithToken:(NSData*)deviceToken;
-    
-    //MARK:handle recive remote notification to register status track for it
-+(void)handlePush:(NSDictionary *)userInfo forApplication:(UIApplication *)application;
-    
 
-    ///create smartLink for app
-    /*
-     input parameter
-     smart link object
-     
-     response in block
-     */
+//MARK:handle recive remote notification to register status track for it
++(void)handlePush:(NSDictionary *)userInfo forApplication:(UIApplication *)application;
+
+
+///create smartLink for app
+/*
+ input parameter
+ smart link object
+ 
+ response in block
+ */
 +(void)createSmartLink:( SmartDeepLink*)linkObject whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
-    
-    //MARK : create LandingPage for user
+
+//MARK : create LandingPage for user
 +(void)createLandingPage:(MobileLandingPage *)landingPage whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
 
 +(void)fireAutomator:(NSString *)triggerPoint  personalizationData:(NSMutableDictionary*) personalizationData whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
@@ -73,24 +73,24 @@
 
 //Mark track notification
 /*
-    input parameter
-    1- notification user info
-    2- action String (opend, recived, con..)
-*/
+ input parameter
+ 1- notification user info
+ 2- action String (opend, recived, con..)
+ */
 +(void)recordPushStatus:(NSString*)action userInfo:(NSDictionary *) userInfo whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
 +(void)logEvent:(NSString *)event andAction:(NSString *)action extras:(NSDictionary*) extras whenFinish:(void (^)(NSURLResponse *response, NSMutableDictionary *result,NSError * error))onComplete;
 
 //MARK: get parser user id
 +(NSString *)getUserID;
-    //MARK: enable and disable notification for user
-+(void)enableNotifications:(BOOL)isEnabled forType : (NSString*) type whenFinish:(void (^)(NSURLResponse*response, NSMutableDictionary*result,NSError *))onComplete;
-    //MARK: add new notification channel for different type of notification recieving
+//MARK: enable and disable notification for user
++(void)enableNotifications:(void (^)(NSURLResponse*response, NSMutableDictionary*result,NSError *))onComplete;
+//MARK: add new notification channel for different type of notification recieving
 +(void)createNotificationChannel :(NSString *) type withData :(NSString*) data whenFinish:(void (^)(NSURLResponse*response, NSMutableDictionary*result,NSError *error))onComplete;
 
-    //MARK: init sdk with response .
+//MARK: init sdk with response .
 +(void)initialize:(NSString *)projectId apiKey:(NSString *)apiKey subDomain:(NSString *)subDomain trackUserForAdvertising :(BOOL) trackAdvertisingId ;
 +(void)updateUserData:(NSDictionary *)userData ;
-    ///is called only on the first app run if matching succeeded
+///is called only on the first app run if matching succeeded
 +(void)logPurchase:(NSString *)productName withAmount :(double ) amount forCurrency :(NSString*) currency ;
 +(void)updateUserId:(NSString *)userId  ;
 +(void)matchLink;
@@ -99,8 +99,8 @@
 
 +(void)recordPushStatus:(NSString*)action userInfo:(NSDictionary *) userInfo ;
 +(void)logEvent:(NSString *)event andAction:(NSString *)action extras:(NSDictionary*) extras ;
-  //MARK: enable and disable notification for user
-+(void)enableNotifications:(BOOL)isEnabled forType : (NSString*) type;
-  //MARK: add new notification channel for different type of notification recieving
+//MARK: enable and disable notification for user
++(void)enableNotifications;
+//MARK: add new notification channel for different type of notification recieving
 +(void)createNotificationChannel :(NSString *) type withData :(NSString*) data;
-    @end
+@end

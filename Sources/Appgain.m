@@ -48,6 +48,7 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         [tempSdkKeys setAppApiKey:apiKey];
         [tempSdkKeys setAppID:projectId];
         [tempSdkKeys setAppSubDomainName:subDomain];
+        [tempSdkKeys setNotificationsState:YES];
 //        [[ServiceLayer new] requestWithURL:[UrlData getAppKeysUrlWithID:projectId] httpWay:@"GET"  didFinish:^(NSURLResponse * response, NSMutableDictionary * result,NSError * error) {
 //            if (result != nil){
 //                if ([result objectForKey:@"AppSubDomainName"] != nil){
@@ -633,16 +634,22 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
 
 
 //MARK: enable and disable notification for user
-+(void)enableNotifications:(BOOL)isEnabled forType : (NSString*) type whenFinish:(void (^)(NSURLResponse *, NSMutableDictionary *, NSError *))onComplete{
++(void)enableNotifications: (void (^)(NSURLResponse *, NSMutableDictionary *, NSError *))onComplete{
     NSMutableDictionary *details = [NSMutableDictionary new];
     
-    details[@"isEnabled"] = isEnabled == YES ? @"true" : @"false";//[[NSString alloc] initWithFormat:@"%i",isEnabled];
+    
+    BOOL notificationsState = [[SdkKeys new] getNotificationsState];
+    
+    notificationsState = notificationsState == YES ? NO : YES;
+    details[@"isEnabled"] = notificationsState == YES ? @YES : @NO; //[[NSString alloc] initWithFormat:@"%i",isEnabled];
+    
 //    details[@"type"] = type;
     details[@"userId"] = [[SdkKeys new] getUserID];
     
     //NSString * url = [Appgain getUrlWithParameter:[UrlData getEnableNotifications] andParameter:details];
     
     [[ServiceLayer new] postRequestWithURL:[UrlData getEnableNotifications] withBodyData:details withParameters:nil didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+        [[SdkKeys new] setNotificationsState: notificationsState];
         onComplete(response,result,error);
     }];
 }
@@ -718,10 +725,12 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     NSMutableDictionary *details = [NSMutableDictionary new];
     if (userInfo != nil){
         if ([userInfo objectForKey:@"campaign_id"]) {
+            campaignId = [userInfo objectForKey:@"campaign_id"];
             details[@"campaign_id"] = [userInfo objectForKey:@"campaign_id"];
         }
         
         if ([userInfo objectForKey:@"campaignName"]) {
+            campaignName = [userInfo objectForKey:@"campaignName"];
             details[@"campaign_name"] = [userInfo objectForKey:@"campaignName"];
         }
     }
@@ -740,8 +749,8 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
         
     }];
 }
-+(void)enableNotifications:(BOOL)isEnabled forType : (NSString*) type{
-    [Appgain enableNotifications:isEnabled forType : type whenFinish:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
++(void)enableNotifications{
+    [Appgain enableNotifications:^(NSURLResponse *response, NSMutableDictionary *result, NSError *error) {
         
     }];
 }
