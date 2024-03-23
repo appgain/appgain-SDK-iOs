@@ -97,6 +97,10 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
                             initDone(response,result,error);
                         } ];
                     });
+                }else{
+                    [Appgain initUser:^(NSURLResponse * response, NSMutableDictionary * result, NSError * error) {
+                        initDone(response,result,error);
+                    } ];
                 }
                 
             }];
@@ -128,7 +132,8 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
             [[SdkKeys new] setIsReturnUser: result[@"isReturningUser"]];
             
             [Appgain updateUserData:nil];
-            [Appgain callIdaAttribution];
+//            [Appgain callIdaAttribution];
+            [Appgain fetchAttributionData];
             
             onComplete(response, result, error);
         }
@@ -159,42 +164,59 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
     }];
 }
 
-+(void)callIdaAttribution{
++ (void) fetchAttributionData {
     if ([[[SdkKeys new] getIda] isEqualToString:@"true"]){
-        
-        // Delay 2 seconds
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if ([[ADClient sharedClient] respondsToSelector:@selector(requestAttributionDetailsWithBlock:)]) {
-                [[ADClient sharedClient] requestAttributionDetailsWithBlock:^(NSDictionary *attributionDetails, NSError *error) {
-                    // Look inside of the returned dictionary for all attribution details
-                    NSMutableDictionary *details = [NSMutableDictionary new];
-                    if ([attributionDetails objectForKey:@"Version3.1"] ){
-                        
-                        NSDictionary * parameter = [attributionDetails objectForKey:@"Version3.1"] ;
-                        for (id  key in parameter){
-                            NSString * newKey = [(NSString*)key stringByReplacingOccurrencesOfString:@"-" withString:@""];
-                            id value = parameter[key];
-                            details[newKey] = value;
-                        }
-//                        if (![[[SdkKeys new] getDeviceADID]  isEqual: @"Not allowed"]) {
-//                            details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
-//                        }
-                        // log session
-                        if (logSession){
-                            details[@"session"] = @"true";
-                        } else {
-                            logSession = YES;
-                        }
-                        
-//                        NSMutableDictionary *parameters = [NSMutableDictionary new];
-                        details[@"userId"] = [[SdkKeys new] getUserID];
-                        
-                        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:nil  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
-                        }];
+        if (@available(iOS 14.3, *)){
+            NSError *error;
+            NSString *adAttributionToken = [AAAttribution attributionTokenWithError:&error];
+            if (adAttributionToken){
+                NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[[NSURL alloc] initWithString:@"https://api-adservices.apple.com/api/v1/"]];
+                [request setHTTPMethod:@"POST"];
+                NSData *postdata = [adAttributionToken dataUsingEncoding: NSUTF8StringEncoding allowLossyConversion:YES];
+                NSString *postLength = [NSString stringWithFormat:@"%d",[postdata length]];
+                [request setHTTPBody:postdata];
+                [request addValue:postLength forHTTPHeaderField:@"Content-Length"];
+                [request addValue:@"text/plain" forHTTPHeaderField:@"Content-Type"];
+                NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *taskError) {
+                    
+                    if (data != nil) {
+                        NSError *jsonError = nil;
+                        NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:2 error:&jsonError];
+                        [Appgain sendAttributionDataToServer:responseDictionary];
                     }
+                    
                 }];
+                [task resume];
             }
-        });
+        }
+    }
+}
+
++ (void) sendAttributionDataToServer: (NSDictionary *) response {
+    NSMutableDictionary *details = [NSMutableDictionary new];
+    if ([response valueForKey:@"attribution"] ){
+        
+        for (id  key in response){
+            if ([(NSString*)key isEqualToString:@"attribution"]) {
+                id value = response[key];
+                details[key] = value;
+            }
+        }
+        
+        if (![[[SdkKeys new] getDeviceADID]  isEqual: @"Not allowed"]) {
+            details[@"deviceId"] = [[SdkKeys new] getDeviceADID];
+        }
+        // log session
+        if (logSession){
+            details[@"session"] = @"true";
+        } else {
+            logSession = YES;
+        }
+        
+        details[@"userId"] = [[SdkKeys new] getUserID];
+        
+        [[ServiceLayer new] postRequestWithURL:[UrlData updateUser]  withBodyData:details withParameters:nil  didFinish:^(NSURLResponse *response  , NSMutableDictionary * result,NSError * error) {
+        }];
     }
 }
 

@@ -13,7 +13,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
-#import <iAd/iAd.h>
+#import <StoreKit/StoreKit.h>
+#import <AdServices/AdServices.h>
 @interface Appgain : NSObject
 
 //MARK: init sdk with app_id and api_key
