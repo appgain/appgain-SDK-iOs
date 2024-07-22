@@ -630,11 +630,11 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
 +(void)logEvent:(NSString *)event andAction:(NSString *)action extras:(NSDictionary*) extras whenFinish:(void (^)(NSURLResponse*, NSMutableDictionary*,NSError *))onComplete{
     NSDictionary *info;
     if (extras != nil){
-        info = @{@"action":action,@"event":event,@"extras":extras};
+        info = @{@"action":action,@"type":event,@"value":extras};
         
     }
     else{
-        info = @{@"action":action,@"event":event};
+        info = @{@"action":action,@"type":event};
     }
     [[ServiceLayer new] postRequestWithURL:[UrlData getLogEventUrl] withBodyData: info withParameters:nil didFinish:^(NSURLResponse *response, NSMutableDictionary *result,NSError * error) {
         dispatch_async(dispatch_get_main_queue(), ^{
