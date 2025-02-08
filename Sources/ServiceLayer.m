@@ -17,6 +17,20 @@ WKWebView* webView;
     
     // override with subdomain
     SdkKeys* tempSdkKeys = [SdkKeys new];
+    
+    if ( [[[SdkKeys new] getUserID]  isEqual: @""] &&
+        ![url containsString:@"/initSDK"] &&
+        ![url containsString:@"/initUser"] ) {
+        NSString *errorDomain = @"ErrorDomain";
+        NSInteger errorCode = 123;
+        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey: @"init not fired" };
+
+        NSError *error = [NSError errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
+        onComplete(nil,nil,error);
+        return;
+    }
+    
+    
     if ([url containsString:@"api.appgain.io"] &&
         [tempSdkKeys getAppSubDomainName] != NULL &&
         ![[tempSdkKeys getAppSubDomainName] isEqualToString:@""]) {
@@ -85,7 +99,34 @@ WKWebView* webView;
 
 
 //MARK: post request data.
--(void)postRequestWithURL:(NSString *)url withBodyData:(NSDictionary *)dictionaryBody didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
+-(void)postRequestWithURL:(NSString *)url withBodyData:(NSDictionary *)dictionaryBody  withParameters:(NSDictionary *)dictionaryParameters didFinish:(void (^)(NSURLResponse *, NSMutableDictionary *,NSError*))onComplete{
+    
+    if ( [[[SdkKeys new] getUserID]  isEqual: @""] &&
+        ![url containsString:@"/initSDK"]  &&
+        ![url containsString:@"/initUser"] ) {
+        NSString *errorDomain = @"ErrorDomain";
+        NSInteger errorCode = 123;
+        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey: @"init not fired" };
+
+        NSError *error = [NSError errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
+        onComplete(nil,nil,error);
+        return;
+    }
+    
+    if ( dictionaryParameters != nil ) {
+        NSMutableArray *parameterArray = [NSMutableArray array];
+        [dictionaryParameters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+            NSString *parameter = [NSString stringWithFormat:@"%@=%@", key, [value stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+            [parameterArray addObject:parameter];
+        }];
+
+        NSString *parameterString = [parameterArray componentsJoinedByString:@"&"];
+        NSLog(@"Parameter String: %@", parameterString);
+        url = [url stringByAppendingString:@"?"];
+        url = [url stringByAppendingString:parameterString];
+    }
+    
+    
     // show network indicator
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
@@ -105,24 +146,16 @@ WKWebView* webView;
     }
     [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    if ([url containsString:[[SdkKeys new] getParseServerUrl]]){
-        [urlRequest addValue:@"text/plain" forHTTPHeaderField:@"Content-Type"];
-        
-    }
-    else{
-        [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        
-    }
-    
     NSError *error;
     if (dictionaryBody != nil){
+        [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        
         NSData *bodyData = [NSJSONSerialization dataWithJSONObject:dictionaryBody options:NSJSONWritingPrettyPrinted error:&error];
         NSLog(@"body details %@",bodyData);
         [urlRequest setHTTPBody:bodyData];
-        
-        
-        
     }
+    
+    
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
                                       {

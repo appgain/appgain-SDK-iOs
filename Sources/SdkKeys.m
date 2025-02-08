@@ -275,4 +275,16 @@
     [defaults setValue:key forKey:PUSH_DEVICE_TOKEN];
     [defaults synchronize];
 }
+
+-(BOOL*) getNotificationsState {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL theKey = [defaults boolForKey:Toggle_Notifications];
+    return theKey;
+}
+
+-(void) setNotificationsState :(BOOL) key {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:key forKey:Toggle_Notifications];
+    [defaults synchronize];
+}
 @end

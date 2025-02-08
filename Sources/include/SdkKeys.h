@@ -34,6 +34,7 @@
 #define USER_ID @"user_id"
 #define PUSH_DEVICE_TOKEN @"push_device_token"
 #define IDFA_ID @"idfa_id"
+#define Toggle_Notifications @"notifications_toggle_state"
 
 //MARK:appApiKey
 -(NSString*) getAppApiKey;
@@ -93,6 +94,9 @@
 
 -(NSString*) getIda;
 -(void) setIda :(NSString*)  key;
+
+-(BOOL*) getNotificationsState;
+-(void) setNotificationsState :(BOOL)  key;
 
 
 @end

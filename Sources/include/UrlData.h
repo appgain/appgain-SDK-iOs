@@ -7,6 +7,7 @@
 
 #import "SdkKeys.h"
 
+static NSString* sdkVersion = @"4.4.0";
 
 @interface UrlData : NSObject
 
@@ -21,7 +22,11 @@
 + (NSString*) getLandingPageUrl;
 + (NSString*) getnotificationTrackUrl;
 + (NSString*) getAutomatorUrlWithTriggerPoint :(NSString*)trigger;
+
 + (NSString*) getbaseServerUrl;
++ (NSString*) getSubDomainServerUrl;
++ (NSString*) getSDKSubFolderServerUrl;
+
 + (NSString*) getLogEventUrl;
 +(NSString *)getEnableNotifications;
 +(NSString *) createNotificationChannels;
