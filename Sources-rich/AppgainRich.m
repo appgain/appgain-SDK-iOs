@@ -8,6 +8,7 @@
 
 #import "AppgainRich.h"
 #import <UIKit/UIKit.h>
+#import "CarouselNotificationHandler/CarouselHandler.h"
 @implementation AppgainRich
 
 //MARK : Rich notification part
@@ -15,6 +16,7 @@
 
 static UIViewController* viewControllerShared;
 static NSString * url;
+static CarouselHandler *carouselHandler = nil;
 + (void)didReceiveNotificationRequest:(UNNotificationRequest *)request andNotificationContent :(UNMutableNotificationContent*) bestAttemptContent withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
     // self.contentHandler = contentHandler;
     bestAttemptContent = [request.content mutableCopy];
@@ -109,6 +111,12 @@ static NSString * url;
         WKWebView * myWebView = [[WKWebView alloc] initWithFrame:viewFrame];
         [myWebView loadHTMLString:attachmentUrl baseURL:NULL];
         [viewController.view addSubview:myWebView];
+        
+    }else  if ([type isEqualToString:@"carousel"]){
+        NSArray *carousel = notification.request.content.userInfo[@"carousel"];
+        carouselHandler = [[CarouselHandler alloc] initWithCarouselData:carousel viewController:viewController];
+
+        [carouselHandler reloadWithCarouselData:carousel];
         
     }
     if ([callForAction isKindOfClass:NSString.class] ){
