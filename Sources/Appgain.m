@@ -134,9 +134,9 @@ trackUserForAdvertising :(BOOL) trackAdvertisingId
             [Appgain updateUserData:nil];
 //            [Appgain callIdaAttribution];
             [Appgain fetchAttributionData];
-            
-            onComplete(response, result, error);
         }
+        
+        onComplete(response, result, error);
         
     }];
 }
